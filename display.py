@@ -29,6 +29,7 @@ def setPixelColor(x, y, color):
 def setStrip(color):
     for i in range(LED_COUNT):
         strip.setPixelColor(i, getIfromRGB(color))
+    strip.show()
 
 def show(image):
     for x in range(WIDTH):
