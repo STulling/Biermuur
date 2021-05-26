@@ -122,6 +122,40 @@ def theaterChaseRainbow(wait_ms=50):
             for i in range(0, strip.numPixels(), 3):
                 strip.setPixelColor(i + q, 0)
 
+def shapewipe(shape=None, color=(255, 255, 0)):
+    grow_size = max(WIDTH, HEIGHT)
+    d = ImageDraw.Draw(out)
+    for x in range(grow_size):
+        wipeImage(out, (255, 0, 0))
+        sizedshape = [(i[0] * x + WIDTH / 2, i[1] * x + HEIGHT / 2) for i in shape]
+        d.polygon(xy=sizedshape, fill=color, outline=color)
+        sizedshape = [(i[0] * x + WIDTH / 2 - 1, i[1] * x + HEIGHT / 2) for i in shape]
+        d.polygon(xy=sizedshape, fill=color, outline=color)
+        sizedshape = [(i[0] * x + WIDTH / 2, i[1] * x + HEIGHT / 2 - 1) for i in shape]
+        d.polygon(xy=sizedshape, fill=color, outline=color)
+        sizedshape = [(i[0] * x + WIDTH / 2 - 1, i[1] * x + HEIGHT / 2 - 1) for i in shape]
+        d.polygon(xy=sizedshape, fill=color, outline=color)
+        show(out)
+
+
+def diamondwipe(color=(255, 255, 0)):
+    star = [(0, -2), (2, 0), (0, 2), (-2, 0)]
+    shapewipe(shape=star, color=color)
+
+
+def diamondwipes(times=5):
+    for i in range(times):
+        r = random.randint(0, 1) * 255
+        g = random.randint(0, 1) * 255
+        b = random.randint(0, 1) * 255
+        color = (r, g, b)
+        diamondwipe(color=color)
+
+
+def starwipe(color=(255, 255, 0)):
+    star = [(0, -1), (0.588, 0.8), (-0.951, -0.309), (0.951, -0.309), (-0.588, 0.8)]
+    shapewipe(shape=star, color=color)
+
 
 def init():
     global strip

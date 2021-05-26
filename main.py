@@ -7,7 +7,6 @@ import sys
 app = Flask(__name__)
 process = None
 
-
 def setAction(action, args):
     global process
     if process and process.is_alive():
@@ -25,6 +24,12 @@ def index():
             setAction(display.randomwoord, ())
         elif request.form.get('regenboog'):
             setAction(display.rainbow, ())
+        elif request.form.get('starwipe'):
+            setAction(display.starwipe, ())
+        elif request.form.get('diamondwipe'):
+            setAction(display.diamondwipe, ())
+        elif request.form.get('diamondwipes'):
+            setAction(display.diamondwipes, ())
         elif request.form.get('show') and request.form.get('text'):
             print("showing: " + request.form.get('text'))
             setAction(movingText, (request.form.get('text'), 0.04, True))
