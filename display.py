@@ -329,4 +329,4 @@ def matrix():
             for xoff, yoff in one:
                 setPixelColor(x + xoff, y + yoff, primary)
         strip.show()
-        time.sleep(0.05)
+        time.sleep(0.1)
