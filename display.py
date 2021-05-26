@@ -8,6 +8,7 @@ import argparse
 from PIL import Image, ImageDraw, ImageFont
 import sys
 import random
+from fake_strip import FakeStrip
 
 # LED strip configuration:
 LED_COUNT = 144  # Number of LED pixels.
@@ -19,7 +20,7 @@ LED_INVERT = False  # True to invert the signal (when using NPN transistor level
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 WIDTH = 12
 HEIGHT = 12
-strip = None
+strip = FakeStrip()
 
 fnt = ImageFont.truetype("Pixel12x10Mono.ttf", 13)
 out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
@@ -82,13 +83,13 @@ def movingText(text, speed, loop=False):
 def wheel(pos):
     """Generate rainbow colors across 0-255 positions."""
     if pos < 85:
-        return Color(pos * 3, 255 - pos * 3, 0)
+        return (pos * 3, 255 - pos * 3, 0)
     elif pos < 170:
         pos -= 85
-        return Color(255 - pos * 3, 0, pos * 3)
+        return (255 - pos * 3, 0, pos * 3)
     else:
         pos -= 170
-        return Color(0, pos * 3, 255 - pos * 3)
+        return (0, pos * 3, 255 - pos * 3)
 
 
 def rainbow(wait_ms=20, iterations=1):
@@ -132,6 +133,7 @@ def diamondwipe(color=(255, 255, 0)):
             for x, y in coords:
                 if 0 <= x < WIDTH and 0 <= y < HEIGHT:
                     setPixelColor(x, y, getIfromRGB(color))
+        strip.show()
         time.sleep(1 / 20.0)
 
 def diamond_wipes():
@@ -143,17 +145,23 @@ def diamond_wipes():
         diamondwipe(color=color)
 
 def random_pixel():
+    indices = list(range(WIDTH * HEIGHT))
     while True:
-        pixel = random.randint(0, WIDTH * HEIGHT)
-        color = random.randint(0, 16777215)
-        strip.setPixelColor(pixel, color)
-        time.sleep(1 / 20.0)
-
-def random_order_wipe():
-    while True:
-        for pixel in random.shuffle(range(WIDTH * HEIGHT)):
+        random.shuffle(indices)
+        for pixel in indices:
             color = random.randint(0, 16777215)
             strip.setPixelColor(pixel, color)
+            strip.show()
+            time.sleep(1 / 20.0)
+
+def random_order_wipe():
+    indices = list(range(WIDTH * HEIGHT))
+    while True:
+        random.shuffle(indices)
+        color = random.randint(0, 16777215)
+        for pixel in indices:
+            strip.setPixelColor(pixel, color)
+            strip.show()
             time.sleep(1 / 20.0)
 
 def init():
@@ -174,7 +182,7 @@ def golf():
     xs = [2 * np.pi * x / 11 for x in range(12)]
     t = 0
     dt = 0.01
-    color = Color(0, 255, 255)
+    color = (0, 255, 255)
     while True:
         t += dt
         ys = [int(6 * np.sin(x + t) + 6) for x in xs]
