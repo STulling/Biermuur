@@ -175,7 +175,6 @@ def golf():
     t = 0
     dt = 0.01
     color = Color(0, 255, 255)
-    print(color)
     while True:
         t += dt
         ys = [int(6 * np.sin(x + t) + 6) for x in xs]
@@ -183,5 +182,3 @@ def golf():
         for x, y in zip(range(12), ys):
             setPixelColor(x, y, color)
         strip.show()
-
-print(getIfromRGB((255,255,255)))
