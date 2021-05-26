@@ -122,12 +122,14 @@ def theaterChaseRainbow(wait_ms=50):
                 strip.setPixelColor(i + q, 0)
 
 def diamondwipe(color=(255, 255, 0)):
-    for i in range(max(WIDTH, HEIGHT)//2):
+    xmid = WIDTH//2
+    ymid = HEIGHT//2
+    for i in range(max(xmid, ymid)):
         for x, y in enumerate(reversed(range(i))):
-            setPixelColor(WIDTH/2 + x, HEIGHT/2 + y, getIfromRGB(color))
-            setPixelColor(WIDTH/2 - 1 - x, HEIGHT/2 + y, getIfromRGB(color))
-            setPixelColor(WIDTH/2 + x, HEIGHT/2 - 1 - y, getIfromRGB(color))
-            setPixelColor(WIDTH/2 - 1 - x, HEIGHT/2 - 1 - y, getIfromRGB(color))
+            setPixelColor(xmid + x, ymid + y, getIfromRGB(color))
+            setPixelColor(xmid - 1 - x, ymid + y, getIfromRGB(color))
+            setPixelColor(xmid + x, ymid - 1 - y, getIfromRGB(color))
+            setPixelColor(xmid - 1 - x, ymid - 1 - y, getIfromRGB(color))
 
 def diamond_wipes():
     while True:
