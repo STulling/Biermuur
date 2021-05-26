@@ -1,5 +1,8 @@
 import time
-from rpi_ws281x import *
+try:
+    from rpi_ws281x import *
+except ImportError:
+    print("Missing rpi_ws281x library, running webserver anyway")
 import argparse
 from PIL import Image, ImageDraw, ImageFont
 import sys

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request
 from display import init, movingText, setStrip
 from multiprocessing import Process
 import display
+import sys
 
 app = Flask(__name__)
 process = None
@@ -31,5 +32,8 @@ def index():
 
 
 if __name__ == "__main__":
-    init()
+    try:
+        init()
+    except NameError:
+        print("No display hooked up, ignoring...")
     app.run(host="0.0.0.0", debug=True)
