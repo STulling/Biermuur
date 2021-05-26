@@ -101,6 +101,13 @@ input[type="input"] {
     font-size: 90px
 }
 
+input[type="color"] {
+    width: auto;
+    height: auto;
+    padding: 0px;
+    border-width: 0px;
+}
+
 input[type="submit"] {
     font-size: 30px
 }

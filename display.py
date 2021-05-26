@@ -26,6 +26,25 @@ strip = FakeStrip()
 fnt = ImageFont.truetype("Pixel12x10Mono.ttf", 13)
 out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
 
+primary = (0, 255, 0)
+secondary = (255, 0, 0)
+
+
+def HTMLColorToRGB(colorstring):
+    """ convert #RRGGBB to an (R, G, B) tuple """
+    colorstring = colorstring.strip()
+    if colorstring[0] == '#': colorstring = colorstring[1:]
+    r, g, b = colorstring[:2], colorstring[2:4], colorstring[4:]
+    r, g, b = [int(n, 16) for n in (r, g, b)]
+    return r, g, b
+
+
+def setTheme(HTMLPrimary, HTMLSecondary):
+    global primary
+    global secondary
+    primary = HTMLColorToRGB(HTMLPrimary)
+    secondary = HTMLColorToRGB(HTMLSecondary)
+
 
 def setPixelColor(x, y, color):
     if x < 0 or y < 0:
@@ -72,10 +91,9 @@ def movingText(text, speed, loop=False):
     d.fontmode = "1"
     while True:
         for x in range(moving_width):
-            wipeImage(out, (255, 0, 0))
-            d.multiline_text((10 - x, 1), text, font=fnt, fill=(0, 255, 0))
+            wipeImage(out, secondary)
+            d.multiline_text((10 - x, 1), text, font=fnt, fill=primary)
             show(out)
-            # out.show()
             time.sleep(speed)
         if not loop:
             break
