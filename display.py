@@ -241,7 +241,7 @@ def lijnen():
             yval = int(alpha * x + yas)
             setPixelColor(x, yval, color)
         strip.show()
-        time.sleep(0.2)
+        # time.sleep(0.2)
 
 def cirkels():
     while True:
