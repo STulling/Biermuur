@@ -202,7 +202,9 @@ def init():
 
 
 def randomwoord():
-    p = ['MAAK PUZZEL', 'EIGEN KWEEK TIJD', 'KAMP HELAAS', 'SLA KWEKEN', 'KUNSTGRAS']
+    p = ['NIET ZEUREN FEUT', 'TWEE GROENE JONGENS', 'GEEN SPOILERS!', 'BRO NEEM WAT SLA',
+         'VOOR OF NA 1 UUR', 'DAAR ZIT POTENTIE IN', 'IK BEN EEN WETENSCHAPPER BTW',
+         'MEER KRATTEN']
     x = random.choice(p)
     movingText(x, 0.04)
 
@@ -240,6 +242,7 @@ def lijnen():
         for x in range(12):
             yval = int(alpha * x + yas)
             setPixelColor(x, yval, color)
+            strip.show()
             time.sleep(0.1)
         strip.show()
         # time.sleep(0.2)
