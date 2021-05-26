@@ -3,15 +3,15 @@
     <head>
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="static/style.css?v=1.0.1">
+        <link rel="stylesheet" href="static/style.css?v=1.0.2">
     </head>
     <body>
         <form class="grid" action="/" method="post">
-            <input type="color" class="box box1-1" name="primary" value="#00ff00">
+            <input type="color" class="box box1-1" name="primary" value={{ colors[0] }}>
             <button class="box box2-1" type="submit" name="set" value="1">
                 Set Colors
             </button>
-            <input type="color" class="box box1-1" name="secondary" value="#ff0000">
+            <input type="color" class="box box1-1" name="secondary" value={{ colors[1] }}>
             <div class="box box4-1">
                 <input type="input" name="text" value="" placeholder="..." autocomplete="off">
             </div>

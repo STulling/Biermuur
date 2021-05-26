@@ -40,8 +40,8 @@ def index():
         elif request.form.get('set'):
             display.setTheme(request.form.get('primary'), request.form.get('secondary'))
         else:
-            return render_template("index.html")
-    return render_template("index.html")
+            return render_template("index.html", colors=display.getHTMLColors())
+    return render_template("index.html", colors=display.getHTMLColors())
 
 
 if __name__ == "__main__":

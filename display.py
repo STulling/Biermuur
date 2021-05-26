@@ -30,6 +30,17 @@ primary = (0, 255, 0)
 secondary = (255, 0, 0)
 
 
+def getHTMLColors():
+    return RGBToHTMLColor(primary), RGBToHTMLColor(secondary)
+
+
+def RGBToHTMLColor(rgb_tuple):
+    """ convert an (R, G, B) tuple to #RRGGBB """
+    hexcolor = '#%02x%02x%02x' % rgb_tuple
+    # that's it! '%02x' means zero-padded, 2-digit hex values
+    return hexcolor
+
+
 def HTMLColorToRGB(colorstring):
     """ convert #RRGGBB to an (R, G, B) tuple """
     colorstring = colorstring.strip()
