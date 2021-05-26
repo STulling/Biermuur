@@ -27,6 +27,10 @@ out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
 
 
 def setPixelColor(x, y, color):
+    if x < 0 or y < 0:
+        return
+    if x >= WIDTH or y >= HEIGHT:
+        return
     if y % 2 == 1:
         x = 11 - x
     loc = x + y * WIDTH
