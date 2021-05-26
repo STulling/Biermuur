@@ -9,9 +9,8 @@ process = None
 
 def setAction(action, args):
     global process
-    if process:
-        if process.is_alive():
-            process.terminate()
+    if process and process.is_alive():
+        process.terminate()
     process = Process(target=action, args=args)
     process.start()
 
@@ -20,7 +19,7 @@ def setAction(action, args):
 def index():
     if request.method == 'POST':
         if request.form.get('clear'):
-            setAction(setStrip, ((0, 0, 0),))
+            setAction(setStrip, (tuple([0, 0, 0])),)
         elif request.form.get('regenboog'):
             setAction(display.rainbow, ())
         elif request.form.get('show') and request.form.get('text'):
