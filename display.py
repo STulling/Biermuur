@@ -26,16 +26,21 @@ out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
 
 
 def setPixelColor(x, y, color):
+    if x < 0 or y < 0:
+        return
+    if x >= WIDTH or y >= HEIGHT:
+        return
     if y % 2 == 1:
         x = 11 - x
     loc = x + y * WIDTH
     strip.setPixelColor(loc, color)
 
 
-def setStrip(color):
+def setStrip(color, update=True):
     for i in range(LED_COUNT):
         strip.setPixelColor(i, getIfromRGB(color))
-    strip.show()
+    if update:
+        strip.show()
 
 
 def show(image):
@@ -59,7 +64,7 @@ def getIfromRGB(rgb):
     return RGBint
 
 
-def movingText(text, speed):
+def movingText(text, speed, loop=False):
     moving_width = 10 * 2 + 10 * len(text)
     d = ImageDraw.Draw(out)
     d.fontmode = "1"
@@ -70,6 +75,8 @@ def movingText(text, speed):
             show(out)
             # out.show()
             time.sleep(speed)
+        if not loop:
+            break
 
 
 def wheel(pos):
@@ -86,11 +93,12 @@ def wheel(pos):
 
 def rainbow(wait_ms=20, iterations=1):
     """Draw rainbow that fades across all pixels at once."""
-    for j in range(256 * iterations):
-        for i in range(strip.numPixels()):
-            strip.setPixelColor(i, wheel((i + j) & 255))
-        strip.show()
-        time.sleep(wait_ms / 1000.0)
+    while True:
+        for j in range(256 * iterations):
+            for i in range(strip.numPixels()):
+                strip.setPixelColor(i, wheel((i + j) & 255))
+            strip.show()
+            time.sleep(wait_ms / 1000.0)
 
 
 def rainbowCycle(wait_ms=20, iterations=5):
@@ -113,28 +121,13 @@ def theaterChaseRainbow(wait_ms=50):
             for i in range(0, strip.numPixels(), 3):
                 strip.setPixelColor(i + q, 0)
 
-
-def shapewipe(shape=None, color=(255, 255, 0)):
-    grow_size = max(WIDTH, HEIGHT)
-    d = ImageDraw.Draw(out)
-    for x in range(grow_size):
-        wipeImage(out, (255, 0, 0))
-        sizedshape = [(i[0] * x + WIDTH / 2, i[1] * x + HEIGHT / 2) for i in shape]
-        d.polygon(xy=sizedshape, fill=color, outline=color)
-        sizedshape = [(i[0] * x + WIDTH / 2 - 1, i[1] * x + HEIGHT / 2) for i in shape]
-        d.polygon(xy=sizedshape, fill=color, outline=color)
-        sizedshape = [(i[0] * x + WIDTH / 2, i[1] * x + HEIGHT / 2 - 1) for i in shape]
-        d.polygon(xy=sizedshape, fill=color, outline=color)
-        sizedshape = [(i[0] * x + WIDTH / 2 - 1, i[1] * x + HEIGHT / 2 - 1) for i in shape]
-        d.polygon(xy=sizedshape, fill=color, outline=color)
-        show(out)
-        time.sleep(1/20)
-
-
 def diamondwipe(color=(255, 255, 0)):
-    star = [(0, -2), (2, 0), (0, 2), (-2, 0)]
-    shapewipe(shape=star, color=color)
-
+    for i in range(max(WIDTH, HEIGHT)/2):
+        for x, y in enumerate(reversed(range(i))):
+            setPixelColor(WIDTH/2 + x, HEIGHT/2 + y, getIfromRGB(color))
+            setPixelColor(WIDTH/2 - 1 - x, HEIGHT/2 + y, getIfromRGB(color))
+            setPixelColor(WIDTH/2 + x, HEIGHT/2 - 1 - y, getIfromRGB(color))
+            setPixelColor(WIDTH/2 - 1 - x, HEIGHT/2 - 1 - y, getIfromRGB(color))
 
 def diamond_wipes():
     while True:
@@ -144,12 +137,6 @@ def diamond_wipes():
         color = (r, g, b)
         diamondwipe(color=color)
 
-
-def starwipe(color=(255, 255, 0)):
-    star = [(0, -1), (0.588, 0.8), (-0.951, -0.309), (0.951, -0.309), (-0.588, 0.8)]
-    shapewipe(shape=star, color=color)
-
-
 def init():
     global strip
     # Create NeoPixel object with appropriate configuration.
@@ -157,9 +144,23 @@ def init():
     # Intialize the library (must be called once before other functions).
     strip.begin()
 
+
 def randomwoord():
     p = ['MAAK PUZZEL', 'EIGEN KWEEK TIJD', 'KAMP HELAAS', 'SLA KWEKEN', 'KUNSTGRAS']
     x = random.choice(p)
     movingText(x, 0.04)
-    
 
+
+def golf():
+    xs = [2 * np.pi * x / 11 for x in range(12)]
+    t = 0
+    dt = 0.01
+    color = Color(0, 255, 255)
+    print(color)
+    while True:
+        t += dt
+        ys = [int(6 * np.sin(x + t) + 6) for x in xs]
+        setStrip((255, 0, 0), False)
+        for x, y in zip(range(12), ys):
+            setPixelColor(x, y, color)
+        strip.show()
