@@ -315,7 +315,6 @@ def matrix():
     while True:
         setStrip(secondary, True)
         for i, (x, y) in enumerate(zeros):
-            print(x, y)
             if y > HEIGHT + 4:
                 zeros[i] = (random.randint(-2, WIDTH + 2), -3)
             else:
