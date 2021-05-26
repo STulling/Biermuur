@@ -282,7 +282,8 @@ def histogram():
             for yval in range(y):
                 setPixelColor(i, 11 - yval, color)
             strip.show()
-        time.sleep(0.3)
+        time.sleep(0.05)
+        setStrip(secondary, False)
 
 
 def matrix():
