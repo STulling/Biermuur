@@ -121,7 +121,7 @@ def init():
     strip.begin()
 
 def randomwoord():
-    p = np.array['MAAK PUZZEL', 'EIGEN KWEEK TIJD']
+    p = ['MAAK PUZZEL', 'EIGEN KWEEK TIJD', 'KAMP HELAAS', 'SLA KWEKEN', 'KUNSTGRAS']
     x = random.choice(p)
     movingText(x, 0.04)
     
