@@ -312,10 +312,14 @@ def matrix():
         for i, (x, y) in enumerate(zeros):
             if y < -4:
                 zeros[i] = (random.randint(-2, WIDTH + 2), -3)
+            else:
+                zeros[i] = (x, y-1)
             for xoff, yoff in zero:
                 setPixelColor(x+xoff, y+yoff, primary)
         for i, (x, y) in enumerate(ones):
             if y < -4:
                 ones[i] = (random.randint(-2, WIDTH + 2), -3)
+            else:
+                ones[i] = (x, y - 1)
             for xoff, yoff in one:
                 setPixelColor(x+xoff, y+yoff, primary)
