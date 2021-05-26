@@ -126,6 +126,7 @@ def shapewipe(shape=None, color=(255, 255, 0)):
         sizedshape = [(i[0] * x + WIDTH / 2 - 1, i[1] * x + HEIGHT / 2 - 1) for i in shape]
         d.polygon(xy=sizedshape, fill=color, outline=color)
         show(out)
+        time.sleep(wait_ms / 1000.0)
 
 
 def diamondwipe(color=(255, 255, 0)):
