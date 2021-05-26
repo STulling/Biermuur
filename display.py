@@ -270,7 +270,7 @@ def histogram():
         for i in x:
             color = random.randint(0, 16777215)
             for yval in range(y):
-                setPixelColor(x, yval, color)
+                setPixelColor(i, yval, color)
             time.sleep(0.2)
             strip.show()
         time.sleep(0.1)
