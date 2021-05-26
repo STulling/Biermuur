@@ -6,6 +6,8 @@ except ImportError:
 import argparse
 from PIL import Image, ImageDraw, ImageFont
 import sys
+import numpy as np
+import random
 
 # LED strip configuration:
 LED_COUNT = 144  # Number of LED pixels.
@@ -117,3 +119,10 @@ def init():
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     # Intialize the library (must be called once before other functions).
     strip.begin()
+
+def randomwoord():
+    p = np.array['MAAK PUZZEL', 'EIGEN KWEEK TIJD']
+    x = random.choice(p)
+    movingText(x, 0.04)
+    
+
