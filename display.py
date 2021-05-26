@@ -140,13 +140,15 @@ def randomwoord():
 def golf():
     xs = [2 * np.pi * x / 11 for x in range(12)]
     t = 0
-    dt = 0.01
+    dt = 0.1
     color = Color(0, 255, 255)
     print(color)
     while True:
         t += dt
         ys = [int(6 * np.sin(x + t) + 6) for x in xs]
-        setStrip((255, 0, 0), False)
+        setStrip((0, 0, 255), False)
         for x, y in zip(range(12), ys):
             setPixelColor(x, y, color)
+            setPixelColor(x, y-1, color)
+            setPixelColor(x, y+1, color)
         strip.show()
