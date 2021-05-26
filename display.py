@@ -140,7 +140,7 @@ def randomwoord():
 def golf():
     xs = [2 * np.pi * x / 11 for x in range(12)]
     t = 0
-    dt = 0.1
+    dt = 0.05
     color = Color(0, 255, 255)
     print(color)
     while True:
