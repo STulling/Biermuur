@@ -27,7 +27,7 @@ def index():
             setAction(display.rainbow, ())
         elif request.form.get('show') and request.form.get('text'):
             print("showing: " + request.form.get('text'))
-            setAction(movingText, (request.form.get('text'), 0.04))
+            setAction(movingText, (request.form.get('text'), 0.04, True))
         else:
             return render_template("index.html")
     return render_template("index.html")
