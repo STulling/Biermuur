@@ -1,4 +1,5 @@
 import time
+
 try:
     from rpi_ws281x import *
 except ImportError:
@@ -8,7 +9,6 @@ from PIL import Image, ImageDraw, ImageFont
 import sys
 import numpy as np
 import random
-
 
 # LED strip configuration:
 LED_COUNT = 144  # Number of LED pixels.
@@ -98,14 +98,13 @@ def rainbow(wait_ms=20, iterations=1):
             time.sleep(wait_ms / 1000.0)
 
 
-
 def rainbowCycle(wait_ms=20, iterations=5):
     """Draw rainbow that uniformly distributes itself across all pixels."""
-    for j in range(256*iterations):
+    for j in range(256 * iterations):
         for i in range(strip.numPixels()):
             strip.setPixelColor(i, wheel((int(i * 256 / strip.numPixels()) + j) & 255))
         strip.show()
-        time.sleep(wait_ms/1000.0)
+        time.sleep(wait_ms / 1000.0)
 
 
 def theaterChaseRainbow(wait_ms=50):
@@ -113,11 +112,11 @@ def theaterChaseRainbow(wait_ms=50):
     for j in range(256):
         for q in range(3):
             for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, wheel((i+j) % 255))
+                strip.setPixelColor(i + q, wheel((i + j) % 255))
             strip.show()
-            time.sleep(wait_ms/1000.0)
+            time.sleep(wait_ms / 1000.0)
             for i in range(0, strip.numPixels(), 3):
-                strip.setPixelColor(i+q, 0)
+                strip.setPixelColor(i + q, 0)
 
 
 def init():
@@ -127,25 +126,21 @@ def init():
     # Intialize the library (must be called once before other functions).
     strip.begin()
 
+
 def randomwoord():
     p = ['MAAK PUZZEL', 'EIGEN KWEEK TIJD', 'KAMP HELAAS', 'SLA KWEKEN', 'KUNSTGRAS']
     x = random.choice(p)
     movingText(x, 0.04)
 
+
 def golf():
-    xs = [2*np.pi * x/11 for x in range(12)]
+    xs = [2 * np.pi * x / 11 for x in range(12)]
     t = 0
     dt = 0.01
     while True:
         t += dt
-        ys = [int(6*np.sin(x + t) + 6) for x in xs]
-        setStrip((255,0,0), False)
-        for x, y in zip(xs,ys):
-            setPixelColor(x,y,getIfromRGB((0,255,255)))
+        ys = [int(6 * np.sin(x + t) + 6) for x in xs]
+        setStrip((255, 0, 0), False)
+        for x, y in zip(xs, ys):
+            setPixelColor(x, y, getIfromRGB((0, 255, 255)))
         strip.show()
-
-
-
-
-
-
