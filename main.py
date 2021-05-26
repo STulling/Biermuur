@@ -41,6 +41,8 @@ def index():
             display.setTheme(request.form.get('primary'), request.form.get('secondary'))
         elif request.form.get('cirkels'):
             setAction(display.cirkels, ())
+        elif request.form.get('histogram'):
+            setAction(display.histogram, ())
         else:
             return render_template("index.html", colors=display.getHTMLColors())
     return render_template("index.html", colors=display.getHTMLColors())

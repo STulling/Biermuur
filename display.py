@@ -260,5 +260,19 @@ def cirkels():
                     if afstand < straal:
                         setPixelColor(x, y, color)
             strip.show()
-            time.sleep(0.2)
+            time.sleep(0.1)
         setStrip(secondary, False)
+
+def histogram():
+    while True:
+        x = range(12)
+        y = random.randint(3,12)
+        for i in x:
+            color = random.randint(0, 16777215)
+            for yval in range(y):
+                setPixelColor(x, yval, color)
+            time.sleep(0.2)
+            strip.show()
+        time.sleep(0.1)
+        setStrip(secondary, False)
+
