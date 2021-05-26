@@ -43,5 +43,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         if process and process.is_alive():
             process.terminate()
-        setStrip((0, 0, 0))
+        setAction(setStrip, (tuple([0, 0, 0]),))
+        process.join()
         sys.exit(0)
