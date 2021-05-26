@@ -39,6 +39,8 @@ def index():
             setAction(display.lijnen, ())
         elif request.form.get('set'):
             display.setTheme(request.form.get('primary'), request.form.get('secondary'))
+        elif request.form.get('cirkels'):
+            setAction(display.cirkels, ())
         else:
             return render_template("index.html", colors=display.getHTMLColors())
     return render_template("index.html", colors=display.getHTMLColors())
