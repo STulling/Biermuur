@@ -158,3 +158,22 @@ def golf():
             setPixelColor(x, y+1, color)
         strip.show()
         time.sleep(0.01)
+
+def lijnen():
+    while True:
+        hoeken = np.linspace(-1, 1, 100)
+        alhpa = random.choice(hoeken)
+        intercept = np.linspace(0, 12, 1)
+        yas = random.choice(intercept)
+        y = []
+        x = [0,1,2,3,4,5,6,7,8,9,10,11]
+        while y > 0 and y<12:
+            for i in x:
+               np.append(y, alpha * i + yas)
+        setStrip((0, 0, 255), False)
+        color = Color(0, 255, 255)
+        for x, y in zip(x, y):
+            setPixelColor(x, y, color)
+        strip.show()
+        time.sleep(0.5)
+
