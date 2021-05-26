@@ -211,7 +211,7 @@ def golf():
     xs = [2 * np.pi * x / 11 for x in range(12)]
     t = 0
     dt = 0.025
-    color = primary
+    color = getIfromRGB(primary)
     while True:
         t += dt
         ys1 = [int(6 * np.sin(x + t) + 6) for x in xs]
@@ -235,12 +235,11 @@ def lijnen():
         color = random.randint(0, 16777215)
         alpha = random.choice(hoeken)
         yas = 6
-        x = range(12)
-        for i in x:
-            yval = int(alpha * i + yas)
-            setPixelColor(i, yval, color)
+        for x in range(12):
+            yval = int(alpha * x + yas)
+            setPixelColor(x, yval, color)
         strip.show()
-        time.sleep(0.05)
+        time.sleep(0.2)
 
 def cirkels():
     while True:
