@@ -7,10 +7,6 @@ except ImportError:
 import argparse
 from PIL import Image, ImageDraw, ImageFont
 import sys
-<<<<<<< HEAD
-=======
-import numpy as np
->>>>>>> origin/main
 import random
 
 # LED strip configuration:
@@ -67,13 +63,6 @@ def movingText(text, speed):
     moving_width = 10 * 2 + 10 * len(text)
     d = ImageDraw.Draw(out)
     d.fontmode = "1"
-<<<<<<< HEAD
-    for x in range(moving_width):
-        wipeImage(out, (255, 0, 0))
-        d.multiline_text((10 - x, 1), text, font=fnt, fill=(0, 255, 0))
-        show(out)
-        time.sleep(speed)
-=======
     while True:
         for x in range(moving_width):
             wipeImage(out, (255, 0, 0))
@@ -81,7 +70,6 @@ def movingText(text, speed):
             show(out)
             # out.show()
             time.sleep(speed)
->>>>>>> origin/main
 
 
 def wheel(pos):
