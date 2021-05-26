@@ -266,7 +266,6 @@ def cirkels():
 def histogram():
     while True:
         x = range(12)
-        y = random.randint(3,12)
         for i in x:
             y = random.randint(3, 12)
             color = random.randint(0, 16777215)
@@ -275,5 +274,5 @@ def histogram():
             time.sleep(0.05)
             strip.show()
         time.sleep(0.3)
-        setStrip(secondary, False)
+
 
