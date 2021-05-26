@@ -59,7 +59,7 @@ def getIfromRGB(rgb):
     return RGBint
 
 
-def movingText(text, speed):
+def movingText(text, speed, loop=False):
     moving_width = 10 * 2 + 10 * len(text)
     d = ImageDraw.Draw(out)
     d.fontmode = "1"
@@ -70,6 +70,8 @@ def movingText(text, speed):
             show(out)
             # out.show()
             time.sleep(speed)
+        if not loop:
+            break
 
 
 def wheel(pos):
