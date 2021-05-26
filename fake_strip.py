@@ -18,8 +18,6 @@ class FakeStrip():
             return
         y = math.floor(index / WIDTH)
         x = (WIDTH - 1 - (index - y * WIDTH) if y % 2 == 1 else index - y * WIDTH)
-        print(index)
-        print((x, y))
         self.im.putpixel((x, y), color)
 
     def numPixels(self):
