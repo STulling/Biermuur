@@ -10,7 +10,7 @@ process = None
 def setAction(action, args):
     global process
     if process and process.is_alive():
-        process.terminate()
+        process.kill()
     process = Process(target=action, args=args)
     process.start()
 
@@ -20,6 +20,8 @@ def index():
     if request.method == 'POST':
         if request.form.get('clear'):
             setAction(setStrip, (tuple([0, 0, 0]),))
+        elif request.form.get('randomWoord'):
+            setAction(display.randomwoord, ())
         elif request.form.get('regenboog'):
             setAction(display.rainbow, ())
         elif request.form.get('starwipe'):
@@ -30,7 +32,9 @@ def index():
             setAction(display.diamondwipes, ())
         elif request.form.get('show') and request.form.get('text'):
             print("showing: " + request.form.get('text'))
-            setAction(movingText, (request.form.get('text'), 0.04))
+            setAction(movingText, (request.form.get('text'), 0.04, True))
+        elif request.form.get('golf'):
+            setAction(display.golf, ())
         else:
             return render_template("index.html")
     return render_template("index.html")
@@ -41,4 +45,9 @@ if __name__ == "__main__":
         init()
     except NameError:
         print("No display hooked up, ignoring...")
-    app.run(host="0.0.0.0", debug=True)
+    try:
+        app.run(host="0.0.0.0", debug=True)
+    except KeyboardInterrupt:
+        if process and process.is_alive():
+            process.kill()
+        sys.exit(0)

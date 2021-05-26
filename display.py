@@ -7,6 +7,7 @@ except ImportError:
 import argparse
 from PIL import Image, ImageDraw, ImageFont
 import sys
+import numpy as np
 import random
 
 # LED strip configuration:
@@ -26,16 +27,21 @@ out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
 
 
 def setPixelColor(x, y, color):
+    if x < 0 or y < 0:
+        return
+    if x >= WIDTH or y >= HEIGHT:
+        return
     if y % 2 == 1:
         x = 11 - x
     loc = x + y * WIDTH
     strip.setPixelColor(loc, color)
 
 
-def setStrip(color):
+def setStrip(color, update=True):
     for i in range(LED_COUNT):
         strip.setPixelColor(i, getIfromRGB(color))
-    strip.show()
+    if update:
+        strip.show()
 
 
 def show(image):
@@ -59,15 +65,19 @@ def getIfromRGB(rgb):
     return RGBint
 
 
-def movingText(text, speed):
+def movingText(text, speed, loop=False):
     moving_width = 10 * 2 + 10 * len(text)
     d = ImageDraw.Draw(out)
     d.fontmode = "1"
-    for x in range(moving_width):
-        wipeImage(out, (255, 0, 0))
-        d.multiline_text((10 - x, 1), text, font=fnt, fill=(0, 255, 0))
-        show(out)
-        time.sleep(speed)
+    while True:
+        for x in range(moving_width):
+            wipeImage(out, (255, 0, 0))
+            d.multiline_text((10 - x, 1), text, font=fnt, fill=(0, 255, 0))
+            show(out)
+            # out.show()
+            time.sleep(speed)
+        if not loop:
+            break
 
 
 def wheel(pos):
@@ -84,11 +94,12 @@ def wheel(pos):
 
 def rainbow(wait_ms=20, iterations=1):
     """Draw rainbow that fades across all pixels at once."""
-    for j in range(256 * iterations):
-        for i in range(strip.numPixels()):
-            strip.setPixelColor(i, wheel((i + j) & 255))
-        strip.show()
-        time.sleep(wait_ms / 1000.0)
+    while True:
+        for j in range(256 * iterations):
+            for i in range(strip.numPixels()):
+                strip.setPixelColor(i, wheel((i + j) & 255))
+            strip.show()
+            time.sleep(wait_ms / 1000.0)
 
 
 def rainbowCycle(wait_ms=20, iterations=5):
@@ -110,7 +121,6 @@ def theaterChaseRainbow(wait_ms=50):
             time.sleep(wait_ms / 1000.0)
             for i in range(0, strip.numPixels(), 3):
                 strip.setPixelColor(i + q, 0)
-
 
 def shapewipe(shape=None, color=(255, 255, 0)):
     grow_size = max(WIDTH, HEIGHT)
@@ -153,3 +163,51 @@ def init():
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     # Intialize the library (must be called once before other functions).
     strip.begin()
+
+
+def randomwoord():
+    p = ['MAAK PUZZEL', 'EIGEN KWEEK TIJD', 'KAMP HELAAS', 'SLA KWEKEN', 'KUNSTGRAS']
+    x = random.choice(p)
+    movingText(x, 0.04)
+
+
+def golf():
+    xs = [2 * np.pi * x / 11 for x in range(12)]
+    t = 0
+    dt = 0.025
+    color = Color(0, 255, 255)
+    print(color)
+    while True:
+        t += dt
+        ys1 = [int(6 * np.sin(x + t) + 6) for x in xs]
+        ys2 = [int(6 * np.sin(x + t + np.pi) + 6) for x in xs]
+        setStrip((0, 0, 255), False)
+        for x, y in zip(range(12), ys1):
+            setPixelColor(x, y, color)
+            setPixelColor(x, y-1, color)
+            setPixelColor(x, y+1, color)
+        for x, y in zip(range(12), ys2):
+            setPixelColor(x, y, color)
+            setPixelColor(x, y-1, color)
+            setPixelColor(x, y+1, color)
+        strip.show()
+        time.sleep(0.01)
+
+def lijnen():
+    hoeken = np.linspace(-2, 2, 20)
+    while True:
+        alpha = random.choice(hoeken)
+        yas = 6
+        y = []
+        x = [0,1,2,3,4,5,6,7,8,9,10,11]
+        for i in x:
+            yval = alpha * i + yas
+            while yval > 0 and yval<12:
+               np.append(y, yval)
+        setStrip((0, 0, 255), False)
+        color = Color(0, 255, 255)
+        for x, y in zip(range(y), y):
+            setPixelColor(x, y, color)
+        strip.show()
+        time.sleep(0.5)
+
