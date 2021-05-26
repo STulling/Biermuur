@@ -1,0 +1,18 @@
+div.group {
+  border: 1px solid;
+  padding: 10px;
+  box-shadow: 5px 10px;
+  display: inline-block;
+}
+
+body {
+    font-size: 30px
+}
+
+input[type="input"] {
+    font-size: 30px
+}
+
+input[type="submit"] {
+    font-size: 30px
+}
