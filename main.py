@@ -11,7 +11,7 @@ process = None
 def setAction(action, args):
     global process
     if process and process.is_alive():
-        process.terminate()
+        process.kill()
     process = Process(target=action, args=args)
     process.start()
 
@@ -44,5 +44,5 @@ if __name__ == "__main__":
         app.run(host="0.0.0.0", debug=True)
     except KeyboardInterrupt:
         if process and process.is_alive():
-            process.terminate()
+            process.kill()
         sys.exit(0)
