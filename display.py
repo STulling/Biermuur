@@ -9,6 +9,7 @@ from PIL import Image, ImageDraw, ImageFont
 import sys
 import numpy as np
 import random
+from fake_strip import FakeStrip
 
 # LED strip configuration:
 LED_COUNT = 144  # Number of LED pixels.
@@ -20,7 +21,7 @@ LED_INVERT = False  # True to invert the signal (when using NPN transistor level
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 WIDTH = 12
 HEIGHT = 12
-strip = None
+strip = FakeStrip()
 
 fnt = ImageFont.truetype("Pixel12x10Mono.ttf", 13)
 out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
@@ -83,13 +84,13 @@ def movingText(text, speed, loop=False):
 def wheel(pos):
     """Generate rainbow colors across 0-255 positions."""
     if pos < 85:
-        return Color(pos * 3, 255 - pos * 3, 0)
+        return (pos * 3, 255 - pos * 3, 0)
     elif pos < 170:
         pos -= 85
-        return Color(255 - pos * 3, 0, pos * 3)
+        return (255 - pos * 3, 0, pos * 3)
     else:
         pos -= 170
-        return Color(0, pos * 3, 255 - pos * 3)
+        return (0, pos * 3, 255 - pos * 3)
 
 
 def rainbow(wait_ms=20, iterations=1):
@@ -122,40 +123,46 @@ def theaterChaseRainbow(wait_ms=50):
             for i in range(0, strip.numPixels(), 3):
                 strip.setPixelColor(i + q, 0)
 
-def shapewipe(shape=None, color=(255, 255, 0)):
-    grow_size = max(WIDTH, HEIGHT)
-    d = ImageDraw.Draw(out)
-    for x in range(grow_size):
-        wipeImage(out, (255, 0, 0))
-        sizedshape = [(i[0] * x + WIDTH / 2, i[1] * x + HEIGHT / 2) for i in shape]
-        d.polygon(xy=sizedshape, fill=color, outline=color)
-        sizedshape = [(i[0] * x + WIDTH / 2 - 1, i[1] * x + HEIGHT / 2) for i in shape]
-        d.polygon(xy=sizedshape, fill=color, outline=color)
-        sizedshape = [(i[0] * x + WIDTH / 2, i[1] * x + HEIGHT / 2 - 1) for i in shape]
-        d.polygon(xy=sizedshape, fill=color, outline=color)
-        sizedshape = [(i[0] * x + WIDTH / 2 - 1, i[1] * x + HEIGHT / 2 - 1) for i in shape]
-        d.polygon(xy=sizedshape, fill=color, outline=color)
-        show(out)
-
-
 def diamondwipe(color=(255, 255, 0)):
-    star = [(0, -2), (2, 0), (0, 2), (-2, 0)]
-    shapewipe(shape=star, color=color)
+    xmid = WIDTH // 2
+    ymid = HEIGHT // 2
+    for i in range(max(WIDTH, HEIGHT)):
+        for x, y in list(enumerate(reversed(range(i)))):
+            coords = [(xmid + x, ymid + y), (xmid - 1 - x, ymid + y), (xmid + x, ymid - 1 - y),
+                      (xmid - 1 - x, ymid - 1 - y)]
+            for x, y in coords:
+                if 0 <= x < WIDTH and 0 <= y < HEIGHT:
+                    setPixelColor(x, y, getIfromRGB(color))
+        strip.show()
+        time.sleep(1 / 20.0)
 
-
-def diamondwipes(times=5):
-    for i in range(times):
+def diamond_wipes():
+    while True:
         r = random.randint(0, 1) * 255
         g = random.randint(0, 1) * 255
         b = random.randint(0, 1) * 255
         color = (r, g, b)
         diamondwipe(color=color)
 
+def random_pixel():
+    indices = list(range(WIDTH * HEIGHT))
+    while True:
+        random.shuffle(indices)
+        for pixel in indices:
+            color = random.randint(0, 16777215)
+            strip.setPixelColor(pixel, color)
+            strip.show()
+            time.sleep(1 / 20.0)
 
-def starwipe(color=(255, 255, 0)):
-    star = [(0, -1), (0.588, 0.8), (-0.951, -0.309), (0.951, -0.309), (-0.588, 0.8)]
-    shapewipe(shape=star, color=color)
-
+def random_order_wipe():
+    indices = list(range(WIDTH * HEIGHT))
+    while True:
+        random.shuffle(indices)
+        color = random.randint(0, 16777215)
+        for pixel in indices:
+            strip.setPixelColor(pixel, color)
+            strip.show()
+            time.sleep(1 / 20.0)
 
 def init():
     global strip
@@ -176,7 +183,6 @@ def golf():
     t = 0
     dt = 0.025
     color = Color(0, 255, 255)
-    print(color)
     while True:
         t += dt
         ys1 = [int(6 * np.sin(x + t) + 6) for x in xs]
