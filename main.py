@@ -26,6 +26,10 @@ def index():
             setAction(display.rainbow, ())
         elif request.form.get('diamond_wipes'):
             setAction(display.diamond_wipes, ())
+        elif request.form.get('random_pixel'):
+            setAction(display.random_pixel, ())
+        elif request.form.get('random_order_wipe'):
+            setAction(display.random_order_wipe, ())
         elif request.form.get('show') and request.form.get('text'):
             print("showing: " + request.form.get('text'))
             setAction(movingText, (request.form.get('text'), 0.04, True))

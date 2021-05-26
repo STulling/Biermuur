@@ -132,7 +132,7 @@ def diamondwipe(color=(255, 255, 0)):
             for x, y in coords:
                 if 0 <= x < WIDTH and 0 <= y < HEIGHT:
                     setPixelColor(x, y, getIfromRGB(color))
-
+        time.sleep(1 / 20.0)
 
 def diamond_wipes():
     while True:
@@ -142,6 +142,19 @@ def diamond_wipes():
         color = (r, g, b)
         diamondwipe(color=color)
 
+def random_pixel():
+    while True:
+        pixel = random.randint(0, WIDTH * HEIGHT)
+        color = random.randint(0, 16777215)
+        strip.setPixelColor(pixel, color)
+        time.sleep(1 / 20.0)
+
+def random_order_wipe():
+    while True:
+        for pixel in random.shuffle(range(WIDTH * HEIGHT)):
+            color = random.randint(0, 16777215)
+            strip.setPixelColor(pixel, color)
+            time.sleep(1 / 20.0)
 
 def init():
     global strip
@@ -171,5 +184,4 @@ def golf():
             setPixelColor(x, y, color)
         strip.show()
 
-
-diamond_wipes()
+print(getIfromRGB((255,255,255)))
