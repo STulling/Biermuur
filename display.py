@@ -275,6 +275,8 @@ def histogram():
     while True:
         x = range(12)
         for i in x:
+            for j in range(12):
+                setPixelColor(i,j, getIfromRGB(secondary))
             y = random.randint(3, 12)
             color = random.randint(0, 16777215)
             for yval in range(y):
