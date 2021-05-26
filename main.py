@@ -21,6 +21,8 @@ def index():
     if request.method == 'POST':
         if request.form.get('clear'):
             setAction(setStrip, (tuple([0, 0, 0]),))
+        elif request.form.get('randomWoord'):
+            setAction(display.randomwoord(), ((),))
         elif request.form.get('regenboog'):
             setAction(display.rainbow, ())
         elif request.form.get('show') and request.form.get('text'):
