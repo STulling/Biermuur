@@ -22,14 +22,14 @@ def index():
         if request.form.get('clear'):
             setAction(setStrip, (tuple([0, 0, 0]),))
         elif request.form.get('randomWoord'):
-            setAction(display.randomwoord, ((),))
+            setAction(display.randomwoord, ())
         elif request.form.get('regenboog'):
             setAction(display.rainbow, ())
         elif request.form.get('show') and request.form.get('text'):
             print("showing: " + request.form.get('text'))
             setAction(movingText, (request.form.get('text'), 0.04, True))
         elif request.form.get('golf'):
-            setAction(display.golf, ((),))
+            setAction(display.golf, ())
         else:
             return render_template("index.html")
     return render_template("index.html")
