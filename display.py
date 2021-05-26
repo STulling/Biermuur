@@ -61,12 +61,13 @@ def movingText(text, speed):
     moving_width = 10 * 2 + 10 * len(text)
     d = ImageDraw.Draw(out)
     d.fontmode = "1"
-    for x in range(moving_width):
-        wipeImage(out, (255, 0, 0))
-        d.multiline_text((10 - x, 1), text, font=fnt, fill=(0, 255, 0))
-        show(out)
-        # out.show()
-        time.sleep(speed)
+    while True:
+        for x in range(moving_width):
+            wipeImage(out, (255, 0, 0))
+            d.multiline_text((10 - x, 1), text, font=fnt, fill=(0, 255, 0))
+            show(out)
+            # out.show()
+            time.sleep(speed)
 
 
 def wheel(pos):
