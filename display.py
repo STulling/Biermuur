@@ -8,7 +8,6 @@ from PIL import Image, ImageDraw, ImageFont
 import sys
 import numpy as np
 import random
-import matplotlib as plt
 
 
 # LED strip configuration:
