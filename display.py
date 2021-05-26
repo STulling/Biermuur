@@ -161,8 +161,7 @@ def diamondwipe(color=(255, 255, 0)):
             coords = [(xmid + x, ymid + y), (xmid - 1 - x, ymid + y), (xmid + x, ymid - 1 - y),
                       (xmid - 1 - x, ymid - 1 - y)]
             for x, y in coords:
-                if 0 <= x < WIDTH and 0 <= y < HEIGHT:
-                    setPixelColor(x, y, getIfromRGB(color))
+                setPixelColor(x, y, getIfromRGB(color))
         strip.show()
         time.sleep(1 / 20.0)
 
@@ -212,12 +211,12 @@ def golf():
     xs = [2 * np.pi * x / 11 for x in range(12)]
     t = 0
     dt = 0.025
-    color = Color(0, 255, 255)
+    color = primary
     while True:
         t += dt
         ys1 = [int(6 * np.sin(x + t) + 6) for x in xs]
         ys2 = [int(6 * np.sin(x + t + np.pi) + 6) for x in xs]
-        setStrip((0, 0, 255), False)
+        setStrip(secondary, False)
         for x, y in zip(range(12), ys1):
             setPixelColor(x, y, color)
             setPixelColor(x, y-1, color)
@@ -239,8 +238,21 @@ def lijnen():
         x = np.linspace(0,11,12)
         for i in x:
             yval = int(alpha * i + yas)
-            if 0 <= yval < HEIGHT:
-                setPixelColor(i, yval, color)
+            setPixelColor(i, yval, color)
+        strip.show()
+        time.sleep(0.05)
+
+def cirkels():
+    while True:
+        color = random.randint(0, 16777215)
+        xcenter = random.randint(0,12)
+        ycenter = random.randint(0, 12)
+        straal = random.randint(1,6)
+        for y in range(HEIGHT):
+            for x in range(WIDTH):
+                afstand = np.sqrt((y-ycenter)**2 + (x-xcenter)**2)
+                if afstand < straal:
+                    setPixelColor(x, y, color)
         strip.show()
         time.sleep(0.05)
 
