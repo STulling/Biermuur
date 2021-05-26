@@ -157,3 +157,4 @@ def golf():
             setPixelColor(x, y-1, color)
             setPixelColor(x, y+1, color)
         strip.show()
+        time.sleep(0.01)
