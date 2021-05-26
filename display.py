@@ -234,7 +234,9 @@ def lijnen():
     while True:
         color = random.randint(0, 16777215)
         alpha = random.choice(hoeken)
-        yas = 6
+        xcenter = random.randint(0,12)
+        ycenter = random.randint(0, 12)
+        yas = ycenter-(xcenter*alpha)
         for x in range(12):
             yval = int(alpha * x + yas)
             setPixelColor(x, yval, color)
@@ -246,12 +248,13 @@ def cirkels():
         color = random.randint(0, 16777215)
         xcenter = random.randint(0,12)
         ycenter = random.randint(0, 12)
-        straal = random.randint(1,4)
-        for y in range(HEIGHT):
-            for x in range(WIDTH):
-                afstand = np.sqrt((y-ycenter)**2 + (x-xcenter)**2)
-                if afstand < straal:
-                    setPixelColor(x, y, color)
-        strip.show()
-        time.sleep(0.2)
-
+        straalmax = 1
+        for straal in range(6):
+            for y in range(HEIGHT):
+                for x in range(WIDTH):
+                    afstand = np.sqrt((y-ycenter)**2 + (x-xcenter)**2)
+                    if afstand < straal:
+                        setPixelColor(x, y, color)
+            strip.show()
+            time.sleep(0.2)
+        setStrip(secondary, False)
