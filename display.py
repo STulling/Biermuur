@@ -162,8 +162,7 @@ def diamondwipe(color=(255, 255, 0)):
             coords = [(xmid + x, ymid + y), (xmid - 1 - x, ymid + y), (xmid + x, ymid - 1 - y),
                       (xmid - 1 - x, ymid - 1 - y)]
             for x, y in coords:
-                if 0 <= x < WIDTH and 0 <= y < HEIGHT:
-                    setPixelColor(x, y, getIfromRGB(color))
+                setPixelColor(x, y, getIfromRGB(color))
         strip.show()
         time.sleep(1 / 20.0)
 
@@ -208,7 +207,9 @@ def init():
 
 
 def randomwoord():
-    p = ['MAAK PUZZEL', 'EIGEN KWEEK TIJD', 'KAMP HELAAS', 'SLA KWEKEN', 'KUNSTGRAS']
+    p = ['NIET ZEUREN FEUT', 'TWEE GROENE JONGENS', 'GEEN SPOILERS!', 'BRO NEEM WAT SLA',
+         'VOOR OF NA 1 UUR', 'DAAR ZIT POTENTIE IN', 'IK BEN EEN WETENSCHAPPER BTW',
+         'MEER KRATTEN']
     x = random.choice(p)
     movingText(x, 0.04)
 
@@ -217,12 +218,12 @@ def golf():
     xs = [2 * np.pi * x / 11 for x in range(12)]
     t = 0
     dt = 0.025
-    color = Color(0, 255, 255)
+    color = getIfromRGB(primary)
     while True:
         t += dt
         ys1 = [int(6 * np.sin(x + t) + 6) for x in xs]
         ys2 = [int(6 * np.sin(x + t + np.pi) + 6) for x in xs]
-        setStrip((0, 0, 255), False)
+        setStrip(secondary, False)
         for x, y in zip(range(12), ys1):
             setPixelColor(x, y, color)
             setPixelColor(x, y - 1, color)
@@ -236,22 +237,51 @@ def golf():
 
 
 def lijnen():
-    hoeken = np.linspace(-2, 2, 20)
+    hoeken = np.linspace(-2,2,10)
     while True:
+        setStrip(secondary, False)
+        color = random.randint(0, 16777215)
         alpha = random.choice(hoeken)
-        yas = 6
-        y = []
-        x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-        for i in x:
-            yval = alpha * i + yas
-            while yval > 0 and yval < 12:
-                np.append(y, yval)
-        setStrip((0, 0, 255), False)
-        color = Color(0, 255, 255)
-        for x, y in zip(range(y), y):
-            setPixelColor(x, y, color)
+        xcenter = random.randint(0,12)
+        ycenter = random.randint(0, 12)
+        yas = ycenter-(xcenter*alpha)
+        for x in range(12):
+            yval = int(alpha * x + yas)
+            setPixelColor(x, yval, color)
+            strip.show()
+            time.sleep(0.1)
         strip.show()
-        time.sleep(0.05)
+        # time.sleep(0.2)
+
+def cirkels():
+    while True:
+        color = random.randint(0, 16777215)
+        xcenter = random.randint(3,9)
+        ycenter = random.randint(3,9)
+        straalmax = 1
+        for straal in range(12):
+            for y in range(HEIGHT):
+                for x in range(WIDTH):
+                    afstand = np.sqrt((y-ycenter)**2 + (x-xcenter)**2)
+                    if afstand < straal:
+                        setPixelColor(x, y, color)
+            strip.show()
+            time.sleep(0.1)
+        setStrip(secondary, False)
+
+def histogram():
+    while True:
+        x = range(12)
+        y = random.randint(3,12)
+        for i in x:
+            y = random.randint(3, 12)
+            color = random.randint(0, 16777215)
+            for yval in range(y):
+                setPixelColor(i, 11-yval, color)
+            time.sleep(0.05)
+            strip.show()
+        time.sleep(0.3)
+        setStrip(secondary, False)
 
 
 def matrix():
