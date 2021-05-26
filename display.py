@@ -237,14 +237,14 @@ def golf():
 
 
 def lijnen():
-    hoeken = np.linspace(-2,2,10)
+    hoeken = np.linspace(-2, 2, 10)
     while True:
         setStrip(secondary, False)
         color = random.randint(0, 16777215)
         alpha = random.choice(hoeken)
-        xcenter = random.randint(0,12)
+        xcenter = random.randint(0, 12)
         ycenter = random.randint(0, 12)
-        yas = ycenter-(xcenter*alpha)
+        yas = ycenter - (xcenter * alpha)
         for x in range(12):
             yval = int(alpha * x + yas)
             setPixelColor(x, yval, color)
@@ -253,21 +253,23 @@ def lijnen():
         strip.show()
         # time.sleep(0.2)
 
+
 def cirkels():
     while True:
         color = random.randint(0, 16777215)
-        xcenter = random.randint(3,9)
-        ycenter = random.randint(3,9)
+        xcenter = random.randint(3, 9)
+        ycenter = random.randint(3, 9)
         straalmax = 1
         for straal in range(12):
             for y in range(HEIGHT):
                 for x in range(WIDTH):
-                    afstand = np.sqrt((y-ycenter)**2 + (x-xcenter)**2)
+                    afstand = np.sqrt((y - ycenter) ** 2 + (x - xcenter) ** 2)
                     if afstand < straal:
                         setPixelColor(x, y, color)
             strip.show()
             time.sleep(0.1)
         setStrip(secondary, False)
+
 
 def histogram():
     while True:
@@ -276,11 +278,10 @@ def histogram():
             y = random.randint(3, 12)
             color = random.randint(0, 16777215)
             for yval in range(y):
-                setPixelColor(i, 11-yval, color)
+                setPixelColor(i, 11 - yval, color)
             time.sleep(0.05)
             strip.show()
         time.sleep(0.3)
-
 
 
 def matrix():
@@ -302,24 +303,27 @@ def matrix():
            (0, 0),
            (1, 0)]
     zeros = [(random.randint(-2, WIDTH + 2), -3),
-            (random.randint(-2, WIDTH + 2), -7),
-            (random.randint(-2, WIDTH + 2), -9)]
-    ones = [(random.randint(-2, WIDTH+2), -1),
+             (random.randint(-2, WIDTH + 2), -7),
+             (random.randint(-2, WIDTH + 2), -9)]
+    ones = [(random.randint(-2, WIDTH + 2), -1),
             (random.randint(-2, WIDTH + 2), -6),
             (random.randint(-2, WIDTH + 2), -11)]
     while True:
         setStrip(secondary, True)
         for i, (x, y) in enumerate(zeros):
-            if y < -4:
+            print(x, y)
+            if y > HEIGHT + 4:
                 zeros[i] = (random.randint(-2, WIDTH + 2), -3)
             else:
-                zeros[i] = (x, y-1)
+                zeros[i] = (x, y + 1)
             for xoff, yoff in zero:
-                setPixelColor(x+xoff, y+yoff, primary)
+                setPixelColor(x + xoff, y + yoff, primary)
         for i, (x, y) in enumerate(ones):
-            if y < -4:
+            if y > HEIGHT + 4:
                 ones[i] = (random.randint(-2, WIDTH + 2), -3)
             else:
-                ones[i] = (x, y - 1)
+                ones[i] = (x, y + 1)
             for xoff, yoff in one:
-                setPixelColor(x+xoff, y+yoff, primary)
+                setPixelColor(x + xoff, y + yoff, primary)
+        strip.show()
+        time.sleep(0.05)
