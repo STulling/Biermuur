@@ -160,19 +160,19 @@ def golf():
         time.sleep(0.01)
 
 def lijnen():
+    hoeken = np.linspace(-2, 2, 20)
     while True:
-        hoeken = np.linspace(-1, 1, 100)
-        alhpa = random.choice(hoeken)
-        intercept = np.linspace(0, 12, 1)
-        yas = random.choice(intercept)
+        alpha = random.choice(hoeken)
+        yas = 6
         y = []
         x = [0,1,2,3,4,5,6,7,8,9,10,11]
-        while y > 0 and y<12:
-            for i in x:
-               np.append(y, alpha * i + yas)
+        for i in x:
+            yval = alpha * i + yas
+            while yval > 0 and yval<12:
+               np.append(y, yval)
         setStrip((0, 0, 255), False)
         color = Color(0, 255, 255)
-        for x, y in zip(x, y):
+        for x, y in zip(range(y), y):
             setPixelColor(x, y, color)
         strip.show()
         time.sleep(0.5)
