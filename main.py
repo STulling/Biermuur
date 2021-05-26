@@ -28,6 +28,8 @@ def index():
         elif request.form.get('show') and request.form.get('text'):
             print("showing: " + request.form.get('text'))
             setAction(movingText, (request.form.get('text'), 0.04, True))
+        elif request.form.get('golf'):
+            setAction(display.golf(), ((),))
         else:
             return render_template("index.html")
     return render_template("index.html")

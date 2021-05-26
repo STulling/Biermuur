@@ -8,6 +8,8 @@ from PIL import Image, ImageDraw, ImageFont
 import sys
 import numpy as np
 import random
+import matplotlib as plt
+
 
 # LED strip configuration:
 LED_COUNT = 144  # Number of LED pixels.
@@ -32,10 +34,11 @@ def setPixelColor(x, y, color):
     strip.setPixelColor(loc, color)
 
 
-def setStrip(color):
+def setStrip(color, update=True):
     for i in range(LED_COUNT):
         strip.setPixelColor(i, getIfromRGB(color))
-    strip.show()
+    if update:
+        strip.show()
 
 
 def show(image):
@@ -129,5 +132,21 @@ def randomwoord():
     p = ['MAAK PUZZEL', 'EIGEN KWEEK TIJD', 'KAMP HELAAS', 'SLA KWEKEN', 'KUNSTGRAS']
     x = random.choice(p)
     movingText(x, 0.04)
-    
+
+def golf():
+    xs = [2*np.pi * x/11 for x in range(12)]
+    t = 0
+    dt = 0.01
+    while True:
+        t += dt
+        ys = [int(6*np.sin(x + t) + 6) for x in xs]
+        setStrip((255,0,0), False)
+        for x, y in zip(xs,ys):
+            setPixelColor(x,y,(0,255,255))
+        strip.show()
+
+
+
+
+
 
