@@ -1,12 +1,53 @@
-div.group {
+.box {
   border: 1px solid;
   padding: 10px;
-  box-shadow: 5px 10px;
-  display: inline-block;
+  display: inline-flex;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 0.25em;
+  font-size: 70px;
+  align-items: center;
+  justify-content: center;
+}
+
+.box input {
+    margin: auto;
+    width: 95%;
+    height: 90%;
+}
+
+.box1-1 {
+    grid-column: auto / span 1;
+    grid-row: auto / span 1;
+    aspect-ratio: 1;
+}
+
+.box4-1 {
+  grid-column: auto / span 4;
+  grid-row: auto / span 1;
+  aspect-ratio: 4;
+}
+
+.box3-1 {
+  grid-column: auto / span 3;
+  grid-row: auto / span 1;
+  aspect-ratio: 3;
+}
+
+.box2-1 {
+  grid-column: auto / span 2;
+  grid-row: auto / span 1;
+  aspect-ratio: 2;
+}
+
+form.grid {
+    display: grid;
+    grid-template-columns: 23% 23% 23% 23%;
+    grid-gap: 1em 1em;
+    grid-auto-flow: row dense;
 }
 
 body {
-    font-size: 30px
+    padding: 20px;
 }
 
 input[type="input"] {
