@@ -144,5 +144,7 @@ def golf():
         ys = [int(6 * np.sin(x + t) + 6) for x in xs]
         setStrip((255, 0, 0), False)
         for x, y in zip(xs, ys):
+            print(x)
+            print(y)
             setPixelColor(x, y, color)
         strip.show()
