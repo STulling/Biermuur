@@ -38,4 +38,9 @@ if __name__ == "__main__":
         init()
     except NameError:
         print("No display hooked up, ignoring...")
-    app.run(host="0.0.0.0", debug=True)
+    try:
+        app.run(host="0.0.0.0", debug=True)
+    except KeyboardInterrupt:
+        if process and process.is_alive():
+            process.terminate()
+        sys.exit(0)
