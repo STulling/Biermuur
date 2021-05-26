@@ -30,6 +30,8 @@ def index():
             setAction(movingText, (request.form.get('text'), 0.04, True))
         elif request.form.get('golf'):
             setAction(display.golf, ())
+        elif request.form.get('lijnen'):
+            setAction(display.lijnen, ())
         else:
             return render_template("index.html")
     return render_template("index.html")

@@ -175,5 +175,5 @@ def lijnen():
         for x, y in zip(range(y), y):
             setPixelColor(x, y, color)
         strip.show()
-        time.sleep(0.5)
+        time.sleep(0.05)
 
