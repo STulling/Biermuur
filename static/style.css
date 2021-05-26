@@ -7,6 +7,20 @@
   align-items: center;
   justify-content: center;
   min-height: 200px;
+  font-family: 'Roboto', sans-serif;
+}
+
+footer {
+    position: absolute;
+    clear: both;
+    width: 100%;
+    background-color: gray;
+    bottom: 0;
+    left: 0;
+    font-size: 40px;
+    text-align: center;
+    color: white;
+    font-family: 'Roboto', sans-serif;
 }
 
 .rainbow-bg {
@@ -16,9 +30,8 @@
     -z-animation: rainbow 18s ease infinite;
     -o-animation: rainbow 18s ease infinite;
     animation: rainbow 18s ease infinite;
-    -webkit-text-stroke: black;
     color: white;
-    -webkit-text-stroke-width: 2px;
+    text-shadow: 2px 2px 0 #000;
 }
 
 @-webkit-keyframes rainbow {
@@ -81,7 +94,7 @@ form.grid {
 }
 
 body {
-    padding: 20px;
+    margin: 0px;
 }
 
 input[type="input"] {
