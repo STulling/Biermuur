@@ -7,6 +7,10 @@ except ImportError:
 import argparse
 from PIL import Image, ImageDraw, ImageFont
 import sys
+<<<<<<< HEAD
+=======
+import numpy as np
+>>>>>>> origin/main
 import random
 
 # LED strip configuration:
@@ -63,11 +67,21 @@ def movingText(text, speed):
     moving_width = 10 * 2 + 10 * len(text)
     d = ImageDraw.Draw(out)
     d.fontmode = "1"
+<<<<<<< HEAD
     for x in range(moving_width):
         wipeImage(out, (255, 0, 0))
         d.multiline_text((10 - x, 1), text, font=fnt, fill=(0, 255, 0))
         show(out)
         time.sleep(speed)
+=======
+    while True:
+        for x in range(moving_width):
+            wipeImage(out, (255, 0, 0))
+            d.multiline_text((10 - x, 1), text, font=fnt, fill=(0, 255, 0))
+            show(out)
+            # out.show()
+            time.sleep(speed)
+>>>>>>> origin/main
 
 
 def wheel(pos):
@@ -126,7 +140,7 @@ def shapewipe(shape=None, color=(255, 255, 0)):
         sizedshape = [(i[0] * x + WIDTH / 2 - 1, i[1] * x + HEIGHT / 2 - 1) for i in shape]
         d.polygon(xy=sizedshape, fill=color, outline=color)
         show(out)
-        time.sleep(1/500)
+        time.sleep(1/20)
 
 
 def diamondwipe(color=(255, 255, 0)):
@@ -134,8 +148,8 @@ def diamondwipe(color=(255, 255, 0)):
     shapewipe(shape=star, color=color)
 
 
-def diamondwipes(times=5):
-    for i in range(times):
+def diamond_wipes():
+    while True:
         r = random.randint(0, 1) * 255
         g = random.randint(0, 1) * 255
         b = random.randint(0, 1) * 255
@@ -154,3 +168,10 @@ def init():
     strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     # Intialize the library (must be called once before other functions).
     strip.begin()
+
+def randomwoord():
+    p = ['MAAK PUZZEL', 'EIGEN KWEEK TIJD', 'KAMP HELAAS', 'SLA KWEKEN', 'KUNSTGRAS']
+    x = random.choice(p)
+    movingText(x, 0.04)
+    
+
