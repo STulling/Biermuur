@@ -121,15 +121,18 @@ def theaterChaseRainbow(wait_ms=50):
             for i in range(0, strip.numPixels(), 3):
                 strip.setPixelColor(i + q, 0)
 
+
 def diamondwipe(color=(255, 255, 0)):
-    xmid = WIDTH//2
-    ymid = HEIGHT//2
-    for i in range(max(xmid, ymid)):
-        for x, y in enumerate(reversed(range(i))):
-            setPixelColor(xmid + x, ymid + y, getIfromRGB(color))
-            setPixelColor(xmid - 1 - x, ymid + y, getIfromRGB(color))
-            setPixelColor(xmid + x, ymid - 1 - y, getIfromRGB(color))
-            setPixelColor(xmid - 1 - x, ymid - 1 - y, getIfromRGB(color))
+    xmid = WIDTH // 2
+    ymid = HEIGHT // 2
+    for i in range(max(WIDTH, HEIGHT)):
+        for x, y in list(enumerate(reversed(range(i)))):
+            coords = [(xmid + x, ymid + y), (xmid - 1 - x, ymid + y), (xmid + x, ymid - 1 - y),
+                      (xmid - 1 - x, ymid - 1 - y)]
+            for x, y in coords:
+                if 0 <= x < WIDTH and 0 <= y < HEIGHT:
+                    setPixelColor(x, y, getIfromRGB(color))
+
 
 def diamond_wipes():
     while True:
@@ -138,6 +141,7 @@ def diamond_wipes():
         b = random.randint(0, 1) * 255
         color = (r, g, b)
         diamondwipe(color=color)
+
 
 def init():
     global strip
@@ -166,3 +170,6 @@ def golf():
         for x, y in zip(range(12), ys):
             setPixelColor(x, y, color)
         strip.show()
+
+
+diamond_wipes()
