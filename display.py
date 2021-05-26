@@ -153,6 +153,7 @@ def theaterChaseRainbow(wait_ms=50):
             for i in range(0, strip.numPixels(), 3):
                 strip.setPixelColor(i + q, 0)
 
+
 def diamondwipe(color=(255, 255, 0)):
     xmid = WIDTH // 2
     ymid = HEIGHT // 2
@@ -166,6 +167,7 @@ def diamondwipe(color=(255, 255, 0)):
         strip.show()
         time.sleep(1 / 20.0)
 
+
 def diamond_wipes():
     while True:
         r = random.randint(0, 1) * 255
@@ -173,6 +175,7 @@ def diamond_wipes():
         b = random.randint(0, 1) * 255
         color = (r, g, b)
         diamondwipe(color=color)
+
 
 def random_pixel():
     indices = list(range(WIDTH * HEIGHT))
@@ -184,6 +187,7 @@ def random_pixel():
             strip.show()
             time.sleep(1 / 20.0)
 
+
 def random_order_wipe():
     indices = list(range(WIDTH * HEIGHT))
     while True:
@@ -193,6 +197,7 @@ def random_order_wipe():
             strip.setPixelColor(pixel, color)
             strip.show()
             time.sleep(1 / 20.0)
+
 
 def init():
     global strip
@@ -220,14 +225,15 @@ def golf():
         setStrip((0, 0, 255), False)
         for x, y in zip(range(12), ys1):
             setPixelColor(x, y, color)
-            setPixelColor(x, y-1, color)
-            setPixelColor(x, y+1, color)
+            setPixelColor(x, y - 1, color)
+            setPixelColor(x, y + 1, color)
         for x, y in zip(range(12), ys2):
             setPixelColor(x, y, color)
-            setPixelColor(x, y-1, color)
-            setPixelColor(x, y+1, color)
+            setPixelColor(x, y - 1, color)
+            setPixelColor(x, y + 1, color)
         strip.show()
         time.sleep(0.01)
+
 
 def lijnen():
     hoeken = np.linspace(-2, 2, 20)
@@ -235,11 +241,11 @@ def lijnen():
         alpha = random.choice(hoeken)
         yas = 6
         y = []
-        x = [0,1,2,3,4,5,6,7,8,9,10,11]
+        x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
         for i in x:
             yval = alpha * i + yas
-            while yval > 0 and yval<12:
-               np.append(y, yval)
+            while yval > 0 and yval < 12:
+                np.append(y, yval)
         setStrip((0, 0, 255), False)
         color = Color(0, 255, 255)
         for x, y in zip(range(y), y):
@@ -247,3 +253,40 @@ def lijnen():
         strip.show()
         time.sleep(0.05)
 
+
+def matrix():
+    zero = [(-1, -3),
+            (0, -3),
+            (1, -3),
+            (-1, -2),
+            (1, -2),
+            (-1, -1),
+            (1, -1),
+            (-1, 0),
+            (0, 0),
+            (1, 0)]
+    one = [(-1, -3),
+           (0, -3),
+           (0, -2),
+           (0, -1),
+           (-1, 0),
+           (0, 0),
+           (1, 0)]
+    zeros = [(random.randint(-2, WIDTH + 2), -3),
+            (random.randint(-2, WIDTH + 2), -7),
+            (random.randint(-2, WIDTH + 2), -9)]
+    ones = [(random.randint(-2, WIDTH+2), -1),
+            (random.randint(-2, WIDTH + 2), -6),
+            (random.randint(-2, WIDTH + 2), -11)]
+    while True:
+        setStrip(secondary, True)
+        for i, (x, y) in enumerate(zeros):
+            if y < -4:
+                zeros[i] = (random.randint(-2, WIDTH + 2), -3)
+            for xoff, yoff in zero:
+                setPixelColor(x+xoff, y+yoff, primary)
+        for i, (x, y) in enumerate(ones):
+            if y < -4:
+                ones[i] = (random.randint(-2, WIDTH + 2), -3)
+            for xoff, yoff in one:
+                setPixelColor(x+xoff, y+yoff, primary)

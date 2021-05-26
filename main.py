@@ -37,6 +37,8 @@ def index():
             setAction(display.golf, ())
         elif request.form.get('lijnen'):
             setAction(display.lijnen, ())
+        elif request.form.get('matrix'):
+            setAction(display.matrix, ())
         elif request.form.get('set'):
             display.setTheme(request.form.get('primary'), request.form.get('secondary'))
         else:
