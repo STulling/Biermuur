@@ -230,8 +230,8 @@ def golf():
 
 def lijnen():
     hoeken = np.linspace(-2,2,10)
-    setStrip((255, 0, 0), False)
     while True:
+        setStrip(secondary, False)
         color = random.randint(0, 16777215)
         alpha = random.choice(hoeken)
         xcenter = random.randint(0,12)
@@ -246,10 +246,10 @@ def lijnen():
 def cirkels():
     while True:
         color = random.randint(0, 16777215)
-        xcenter = random.randint(0,12)
-        ycenter = random.randint(0, 12)
+        xcenter = random.randint(3,9)
+        ycenter = random.randint(3,9)
         straalmax = 1
-        for straal in range(6):
+        for straal in range(12):
             for y in range(HEIGHT):
                 for x in range(WIDTH):
                     afstand = np.sqrt((y-ycenter)**2 + (x-xcenter)**2)
