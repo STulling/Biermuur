@@ -240,6 +240,7 @@ def lijnen():
         for x in range(12):
             yval = int(alpha * x + yas)
             setPixelColor(x, yval, color)
+            time.sleep(0.1)
         strip.show()
         # time.sleep(0.2)
 
