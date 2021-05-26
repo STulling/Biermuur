@@ -20,8 +20,7 @@ def setAction(action, args):
 def index():
     if request.method == 'POST':
         if request.form.get('clear'):
-            print("Clearing")
-            setAction(setStrip, (0, 0, 0))
+            setAction(setStrip, ((0, 0, 0),))
         elif request.form.get('regenboog'):
             setAction(display.rainbow, ())
         elif request.form.get('show') and request.form.get('text'):
