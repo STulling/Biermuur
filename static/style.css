@@ -102,7 +102,10 @@ body {
 }
 
 input[type="input"] {
-    font-size: 90px
+    font-size: 90px;
+    background-color: rgba(0,0,0,0);
+    border-width: 0px;
+    text-align: center;
 }
 
 input[type="color"] {
