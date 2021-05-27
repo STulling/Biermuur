@@ -48,7 +48,7 @@ def index():
             setAction(display.histogram, ())
         elif request.form.get('update'):
             update()
-        elif request.form.get('spiral'):
+        elif request.form.get('spiraal'):
             setAction(display.spiraal, ())
         return redirect(url_for('index'))
     return render_template("index.html", colors=display.getHTMLColors())
