@@ -338,11 +338,11 @@ def spiraal():
         while r < 8:
             setStrip(secondary, False)
             theta += 0.2*np.pi
-            r+= 0.5
+            r+= 0.1
             x = int(r*np.cos(theta)) + 6
             y = int(r*np.sin(theta)) + 6
             print(x, y)
             setPixelColor(x,y, primary)
             strip.show()
-            time.sleep(0.05)
+            time.sleep(0.2)
 
