@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from display import init, movingText, setStrip
 from multiprocessing import Process
 import display
@@ -48,8 +48,7 @@ def index():
             setAction(display.histogram, ())
         elif request.form.get('update'):
             update()
-        else:
-            return render_template("index.html", colors=display.getHTMLColors())
+        return redirect(url_for('index'), code=303)
     return render_template("index.html", colors=display.getHTMLColors())
 
 
