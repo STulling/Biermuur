@@ -330,7 +330,6 @@ def matrix():
         time.sleep(0.1)
 
 def spiraal():
-
     while True:
         r = 2
         theta = 0
@@ -338,8 +337,8 @@ def spiraal():
             setStrip(secondary, False)
             theta += 0.2*np.pi
             r+= 0.5
-            x = int((r*np.cos(theta))
+            x = int(r*np.cos(theta))
             y = int(r*np.sin(theta))
-            setPixelColor(x,y, color)
-            time.sleep(0,05)
+            setPixelColor(x,y, primary)
+            time.sleep(0.05)
 
