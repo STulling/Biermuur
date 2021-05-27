@@ -2,12 +2,14 @@
   border: 1px solid;
   padding: 10px;
   display: inline-flex;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgb(45 81 255);
   font-size: 50px;
   align-items: center;
   justify-content: center;
   min-height: 200px;
   font-family: 'Roboto', sans-serif;
+  color: white;
+  text-shadow: 2px 2px 0 #000;
 }
 
 footer {
