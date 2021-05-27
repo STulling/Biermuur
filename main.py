@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from display import init, movingText, setStrip
 from multiprocessing import Process
 import display
 import sys
+import os
 
 app = Flask(__name__)
 process = None
@@ -45,11 +46,16 @@ def index():
             setAction(display.cirkels, ())
         elif request.form.get('histogram'):
             setAction(display.histogram, ())
+        elif request.form.get('update'):
+            update()
         elif request.form.get('spiral'):
             setAction(display.spiraal, ())
-        else:
-            return render_template("index.html", colors=display.getHTMLColors())
+        return redirect(url_for('index'))
     return render_template("index.html", colors=display.getHTMLColors())
+
+
+def update():
+    os.system("git pull")
 
 
 if __name__ == "__main__":

@@ -313,7 +313,6 @@ def matrix():
     while True:
         setStrip(secondary, True)
         for i, (x, y) in enumerate(zeros):
-            print(x, y)
             if y > HEIGHT + 4:
                 zeros[i] = (random.randint(-2, WIDTH + 2), -3)
             else:
@@ -328,7 +327,7 @@ def matrix():
             for xoff, yoff in one:
                 setPixelColor(x + xoff, y + yoff, primary)
         strip.show()
-        time.sleep(0.05)
+        time.sleep(0.1)
 
 def spiraal():
 
