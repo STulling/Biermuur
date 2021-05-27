@@ -1,8 +1,9 @@
 .box {
-  border: 1px solid;
+  border: 0px solid;
+  margin: 2px;
   padding: 10px;
   display: inline-flex;
-  background: rgb(45 81 255);
+  background: rgb(95 101 130);
   font-size: 50px;
   align-items: center;
   justify-content: center;
@@ -101,6 +102,7 @@ form.grid {
 
 body {
     margin: 0px;
+    background-color: black;
 }
 
 input[type="input"] {
