@@ -45,6 +45,8 @@ def index():
             setAction(display.cirkels, ())
         elif request.form.get('histogram'):
             setAction(display.histogram, ())
+        elif request.form.get('spiral'):
+            setAction(display.spiraal, ())
         else:
             return render_template("index.html", colors=display.getHTMLColors())
     return render_template("index.html", colors=display.getHTMLColors())
