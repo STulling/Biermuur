@@ -3,6 +3,7 @@ from display import init, movingText, setStrip
 from multiprocessing import Process
 import display
 import sys
+import os
 
 app = Flask(__name__)
 process = None
@@ -45,9 +46,15 @@ def index():
             setAction(display.cirkels, ())
         elif request.form.get('histogram'):
             setAction(display.histogram, ())
+        elif request.form.get('update'):
+            update()
         else:
             return render_template("index.html", colors=display.getHTMLColors())
     return render_template("index.html", colors=display.getHTMLColors())
+
+
+def update():
+    os.system("git pull")
 
 
 if __name__ == "__main__":
