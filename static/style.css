@@ -108,6 +108,9 @@ input[type="input"] {
     background-color: rgba(0,0,0,0);
     border-width: 0px;
     text-align: center;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    text-shadow: 2px 2px 0 #000;
 }
 
 input[type="color"] {
