@@ -48,7 +48,7 @@ def index():
             setAction(display.histogram, ())
         elif request.form.get('update'):
             update()
-        return redirect(url_for('index'), code=303)
+        return redirect(url_for('index'))
     return render_template("index.html", colors=display.getHTMLColors())
 
 
