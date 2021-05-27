@@ -332,7 +332,7 @@ def matrix():
 def spiraal():
     while True:
         r = 2
-        theta = 0
+        theta = 2*np.pi
         x = 6
         y = 6
         while 0 < x < WIDTH and 0 < y < HEIGHT:
@@ -343,5 +343,6 @@ def spiraal():
             y = int(r*np.sin(theta))
             print(x, y)
             setPixelColor(x,y, primary)
+            strip.show()
             time.sleep(0.05)
 
