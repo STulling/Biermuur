@@ -1,12 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for
 from display import init, movingText, setStrip
 from multiprocessing import Process
+from datetime import datetime
 import display
 import sys
 import os
 
 app = Flask(__name__)
 process = None
+time = datetime.now()
 
 def setAction(action, args):
     global process
@@ -51,7 +53,7 @@ def index():
         elif request.form.get('spiraal'):
             setAction(display.spiraal, ())
         return redirect(url_for('index'))
-    return render_template("index.html", colors=display.getHTMLColors())
+    return render_template("index.html", colors=display.getHTMLColors(), time=time.strftime("%d/%m/%Y %H:%M:%S"))
 
 
 def update():
