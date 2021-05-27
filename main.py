@@ -55,6 +55,8 @@ def index():
 
 
 def update():
+    if process and process.is_alive():
+        process.kill()
     os.system("git pull")
 
 
