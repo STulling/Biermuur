@@ -341,6 +341,7 @@ def spiraal():
             r+= 0.5
             x = int(r*np.cos(theta))
             y = int(r*np.sin(theta))
+            print(x, y)
             setPixelColor(x,y, primary)
             time.sleep(0.05)
 
