@@ -34,7 +34,7 @@ primary = (0, 255, 0)
 secondary = (255, 0, 0)
 
 buffersize=10
-blocksize=512
+blocksize=1024
 q = queue.Queue(maxsize=buffersize)
 event = threading.Event()
 
@@ -76,7 +76,7 @@ def playSound(file="lieblingsfach.wav"):
                 data = f.buffer_read(blocksize, dtype='float32')
                 q.put(data, timeout=timeout)
                 setStrip(secondary, False)
-                setAmountColor(int(np.max(np.frombuffer(data)) * 100000), getIfromRGB(primary))
+                setAmountColor(int(np.max(np.frombuffer(data)) * 200000), getIfromRGB(primary))
             event.wait()  # Wait until playback is finished
 
 
