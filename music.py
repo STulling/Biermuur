@@ -57,8 +57,8 @@ def playSound(file):
             while data:
                 data = f.buffer_read(blocksize, dtype='float32')
                 q.put(data, timeout=timeout)
-                #display.setStrip(secondary, False)
-                #display.setAmountColor(int(np.max(np.frombuffer(data)) * 200000), getIfromRGB(primary))
+                display.setStrip(secondary, False)
+                display.setAmountColor(int(np.max(np.frombuffer(data)) * 200000), getIfromRGB(primary))
             event.wait()  # Wait until playback is finished
     q.queue.clear()
 
