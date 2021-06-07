@@ -58,7 +58,7 @@ def callback(outdata, frames, time, status):
         outdata[:] = data
 
 
-def playSound(file="lieblingsfach.wav"):
+def playSound(file="killmeslow.wav"):
     with sf.SoundFile(file) as f:
         for _ in range(buffersize):
             data = f.buffer_read(blocksize, dtype='float32')
