@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from display import init, movingText, setStrip
 from multiprocessing import Process
 from datetime import datetime
+import music
 import display
 import sys
 import os
@@ -53,9 +54,12 @@ def index():
         elif request.form.get('spiraal'):
             setAction(display.spiraal, ())
         elif request.form.get('sound'):
-            setAction(display.playSound, ())
+            setAction(music.playSound, ())
+        elif request.form.get('shuffle') and request.form.get('playlist'):
+            print(request.form.get('playlist'))
+            setAction(music.shuffleplaylist, (request.form.get('playlist'),))
         return redirect(url_for('index'))
-    return render_template("index.html", colors=display.getHTMLColors(), time=time.strftime("%d/%m/%Y %H:%M:%S"))
+    return render_template("index.html", colors=display.getHTMLColors(), time=time.strftime("%d/%m/%Y %H:%M:%S"), playlists=music.listFolders())
 
 
 def update():
@@ -65,6 +69,8 @@ def update():
 
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        music.folder = sys.argv[1]
     try:
         init()
     except NameError:

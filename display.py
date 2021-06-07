@@ -10,10 +10,6 @@ import sys
 import numpy as np
 import random
 from fake_strip import FakeStrip
-import sounddevice as sd
-import soundfile as sf
-import queue
-import threading
 
 # LED strip configuration:
 LED_COUNT = 360  # Number of LED pixels.
@@ -32,52 +28,6 @@ out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
 
 primary = (0, 255, 0)
 secondary = (255, 0, 0)
-
-buffersize=10
-blocksize=1024
-q = queue.Queue(maxsize=buffersize)
-event = threading.Event()
-
-
-def callback(outdata, frames, time, status):
-    assert frames == blocksize
-    if status.output_underflow:
-        print('Output underflow: increase blocksize?', file=sys.stderr)
-        raise sd.CallbackAbort
-    assert not status
-    try:
-        data = q.get_nowait()
-    except queue.Empty:
-        print('Buffer is empty: increase buffersize?', file=sys.stderr)
-        raise sd.CallbackAbort
-    if len(data) < len(outdata):
-        outdata[:len(data)] = data
-        outdata[len(data):] = b'\x00' * (len(outdata) - len(data))
-        raise sd.CallbackStop
-    else:
-        outdata[:] = data
-
-
-def playSound(file="killmeslow.wav"):
-    with sf.SoundFile(file) as f:
-        for _ in range(buffersize):
-            data = f.buffer_read(blocksize, dtype='float32')
-            if not data:
-                break
-            q.put_nowait(data)  # Pre-fill queue
-
-        stream = sd.RawOutputStream(
-            samplerate=f.samplerate, blocksize=blocksize,
-            device=sd.default.device, channels=f.channels, dtype='float32',
-            callback=callback, finished_callback=event.set)
-        with stream:
-            timeout = blocksize * buffersize / f.samplerate
-            while data:
-                data = f.buffer_read(blocksize, dtype='float32')
-                q.put(data, timeout=timeout)
-                setStrip(secondary, False)
-                setAmountColor(int(np.max(np.frombuffer(data)) * 200000), getIfromRGB(primary))
-            event.wait()  # Wait until playback is finished
 
 
 def setAmountColor(n, color):
