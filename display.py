@@ -76,7 +76,7 @@ def playSound(file="lieblingsfach.wav"):
                 data = f.buffer_read(blocksize, dtype='float32')
                 q.put(data, timeout=timeout)
                 setStrip(secondary, False)
-                setAmountColor(int(np.max(np.frombuffer(data)) * 1000), getIfromRGB(primary))
+                setAmountColor(int(np.max(np.frombuffer(data)) * 100000), getIfromRGB(primary))
             event.wait()  # Wait until playback is finished
 
 
