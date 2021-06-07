@@ -34,7 +34,7 @@ primary = (0, 255, 0)
 secondary = (255, 0, 0)
 
 buffersize=10
-blocksize=1024
+blocksize=512
 q = queue.Queue(maxsize=buffersize)
 event = threading.Event()
 
