@@ -7,6 +7,7 @@ import soundfile as sf
 import queue
 import threading
 import os
+import numpy as np
 
 buffersize=10
 blocksize=1024
@@ -57,8 +58,8 @@ def playSound(file):
             while data:
                 data = f.buffer_read(blocksize, dtype='float32')
                 q.put(data, timeout=timeout)
-                display.setStrip(secondary, False)
-                display.setAmountColor(int(np.max(np.frombuffer(data)) * 200000), getIfromRGB(primary))
+                display.setStrip(display.secondary, False)
+                display.setAmountColor(int(np.max(np.frombuffer(data)) * 200000), display.getIfromRGB(display.primary))
             event.wait()  # Wait until playback is finished
     q.queue.clear()
 
