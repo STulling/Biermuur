@@ -75,8 +75,15 @@ def playSound(file="lieblingsfach.wav"):
             while data:
                 data = f.buffer_read(blocksize, dtype='float32')
                 q.put(data, timeout=timeout)
-                #print(np.max(np.frombuffer(data)) * 1000)
+                setStrip(secondary, False)
+                setAmountColor(int(np.max(np.frombuffer(data)) * 1000), getIfromRGB(primary))
             event.wait()  # Wait until playback is finished
+
+
+def setAmountColor(n, color):
+    for i in range(min(n, LED_COUNT)):
+        strip.setPixelColor(i, color)
+    strip.show()
 
 
 def getHTMLColors():
