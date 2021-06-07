@@ -18,7 +18,7 @@ folder = "/media/pi/F/music"
 
 
 def download(folder, name):
-    command = f"youtube-dl -x -f bestaudio -x --audio-format wav -o {folder}/%(title)s.%(ext)s \"ytsearch1:{name}\""
+    command = f"youtube-dl -x -f bestaudio -x --audio-format wav -o \"{folder}/%(title)s.%(ext)s\" \"ytsearch1:{name}\""
     os.system(command)
 
 
