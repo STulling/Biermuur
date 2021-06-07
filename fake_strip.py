@@ -1,17 +1,21 @@
 from PIL import Image
 import math
+import os
 
 NUM_PIXELS = 150
 WIDTH = 12
 HEIGHT = 12
 
 
-class FakeStrip():
+class Adafruit_NeoPixel():
     im = Image.new('RGB', (12, 12))
     count = 0
 
-    def __init__(self):
+    def __init__(self, LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL):
         super().__init__()
+
+    def begin(self):
+        return
 
     def setPixelColor(self, index, color):
         if 0 > index or index >= (WIDTH * HEIGHT):
@@ -24,5 +28,6 @@ class FakeStrip():
         return NUM_PIXELS
 
     def show(self):
-        self.im.save(f'images/{self.count:05}.png')
-        self.count += 1
+        if os.path.exists('image'):
+            self.im.save(f'images/{self.count:05}.png')
+            self.count += 1

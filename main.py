@@ -56,8 +56,9 @@ def index():
         elif request.form.get('sound'):
             setAction(music.playSound, ())
         elif request.form.get('shuffle') and request.form.get('playlist'):
-            print(request.form.get('playlist'))
             setAction(music.shuffleplaylist, (request.form.get('playlist'),))
+        elif request.form.get('download') and request.form.get('playlist') and request.form.get('song'):
+            setAction(music.download, (request.form.get('playlist'),request.form.get('song'),))
         return redirect(url_for('index'))
     return render_template("index.html", colors=display.getHTMLColors(), time=time.strftime("%d/%m/%Y %H:%M:%S"), playlists=music.listFolders())
 
@@ -71,10 +72,7 @@ def update():
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         music.folder = sys.argv[1]
-    try:
-        init()
-    except NameError:
-        print("No display hooked up, ignoring...")
+    init()
     try:
         app.run(host="0.0.0.0", debug=True)
     except KeyboardInterrupt:

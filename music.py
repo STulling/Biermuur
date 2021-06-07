@@ -17,6 +17,11 @@ event = threading.Event()
 folder = "/media/pi/F/music"
 
 
+def download(folder, name):
+    command = f"youtube-dl -x -f bestaudio -x --audio-format wav -o {folder}/%(title)s.%(ext)s \"ytsearch1:{name}\""
+    os.system(command)
+
+
 def listFolders():
     return [x[0] for x in os.walk(folder)]
 

@@ -3,13 +3,13 @@ import time
 try:
     from rpi_ws281x import *
 except ImportError:
-    print("Missing rpi_ws281x library, running webserver anyway")
+    print("Missing rpi_ws281x library, using simulated strip")
+    from fake_strip import *
 import argparse
 from PIL import Image, ImageDraw, ImageFont
 import sys
 import numpy as np
 import random
-from fake_strip import FakeStrip
 
 # LED strip configuration:
 LED_COUNT = 360  # Number of LED pixels.
@@ -21,13 +21,13 @@ LED_INVERT = False  # True to invert the signal (when using NPN transistor level
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 WIDTH = 20
 HEIGHT = 18
-strip = FakeStrip()
 
 fnt = ImageFont.truetype("Pixel12x10Mono.ttf", 13)
 out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
 
 primary = (0, 255, 0)
 secondary = (255, 0, 0)
+strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
 
 
 def setAmountColor(n, color):
@@ -207,9 +207,7 @@ def random_order_wipe():
 
 
 def init():
-    global strip
     # Create NeoPixel object with appropriate configuration.
-    strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
     # Intialize the library (must be called once before other functions).
     strip.begin()
 
