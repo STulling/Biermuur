@@ -52,6 +52,8 @@ def index():
             update()
         elif request.form.get('spiraal'):
             setAction(display.spiraal, ())
+        elif request.form.get('sound'):
+            setAction(display.playSound, ())
         return redirect(url_for('index'))
     return render_template("index.html", colors=display.getHTMLColors(), time=time.strftime("%d/%m/%Y %H:%M:%S"))
 
