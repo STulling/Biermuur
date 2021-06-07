@@ -33,7 +33,7 @@ out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
 primary = (0, 255, 0)
 secondary = (255, 0, 0)
 
-buffersize=2
+buffersize=10
 blocksize=1024
 q = queue.Queue(maxsize=buffersize)
 event = threading.Event()
@@ -58,10 +58,10 @@ def callback(outdata, frames, time, status):
         outdata[:] = data
 
 
-def playSound(file="lieblingsfach.mp3"):
+def playSound(file="lieblingsfach.wav"):
     with sf.SoundFile(file) as f:
         for _ in range(buffersize):
-            data = f.buffer_read(blocksize, ctype='float')
+            data = f.buffer_read(blocksize, dtype='float32')
             if not data:
                 break
             q.put_nowait(data)  # Pre-fill queue
@@ -73,8 +73,9 @@ def playSound(file="lieblingsfach.mp3"):
         with stream:
             timeout = blocksize * buffersize / f.samplerate
             while data:
-                data = f.buffer_read(blocksize, ctype='float')
+                data = f.buffer_read(blocksize, dtype='float32')
                 q.put(data, timeout=timeout)
+                #print(np.max(np.frombuffer(data)) * 1000)
             event.wait()  # Wait until playback is finished
 
 
