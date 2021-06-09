@@ -350,8 +350,6 @@ def spiraal():
     while True:
         r = 2
         theta = 2*np.pi
-        x = WIDTH/2
-        y = HEIGHT/2
         setStrip(secondary, False)
         while r < 15:
             theta += 0.05*np.pi
