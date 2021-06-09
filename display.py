@@ -70,7 +70,7 @@ def setPixelColor(x, y, color):
     if x >= WIDTH or y >= HEIGHT:
         return
     if y % 2 == 1:
-        x = 11 - x
+        x = WIDTH - 1 - x
     loc = x + y * WIDTH
     if isinstance(color, tuple):
         color = getIfromRGB(color)
