@@ -246,7 +246,7 @@ def lijnen():
     hoeken = np.linspace(-2, 2, 10)
     while True:
         setStrip(secondary, False)
-        color = random.randint(0, 16777215)
+        color = getIfromRGB(primary)
         alpha = random.choice(hoeken)
         xcenter = random.randint(0, WIDTH)
         ycenter = random.randint(0, HEIGHT)
@@ -356,8 +356,8 @@ def spiraal():
         while r < 15:
             theta += 0.05*np.pi
             r+= 0.02
-            x = int(r*np.cos(theta)) + 6
-            y = int(r*np.sin(theta)) + 6
+            x = int(r*np.cos(theta)) + WIDTH/2
+            y = int(r*np.sin(theta)) + HEIGHT/2
             print(x, y)
             setPixelColor(x,y, primary)
             strip.show()
