@@ -252,19 +252,19 @@ def lijnen():
     hoeken = np.linspace(-2, 2, 10)
     while True:
         setStrip(secondary, False)
-        color = random.randint(0, 16777215)
+        color = getIfromRGB(primary)
         alpha = random.choice(hoeken)
-        xcenter = random.randint(0, 12)
-        ycenter = random.randint(0, 12)
+        xcenter = random.randint(0, WIDTH)
+        ycenter = random.randint(0, HEIGHT)
         yas = ycenter - (xcenter * alpha)
-        for x in range(12):
+        for x in range(WIDTH):
             yval = int(alpha * x + yas)
             setPixelColor(x, yval, color)
             strip.show()
-            time.sleep(0.1)
+            time.sleep(0.02)
         strip.show()
         # time.sleep(0.2)
-
+ 
 
 def cirkels():
     while True:
@@ -281,6 +281,19 @@ def cirkels():
             strip.show()
             time.sleep(0.1)
         setStrip(secondary, False)
+
+def cirkel(radius):
+    color = random.randint(0, 16777215)
+    xcenter = random.randint(3, 9)
+    ycenter = random.randint(3, 9)
+    for y in range(HEIGHT):
+        for x in range(WIDTH):
+            afstand = np.sqrt((y - ycenter) ** 2 + (x - xcenter) ** 2)
+            if afstand < radius:
+                setPixelColor(x, y, color)
+    strip.show()
+    time.sleep(0.1)
+    setStrip(secondary, False)
 
 
 def histogram():
@@ -343,14 +356,12 @@ def spiraal():
     while True:
         r = 2
         theta = 2*np.pi
-        x = 6
-        y = 7
         setStrip(secondary, False)
-        while r < 8:
+        while r < 15:
             theta += 0.05*np.pi
             r+= 0.02
-            x = int(r*np.cos(theta)) + 6
-            y = int(r*np.sin(theta)) + 6
+            x = int(r*np.cos(theta)) + WIDTH/2
+            y = int(r*np.sin(theta)) + HEIGHT/2
             print(x, y)
             setPixelColor(x,y, primary)
             strip.show()
