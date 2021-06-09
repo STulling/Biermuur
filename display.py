@@ -176,34 +176,40 @@ def diamondwipe(color=(255, 255, 0)):
 
 
 def diamond_wipes():
+    color = (0, 0, 0)
+    last_color = color
     while True:
-        r = random.randint(0, 1) * 255
-        g = random.randint(0, 1) * 255
-        b = random.randint(0, 1) * 255
-        color = (r, g, b)
+        while color is last_color:
+            r = random.randint(0, 1) * 255
+            g = random.randint(0, 1) * 255
+            b = random.randint(0, 1) * 255
+            color = (r, g, b)
         diamondwipe(color=color)
+        last_color = color
 
 
 def random_pixel():
-    indices = list(range(WIDTH * HEIGHT))
+    NUM_PIXELS = WIDTH * HEIGHT
+    indices = list(range(NUM_PIXELS))
     while True:
         random.shuffle(indices)
         for pixel in indices:
             color = random.randint(0, 16777215)
             strip.setPixelColor(pixel, color)
             strip.show()
-            time.sleep(1 / 20.0)
+            time.sleep(1 / NUM_PIXELS)
 
 
 def random_order_wipe():
-    indices = list(range(WIDTH * HEIGHT))
+    NUM_PIXELS = WIDTH * HEIGHT
+    indices = list(range(NUM_PIXELS))
     while True:
         random.shuffle(indices)
         color = random.randint(0, 16777215)
         for pixel in indices:
             strip.setPixelColor(pixel, color)
             strip.show()
-            time.sleep(1 / 20.0)
+            time.sleep(1 / NUM_PIXELS)
 
 
 def init():
