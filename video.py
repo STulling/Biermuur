@@ -44,7 +44,7 @@ def playVideo(file="roll.mp4"):
     audio = audio.to_soundarray().astype('float32')
     step = (1/video.fps)
     audioblocks = []
-    frames = video.iter_frames()
+    frames = list(video.iter_frames())
     for t in range(int(duration * fps / blocksize)):
         audioblocks.append(audio[int(t*blocksize): int((t+1)*blocksize), :].flatten().tobytes())
 
