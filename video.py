@@ -44,6 +44,7 @@ def playVideo(file="roll.mp4"):
     audio = audio.to_soundarray().astype('float32')
     step = (1/video.fps)
     audioblocks = []
+    frames = video.iter_frames()
     for t in range(int(duration * fps / blocksize)):
         audioblocks.append(audio[int(t*blocksize): int((t+1)*blocksize), :].flatten().tobytes())
 
@@ -61,7 +62,7 @@ def playVideo(file="roll.mp4"):
             frame = math.floor(seconds * video.fps)
             if frame > prev_frame:
                 prev_frame = frame
-                video_frame = video.get_frame(frame / video.fps)
+                video_frame = frames[frame]
                 display.display(video_frame)
             print(len(q.queue))
             q.put(audioblocks[t], timeout=0.1)
