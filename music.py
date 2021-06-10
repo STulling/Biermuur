@@ -50,6 +50,7 @@ def playSound(file):
     with sf.SoundFile(file) as f:
         for _ in range(buffersize):
             data = f.buffer_read(blocksize, dtype='float32')
+            print(np.frombuffer(data))
             if not data:
                 break
             q.put_nowait(data)  # Pre-fill queue
