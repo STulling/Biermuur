@@ -10,8 +10,8 @@ import time
 import math
 import sys
 
-buffersize=10
-blocksize=2048
+buffersize=30
+blocksize=1024
 q = queue.Queue(maxsize=buffersize)
 event = threading.Event()
 
@@ -47,20 +47,21 @@ def playVideo(file="roll.mp4"):
     for t in range(int(duration * fps / blocksize)):
         audioblocks.append(audio[int(t*blocksize): int((t+1)*blocksize), :].flatten().tobytes())
 
-    print(len(audioblocks[0]))
-
     stream = sd.RawOutputStream(samplerate=fps, blocksize=blocksize, device=sd.default.device, channels=2,
                        dtype=np.float32, callback=callback, finished_callback=event.set)
+
+    for x in range(buffersize):
+        q.put_nowait(audioblocks[x])
+
     with stream:
         prev_frame = -1
-        for t in range(int(duration * fps / blocksize)):
+        for t in range(buffersize, int(duration * fps / blocksize)):
             if t == len(audioblocks): break
-            audio_frame = audioblocks[t]
             seconds = t*blocksize/fps
             frame = math.floor(seconds * video.fps)
             if frame > prev_frame:
                 prev_frame = frame
                 video_frame = video.get_frame(frame / video.fps)
                 display.display(video_frame)
-            q.put(audio_frame, timeout=1)
+            q.put(audioblocks[t], timeout=0.1)
         event.wait()
