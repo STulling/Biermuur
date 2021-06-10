@@ -8,8 +8,8 @@ import threading
 import math
 import sys
 
-buffersize=100
-blocksize=2048
+buffersize=200
+blocksize=1024
 q = queue.Queue(maxsize=buffersize)
 event = threading.Event()
 
