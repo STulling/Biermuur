@@ -9,7 +9,7 @@ import threading
 import os
 import numpy as np
 
-buffersize=20
+buffersize=10
 blocksize=1024
 q = queue.Queue(maxsize=buffersize)
 event = threading.Event()
