@@ -9,6 +9,7 @@ import threading
 import time
 import math
 import sys
+import os
 
 buffersize=30
 blocksize=2048
@@ -65,5 +66,6 @@ def playVideo(file="roll.mp4"):
                 video_frame = frames[frame]
                 display.display(video_frame)
             print(len(q.queue))
+            os.system("cat /sys/class/thermal/thermal_zone0/temp")
             q.put(audioblocks[t], timeout=0.1)
         event.wait()
