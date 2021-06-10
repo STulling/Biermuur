@@ -1,13 +1,13 @@
 import time
-
+import sys
 try:
     from rpi_ws281x import *
 except ImportError:
     print("Missing rpi_ws281x library, using simulated strip")
-    from fake_strip import *
+    if 'fake_strip' not in sys.modules:
+        from fake_strip import *
 import argparse
 from PIL import Image, ImageDraw, ImageFont
-import sys
 import numpy as np
 import random
 

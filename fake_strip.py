@@ -1,33 +1,48 @@
 from PIL import Image
 import math
+import pygame
 import os
+import display
 
-NUM_PIXELS = 150
-WIDTH = 12
-HEIGHT = 12
+def Color(r, g, b):
+    RGBint = (r << 16) + (g << 8) + b
+    return RGBint
+
+
+def getRGBfromI(RGBint):
+    blue = RGBint & 255
+    green = (RGBint >> 8) & 255
+    red = (RGBint >> 16) & 255
+    return red, green, blue
 
 
 class Adafruit_NeoPixel():
-    im = Image.new('RGB', (12, 12))
     count = 0
 
     def __init__(self, LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL):
-        super().__init__()
+        self.NUM_PIXELS = LED_COUNT
+        self.WIDTH = display.WIDTH
+        self.HEIGHT = display.HEIGHT
+        pygame.init()
+        self.SCREEN = pygame.display.set_mode((self.WIDTH * 20, self.HEIGHT * 20))
+        self.SCREEN.fill((0, 0, 0))
 
     def begin(self):
         return
 
     def setPixelColor(self, index, color):
-        if 0 > index or index >= (WIDTH * HEIGHT):
+        if 0 > index or index >= (self.WIDTH * self.HEIGHT):
             return
-        y = math.floor(index / WIDTH)
-        x = (WIDTH - 1 - (index - y * WIDTH) if y % 2 == 1 else index - y * WIDTH)
-        self.im.putpixel((x, y), color)
+        y = math.floor(index / self.WIDTH)
+        x = (self.WIDTH - 1 - (index - y * self.WIDTH) if y % 2 == 1 else index - y * self.WIDTH)
+        self.drawRect(x, y, getRGBfromI(color))
+
+    def drawRect(self, x, y, color):
+        rect = pygame.Rect(x*20 + 1, y*20 + 1, 19, 19)
+        pygame.draw.rect(self.SCREEN, color, rect)
 
     def numPixels(self):
-        return NUM_PIXELS
+        return self.NUM_PIXELS
 
     def show(self):
-        if os.path.exists('image'):
-            self.im.save(f'images/{self.count:05}.png')
-            self.count += 1
+        pygame.display.update()
