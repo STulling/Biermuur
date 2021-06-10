@@ -63,5 +63,6 @@ def playVideo(file="roll.mp4"):
                 prev_frame = frame
                 video_frame = video.get_frame(frame / video.fps)
                 display.display(video_frame)
+            print(len(q.queue))
             q.put(audioblocks[t], timeout=0.1)
         event.wait()
