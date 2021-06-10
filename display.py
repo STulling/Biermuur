@@ -105,6 +105,13 @@ def getIfromRGB(rgb):
     return RGBint
 
 
+def display(arr):
+    for y in range(len(arr)):
+        for x in range(len(arr[y])):
+            setPixelColor(x, y, getIfromRGB(arr[y][x]))
+    strip.show()
+
+
 def movingText(text, speed, loop=False):
     moving_width = 10 * 2 + 10 * len(text)
     d = ImageDraw.Draw(out)

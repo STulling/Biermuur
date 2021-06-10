@@ -3,6 +3,7 @@ from display import init, movingText, setStrip
 from multiprocessing import Process
 from datetime import datetime
 import music
+import video
 import display
 import sys
 import os
@@ -53,8 +54,8 @@ def index():
             update()
         elif request.form.get('spiraal'):
             setAction(display.spiraal, ())
-        elif request.form.get('sound'):
-            setAction(music.playSound, ())
+        elif request.form.get('video'):
+            setAction(video.playVideo, ())
         elif request.form.get('shuffle') and request.form.get('playlist'):
             setAction(music.shuffleplaylist, (request.form.get('playlist'),))
         elif request.form.get('download') and request.form.get('playlist') and request.form.get('song'):

@@ -1,3 +1,3 @@
-import display
+import video
 
-display.playSound()
+video.playVideo()
