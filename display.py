@@ -74,8 +74,7 @@ def setPixelColor(x, y, color):
     loc = int(x + y * WIDTH)
     if isinstance(color, tuple):
         color = getIfromRGB(color)
-    int(color)
-    strip.setPixelColor(loc, color)
+    strip.setPixelColor(loc, int(color))
 
 
 def setStrip(color, update=True):
