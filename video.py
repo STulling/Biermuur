@@ -29,7 +29,7 @@ def playVideo(file="roll.mp4"):
     videoblocks = []
     for t in range(int(duration / step)):
         audioblocks.append(audio[int(t*step*fps): int((t+1)*step*fps), :])
-        
+
     with stream:
         prev_frame = -1
         for t in range(int(duration / step)):
