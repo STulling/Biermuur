@@ -11,7 +11,7 @@ import math
 import sys
 
 buffersize=10
-blocksize=1024
+blocksize=2048
 q = queue.Queue(maxsize=buffersize)
 event = threading.Event()
 
