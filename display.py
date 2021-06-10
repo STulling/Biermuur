@@ -109,7 +109,7 @@ def getIfromRGB(rgb):
 def display(arr):
     for y in range(len(arr)):
         for x in range(len(arr[y])):
-            setPixelColor(x, y, Color(arr[y][x][0], arr[y][x][1], arr[y][x][2]))
+            setPixelColor(x, y, (arr[y][x][0], arr[y][x][1], arr[y][x][2]))
     strip.show()
 
 
