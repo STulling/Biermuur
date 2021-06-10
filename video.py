@@ -20,9 +20,8 @@ def playVideo(file="roll.mp4"):
     video = resize(video, (20, 18))
     duration = video.duration  # == audio.duration, presented in seconds, float
     # note video.fps != audio.fps
-    stream = sd.Stream(samplerate=audio.fps, blocksize=audio.fps, device=sd.default.device, channels=2,
+    stream = sd.RawOutputStream(samplerate=audio.fps, blocksize=audio.fps, device=sd.default.device, channels=2,
                        dtype=np.float32)
-    stream.start()
     fps = audio.fps
     audio = audio.to_soundarray().astype('float32')
     step = (1/video.fps)
@@ -30,14 +29,15 @@ def playVideo(file="roll.mp4"):
     videoblocks = []
     for t in range(int(duration / step)):
         audioblocks.append(audio[int(t*step*fps): int((t+1)*step*fps), :])
-
-    prev_frame = -1
-    for t in range(int(duration / step)):
-        if t == len(audioblocks): break
-        audio_frame = audioblocks[t]
-        frame = math.floor(t * step * video.fps)
-        if frame > prev_frame:
-            prev_frame = frame
-            video_frame = video.get_frame(frame / video.fps)
-            display.display(video_frame)
-        stream.write(audio_frame)
+        
+    with stream:
+        prev_frame = -1
+        for t in range(int(duration / step)):
+            if t == len(audioblocks): break
+            audio_frame = audioblocks[t]
+            frame = math.floor(t * step * video.fps)
+            if frame > prev_frame:
+                prev_frame = frame
+                video_frame = video.get_frame(frame / video.fps)
+                display.display(video_frame)
+            stream.write(audio_frame)
