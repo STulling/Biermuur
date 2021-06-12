@@ -56,7 +56,7 @@ def playVideo(file="fire.mp4"):
         prev_frame = -1
         for t in range(buffersize, int(duration * fps / blocksize)):
             if t == len(audioblocks): break
-            seconds = t*blocksize/fps
+            seconds = (t-buffersize)*blocksize/fps
             frame = math.floor(seconds * video.fps)
             if frame > prev_frame:
                 prev_frame = frame
