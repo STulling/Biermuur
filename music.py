@@ -40,7 +40,7 @@ def shuffleplaylist(path):
 
 class MusicPlayer():
 
-    buffersize = 200
+    buffersize = 2000
     blocksize = 1024
     q = queue.Queue(maxsize=buffersize)
     event = threading.Event()
