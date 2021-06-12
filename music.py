@@ -51,6 +51,10 @@ class MusicPlayer():
     def set_callback(self, new_callback):
         self.callback_function = new_callback
 
+    def process(self, data):
+        data = np.frombuffer(data, np.float32)[::2]
+        self.callback_function(np.sqrt(np.mean(data**2)))
+
     def callback(self, outdata, frames, time, status):
         assert frames == self.blocksize
         if status.output_underflow:
@@ -68,9 +72,8 @@ class MusicPlayer():
             raise sd.CallbackStop
         else:
             outdata[:] = data
-        data = np.frombuffer(data, np.float32)[::2]
         if self.callback_function is not None:
-            x = threading.Thread(self.callback_function, (np.sqrt(np.mean(data**2))))
+            x = threading.Thread(target=self.process, args=(data,))
             x.start()
 
     def playSound(self, file):
