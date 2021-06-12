@@ -378,7 +378,7 @@ def boxes():
     while True:
         setStrip(secondary, False)
         xval = [0,1,2,3]
-        yval = 6
+        yval = [0,1,2,3,4,5]
         kratx = random.randint(0,4)
         kraty = random.randint(0,2)
         xval = xval + kratx*4
@@ -388,4 +388,6 @@ def boxes():
                     setPixelColor(i,j, primary)
                     strip.show()
                     time.sleep(0.05)
-                    
+
+
+
