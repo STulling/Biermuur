@@ -59,18 +59,18 @@ class MusicPlayer():
         assert not status
         try:
             data = self.q.get_nowait()
-            byte_data = data.flatten().tobytes()
         except queue.Empty:
             print('Buffer is empty: increase buffersize?', file=sys.stderr)
             raise sd.CallbackAbort
-        if self.callback_function is not None:
-            self.callback_function(np.sqrt(np.mean(data**2)))
-        if len(byte_data) < len(outdata):
-            outdata[:len(byte_data)] = byte_data
-            outdata[len(byte_data):] = b'\x00' * (len(outdata) - len(byte_data))
+        if len(data) < len(outdata):
+            outdata[:len(data)] = data
+            outdata[len(data):] = b'\x00' * (len(outdata) - len(data))
             raise sd.CallbackStop
         else:
-            outdata[:] = byte_data
+            outdata[:] = data
+        data = np.frombuffer(data)[::2]
+        if self.callback_function is not None:
+            self.callback_function(np.sqrt(np.mean(data**2)))
 
     def playSound(self, file):
         print(f"Playing: {file}")
@@ -94,7 +94,7 @@ class MusicPlayer():
         with stream:
             timeout = self.blocksize * self.buffersize / samplerate
             while (i+1)*self.blocksize < len(song):
-                data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
+                data = song[i * self.blocksize:(i + 1) * self.blocksize, :].flatten().tobytes()
                 i += 1
                 print(len(self.q.queue))
                 self.q.put(data, timeout=timeout)
