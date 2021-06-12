@@ -16,10 +16,10 @@ def on_press(key):
     if key.name == 'r':
         mPlayer.set_callback(AudioUtils.ruit)
 
-def loop():
+def loop(file):
     keyboard.on_press(on_press)
     display.init()
     global mPlayer
     mPlayer = music.MusicPlayer()
     mPlayer.set_callback(AudioUtils.simple)
-    mPlayer.playSound('lieblingsfach.wav')
+    mPlayer.playSound(file)

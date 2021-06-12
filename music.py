@@ -1,5 +1,6 @@
 import random
 
+import DJ
 import display
 import sys
 import sounddevice as sd
@@ -32,10 +33,9 @@ def listFolders():
 
 
 def shuffleplaylist(path):
-    mPlayer = MusicPlayer()
     while True:
         song = random.choice([os.path.join(path, name) for path, subdirs, files in os.walk(path) for name in files])
-        mPlayer.playSound(song)
+        DJ.loop(song)
 
 
 class MusicPlayer():
@@ -74,6 +74,7 @@ class MusicPlayer():
 
     def playSound(self, file):
         print(f"Playing: {file}")
+        self.event.clear()
         song, samplerate = sf.read(file)
         channels = song.shape[1]
         song = song.astype(np.float32)
