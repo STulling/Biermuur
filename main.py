@@ -7,6 +7,7 @@ import video
 import display
 import sys
 import os
+import DJ
 
 app = Flask(__name__)
 process = None
@@ -58,6 +59,8 @@ def index():
             setAction(display.boxes, ())
         elif request.form.get('video'):
             setAction(video.playVideo, ())
+        elif request.form.get('dj'):
+            setAction(DJ.loop, ())
         elif request.form.get('shuffle') and request.form.get('playlist'):
             setAction(music.shuffleplaylist, (request.form.get('playlist'),))
         elif request.form.get('download') and request.form.get('playlist') and request.form.get('song'):
