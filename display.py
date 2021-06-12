@@ -387,12 +387,15 @@ def boxes():
         setStrip(secondary, False)
         xval = np.arange(0, KRAT_WIDTH, 1)
         yval = np.arange(0, KRAT_HEIGHT, 1)
-        kratx = random.randint(0, N_KRAT_X)
-        kraty = random.randint(0, N_KRAT_Y)
+        kratx = random.randint(0, N_KRAT_X-1)
+        kraty = random.randint(0, N_KRAT_Y-1)
         xval += kratx * KRAT_WIDTH
         yval += kraty * KRAT_HEIGHT
         for y in yval:
             time.sleep(0.1)
+            if bool(random.getrandbits(1)):
+                xval = reversed(xval)
             for x in xval:
                 setPixelColor(x, y, primary)
                 strip.show()
+
