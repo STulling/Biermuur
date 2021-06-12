@@ -96,6 +96,7 @@ class MusicPlayer():
             while (i+1)*self.blocksize < len(song):
                 data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
                 i += 1
+                print(len(self.q.queue))
                 self.q.put(data, timeout=timeout)
                 if simulated:
                     for event in pygame.event.get():
