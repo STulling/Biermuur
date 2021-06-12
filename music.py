@@ -68,7 +68,7 @@ class MusicPlayer():
             raise sd.CallbackStop
         else:
             outdata[:] = data
-        data = np.frombuffer(data)[::2]
+        data = np.frombuffer(data, np.float32)[::2]
         if self.callback_function is not None:
             self.callback_function(np.sqrt(np.mean(data**2)))
 
@@ -83,7 +83,7 @@ class MusicPlayer():
         for _ in range(self.buffersize):
             if (i+1)*self.blocksize > len(song):
                 break
-            data = song[i*self.blocksize:(i+1)*self.blocksize, :]
+            data = song[i*self.blocksize:(i+1)*self.blocksize, :].flatten().tobytes()
             i+=1
             self.q.put_nowait(data)  # Pre-fill queue
 
@@ -96,7 +96,6 @@ class MusicPlayer():
             while (i+1)*self.blocksize < len(song):
                 data = song[i * self.blocksize:(i + 1) * self.blocksize, :].flatten().tobytes()
                 i += 1
-                print(len(self.q.queue))
                 self.q.put(data, timeout=timeout)
                 if simulated:
                     for event in pygame.event.get():
