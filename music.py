@@ -70,7 +70,8 @@ class MusicPlayer():
             outdata[:] = data
         data = np.frombuffer(data, np.float32)[::2]
         if self.callback_function is not None:
-            self.callback_function(np.sqrt(np.mean(data**2)))
+            x = threading.Thread(self.callback_function, (np.sqrt(np.mean(data**2))))
+            x.start()
 
     def playSound(self, file):
         print(f"Playing: {file}")
