@@ -1,4 +1,4 @@
-from pynput.keyboard import Key, Listener
+import keyboard
 
 import display
 import music
@@ -7,18 +7,17 @@ import AudioUtils
 mPlayer = None
 
 def on_press(key):
-    if key == Key.esc:
+    if key.name == 'esc':
         mPlayer.set_callback(exit)
-    if key.char == 'b':
+    if key.name == 'b':
         mPlayer.set_callback(AudioUtils.simple)
-    if key.char == 's':
+    if key.name == 's':
         mPlayer.set_callback(AudioUtils.sparkle)
-    if key.char == 'r':
+    if key.name == 'r':
         mPlayer.set_callback(AudioUtils.ruit)
 
 def loop():
-    listener = Listener(on_press=on_press)
-    listener.start()
+    keyboard.on_press(on_press)
     display.init()
     global mPlayer
     mPlayer = music.MusicPlayer()
