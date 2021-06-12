@@ -394,6 +394,6 @@ def boxes():
         for y in yval:
             for x in xval:
                 setPixelColor(x, y, primary)
-                strip.show()
-                time.sleep(0.05)
+        strip.show()
+        time.sleep(0.05)
 
