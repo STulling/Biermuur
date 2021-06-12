@@ -18,8 +18,20 @@ def ruit(rms):
                 display.setPixelColor(x, y, display.getIfromRGB(display.primary))
     display.strip.show()
 
+from scipy.special import comb
+
+def smoothstep(x, x_min=0, x_max=1, N=1):
+    x = np.clip((x - x_min) / (x_max - x_min), 0, 1)
+    result = 0
+    for n in range(0, 1):
+         result += comb(N + n, n) * comb(2 * N + 1, N - n) * (-x) ** n
+
+    result *= x ** (N + 1)
+
+    return result
+
 def cirkel(rms):
-    rms = min(1, (3 * rms)**(2 + 1))
+    rms = smoothstep(rms)
     display.setStrip(display.secondary, False)
     xmid = display.WIDTH / 2 - 0.5
     ymid = display.HEIGHT / 2 - 0.5
@@ -40,3 +52,4 @@ def sparkle(rms):
     for x, y in zip(*np.nonzero(randoms)):
         display.setPixelColor(x, y, display.getIfromRGB(display.primary))
     display.strip.show()
+

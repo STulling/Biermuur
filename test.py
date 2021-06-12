@@ -6,7 +6,7 @@ import AudioUtils
 import DJ
 
 def main():
-    DJ.loop()
+    DJ.loop('lieblingsfach.wav')
 
 if __name__=="__main__":
     main()
