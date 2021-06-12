@@ -63,14 +63,14 @@ class MusicPlayer():
         except queue.Empty:
             print('Buffer is empty: increase buffersize?', file=sys.stderr)
             raise sd.CallbackAbort
+        if self.callback_function is not None:
+            self.callback_function(np.sqrt(np.mean(data**2)))
         if len(byte_data) < len(outdata):
             outdata[:len(byte_data)] = byte_data
             outdata[len(byte_data):] = b'\x00' * (len(outdata) - len(byte_data))
             raise sd.CallbackStop
         else:
             outdata[:] = byte_data
-        if self.callback_function is not None:
-            self.callback_function(np.sqrt(np.mean(data**2)))
 
     def playSound(self, file):
         print(f"Playing: {file}")
