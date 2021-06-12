@@ -1,5 +1,12 @@
 import video
 import music
+import display
+import numpy as np
+import AudioUtils
+import DJ
 
-video.playVideo()
-#music.playSound('hitje.wav')
+def main():
+    DJ.loop()
+
+if __name__=="__main__":
+    main()

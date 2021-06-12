@@ -32,7 +32,7 @@ def callback(outdata, frames, time, status):
         outdata[:] = data
 
 
-def playVideo(file="roll.mp4"):
+def playVideo(file="fire.mp4"):
     video = VideoFileClip(file)
     audio = video.audio
     video = resize(video, (20, 18))

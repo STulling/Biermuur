@@ -3,6 +3,8 @@ import math
 import pygame
 import os
 import display
+import threading
+import time
 
 def Color(r, g, b):
     RGBint = (r << 16) + (g << 8) + b
@@ -23,11 +25,12 @@ class Adafruit_NeoPixel():
         self.NUM_PIXELS = LED_COUNT
         self.WIDTH = display.WIDTH
         self.HEIGHT = display.HEIGHT
+        self.SCREEN = None
+
+    def begin(self):
         pygame.init()
         self.SCREEN = pygame.display.set_mode((self.WIDTH * 20, self.HEIGHT * 20))
         self.SCREEN.fill((0, 0, 0))
-
-    def begin(self):
         return
 
     def setPixelColor(self, index, color):
