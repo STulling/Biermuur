@@ -391,11 +391,9 @@ def boxes():
         kraty = random.randint(0, N_KRAT_Y-1)
         xval += kratx * KRAT_WIDTH
         yval += kraty * KRAT_HEIGHT
-        if bool(random.getrandbits(1)):
-            yval = np.flip(yval)
         for y in yval:
-            time.sleep(0.1)
             for x in xval:
                 setPixelColor(x, y, primary)
                 strip.show()
+                time.sleep(0.05)
 
