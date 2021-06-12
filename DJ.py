@@ -15,6 +15,9 @@ def on_press(key):
         mPlayer.set_callback(AudioUtils.sparkle)
     if key.name == 'r':
         mPlayer.set_callback(AudioUtils.ruit)
+    if key.name == 'c':
+        mPlayer.set_callback(AudioUtils.cirkel)
+
 
 def loop(file):
     keyboard.on_press(on_press)

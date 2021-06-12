@@ -18,6 +18,20 @@ def ruit(rms):
                 display.setPixelColor(x, y, display.getIfromRGB(display.primary))
     display.strip.show()
 
+def cirkel(rms):
+    rms = min(1, (3 * rms)**(2 + 1))
+    display.setStrip(display.secondary, False)
+    xmid = display.WIDTH / 2 - 0.5
+    ymid = display.HEIGHT / 2 - 0.5
+    i = int(rms * max(display.WIDTH, display.HEIGHT))
+    radius = rms*10
+    for y in range(display.HEIGHT):
+        for x in range(display.WIDTH):
+            afstand = np.sqrt((y - ymid) ** 2 + (x - xmid) ** 2)
+            if afstand < radius:
+                display.setPixelColor(x, y, display.getIfromRGB(display.primary))
+    display.strip.show()
+    display.setStrip(display.secondary, False)
 
 def sparkle(rms):
     rms = max(0, min(1, (3 * rms)**(2 + 1) - 0.1))
