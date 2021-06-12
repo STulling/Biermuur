@@ -1,5 +1,6 @@
 import time
 import sys
+
 try:
     from rpi_ws281x import *
 except ImportError:
@@ -21,6 +22,10 @@ LED_INVERT = False  # True to invert the signal (when using NPN transistor level
 LED_CHANNEL = 0  # set to '1' for GPIOs 13, 19, 41, 45 or 53
 WIDTH = 20
 HEIGHT = 18
+KRAT_WIDTH = 4
+KRAT_HEIGHT = 6
+N_KRAT_X = 5
+N_KRAT_Y = 3
 
 fnt = ImageFont.truetype("Pixel12x10Mono.ttf", 13)
 out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
@@ -271,7 +276,7 @@ def lijnen():
             time.sleep(0.02)
         strip.show()
         # time.sleep(0.2)
- 
+
 
 def cirkels():
     while True:
@@ -288,6 +293,7 @@ def cirkels():
             strip.show()
             time.sleep(0.1)
         setStrip(secondary, False)
+
 
 def cirkel(radius):
     color = random.randint(0, 16777215)
@@ -359,35 +365,34 @@ def matrix():
         strip.show()
         time.sleep(0.1)
 
+
 def spiraal():
     while True:
         r = 1
-        theta = 2*np.pi
+        theta = 2 * np.pi
         setStrip(secondary, False)
         while r < 15:
-            theta += 0.05*np.pi
-            r+= 0.01
-            x = int(r*np.cos(theta)) + (WIDTH//2)
-            y = int(r*np.sin(theta)) + (HEIGHT//2)
+            theta += 0.05 * np.pi
+            r += 0.01
+            x = int(r * np.cos(theta)) + (WIDTH // 2)
+            y = int(r * np.sin(theta)) + (HEIGHT // 2)
             print(x, y)
-            setPixelColor(x,y, primary)
+            setPixelColor(x, y, primary)
             strip.show()
             time.sleep(0.05)
+
 
 def boxes():
     while True:
         setStrip(secondary, False)
-        xval = np.arange(0,4,1)
-        yval = np.arange(0,6,1)
-        kratx = random.randint(0,5)
-        kraty = random.randint(0,3)
-        xval = xval + kratx*4
-        yval = yval + kraty*6
+        xval = np.arange(0, KRAT_WIDTH, 1)
+        yval = np.arange(0, KRAT_HEIGHT, 1)
+        kratx = random.randint(0, N_KRAT_X)
+        kraty = random.randint(0, N_KRAT_Y)
+        xval += kratx * KRAT_WIDTH
+        yval += kraty * KRAT_HEIGHT
         for y in yval:
-            time.sleep(0.2)
+            time.sleep(0.1)
             for x in xval:
-                setPixelColor(x,y, primary)
+                setPixelColor(x, y, primary)
                 strip.show()
-
-
-
