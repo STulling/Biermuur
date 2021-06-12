@@ -54,6 +54,8 @@ def index():
             update()
         elif request.form.get('spiraal'):
             setAction(display.spiraal, ())
+        elif request.form.get('krat'):
+            setAction(display.boxes, ())
         elif request.form.get('video'):
             setAction(video.playVideo, ())
         elif request.form.get('shuffle') and request.form.get('playlist'):

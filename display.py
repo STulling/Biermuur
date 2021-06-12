@@ -377,17 +377,17 @@ def spiraal():
 def boxes():
     while True:
         setStrip(secondary, False)
-        xval = [0,1,2,3]
-        yval = [0,1,2,3,4,5]
-        kratx = random.randint(0,4)
-        kraty = random.randint(0,2)
+        xval = np.arange(0,4,1)
+        yval = np.arange(0,6,1)
+        kratx = random.randint(0,5)
+        kraty = random.randint(0,3)
         xval = xval + kratx*4
         yval = yval + kraty*6
-            for i in yval:
-                for j in xval:
-                    setPixelColor(i,j, primary)
-                    strip.show()
-                    time.sleep(0.05)
+        for y in yval:
+            time.sleep(0.2)
+            for x in xval:
+                setPixelColor(x,y, primary)
+                strip.show()
 
 
 
