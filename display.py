@@ -394,7 +394,7 @@ def boxes():
         for y in yval:
             time.sleep(0.1)
             if bool(random.getrandbits(1)):
-                xval = reversed(xval)
+                xval = np.flip(xval)
             for x in xval:
                 setPixelColor(x, y, primary)
                 strip.show()
