@@ -21,6 +21,7 @@ function TabContainer(props) {
   );
 }
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -47,7 +48,7 @@ function App() {
         <Typography variant="h6" className={classes.title}>
           Biermuur
         </Typography>
-        <IconButton color="secondary">
+        <IconButton>
           <DeleteForeverIcon />
         </IconButton>
       </Toolbar>
