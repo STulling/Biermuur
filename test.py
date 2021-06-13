@@ -7,7 +7,7 @@ import sys
 import DJ
 
 def main():
-    DJ.loop('lieblingsfach.wav', blocksize=int(sys.argv[1]))
+    DJ.loop('lieblingsfach.wav')
 
 if __name__=="__main__":
     main()
