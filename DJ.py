@@ -19,10 +19,9 @@ def on_press(key):
         mPlayer.set_callback(AudioUtils.cirkel)
 
 
-def loop(file):
+def loop(file, blocksize=1024):
     keyboard.on_press(on_press)
     display.init()
     global mPlayer
-    mPlayer = music.MusicPlayer()
-    mPlayer.set_callback(AudioUtils.simple)
+    mPlayer = music.MusicPlayer(callback_function=AudioUtils.simple, blocksize=blocksize)
     mPlayer.playSound(file)

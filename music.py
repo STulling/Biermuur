@@ -11,6 +11,7 @@ import os
 import numpy as np
 import audioop
 from pydub import AudioSegment, effects
+from multiprocessing import Process
 
 simulated = False
 
@@ -41,12 +42,12 @@ def shuffleplaylist(path):
 class MusicPlayer():
 
     buffersize = 200
-    blocksize = 1024
     q = queue.Queue(maxsize=buffersize)
     event = threading.Event()
 
-    def __init__(self, callback_function=None):
+    def __init__(self, callback_function=None, blocksize=1024):
         self.callback_function = callback_function
+        self.blocksize = blocksize
 
     def set_callback(self, new_callback):
         self.callback_function = new_callback
@@ -73,8 +74,7 @@ class MusicPlayer():
         else:
             outdata[:] = data
         if self.callback_function is not None:
-            x = threading.Thread(target=self.process, args=(data,))
-            x.start()
+            self.process(data)
 
     def playSound(self, file):
         print(f"Playing: {file}")
