@@ -9,6 +9,7 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import Divider from '@material-ui/core/Divider';
 import TextFieldsIcon from '@material-ui/icons/TextFields';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
 import SendIcon from '@material-ui/icons/Send';
 import WifiIcon from '@material-ui/icons/Wifi';
 import CasinoIcon from '@material-ui/icons/Casino';
@@ -37,12 +38,13 @@ function MainTab() {
           </ListItemIcon>
           <TextField id="show-text" label="Set Text" />
           <ListItemSecondaryAction>
-            <IconButton
+            <Button
               color="primary"
+              variant="contained"
               onClick={handleToggle('wifi')}
             >
               <SendIcon />
-            </IconButton>
+            </Button>
           </ListItemSecondaryAction>
         </ListItem>
         <ListItem>
@@ -51,12 +53,13 @@ function MainTab() {
           </ListItemIcon>
           <ListItemText primary="Random Text" />
           <ListItemSecondaryAction>
-            <IconButton
+            <Button
                 color="primary"
+                variant="contained"
                 onClick={handleToggle('wifi')}
               >
               <SendIcon />
-            </IconButton>
+            </Button>
           </ListItemSecondaryAction>
         </ListItem>
       </List>

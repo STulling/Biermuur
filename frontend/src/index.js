@@ -9,6 +9,18 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 const theme = createMuiTheme({
   palette: {
     type: "dark",
+    primary: {
+      contrastText: "rgba(0, 0, 0, 0.87)",
+      dark: "rgb(100, 141, 174)",
+      light: "rgb(166, 212, 250)",
+      main: "#90caf9",
+    },
+    secondary: {
+      contrastText: "rgba(0, 0, 0, 0.87)",
+      dark: "rgb(170, 100, 123)",
+      light: "rgb(246, 165, 192)",
+      main: "#f48fb1",
+    },
   }
 });
 

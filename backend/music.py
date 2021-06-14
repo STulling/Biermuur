@@ -32,6 +32,8 @@ def download(folder, name):
 def listFolders():
     return [x[0] for x in os.walk(folder)]
 
+def listSongs():
+    return [name for path, subdirs, files in os.walk(folder) for name in files]
 
 def shuffleplaylist(path):
     while True:

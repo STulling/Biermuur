@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
+from flask_restful import Resource, Api
+from flask_cors import CORS
 from display import init, movingText, setStrip
 from multiprocessing import Process
 from datetime import datetime
@@ -10,6 +12,8 @@ import os
 import DJ
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+api = Api(app)
 process = None
 time = datetime.now()
 
@@ -20,6 +24,13 @@ def setAction(action, args):
     process = Process(target=action, args=args)
     process.start()
 
+
+class Songs(Resource):
+    def get(self):
+        return music.listSongs()
+
+
+api.add_resource(Songs, '/api/songs')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

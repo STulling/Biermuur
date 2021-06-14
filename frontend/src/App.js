@@ -15,7 +15,6 @@ import MainTab from './components/MainTab';
 import SettingsTab from './components/SettingsTab';
 import MusicTab from './components/MusicTab';
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -42,7 +41,7 @@ function App() {
         <Typography variant="h6" className={classes.title}>
           Biermuur
         </Typography>
-        <IconButton>
+        <IconButton color="inherit">
           <DeleteForeverIcon />
         </IconButton>
       </Toolbar>
@@ -55,9 +54,9 @@ function App() {
         value={value}
         onChange={handleChange}
         variant="fullWidth"
-        indicatorColor="secondary"
-        textColor="secondary"
-        aria-label="icon label tabs example"
+        indicatorColor="primary"
+        textColor="primary"
+        aria-label="icon tabs example"
       >
         <Tab icon={<EmojiObjectsIcon />} label="MODES" />
         <Tab icon={<MusicNoteIcon />} label="MUSIC" />
