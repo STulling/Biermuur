@@ -14,6 +14,8 @@ import WifiIcon from '@material-ui/icons/Wifi';
 import CasinoIcon from '@material-ui/icons/Casino';
 import BluetoothIcon from '@material-ui/icons/Bluetooth';
 import TextField from '@material-ui/core/TextField';
+import PaletteIcon from '@material-ui/icons/Palette';
+import { ColorPicker } from 'material-ui-color';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,12 +32,30 @@ function MainTab() {
 
   return (
     <div className={classes.root}>
-      <List subheader={<ListSubheader>Text</ListSubheader>}>
+      <List subheader={<ListSubheader>Colors</ListSubheader>}>
         <ListItem>
           <ListItemIcon>
-            <TextFieldsIcon />
+            <PaletteIcon />
           </ListItemIcon>
-          <TextField id="show-text" label="Set Text" />
+          <ColorPicker
+            defaultValue='#FF0000' disablePlainColor
+          />
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            <PaletteIcon />
+          </ListItemIcon>
+          <ColorPicker
+            defaultValue='#00FF00' disablePlainColor
+          />
+        </ListItem>
+      </List>
+      <List subheader={<ListSubheader>Audio</ListSubheader>}>
+        <ListItem>
+          <ListItemIcon>
+            <PaletteIcon />
+          </ListItemIcon>
+          <TextField id="show-text" label="Block size" />
           <ListItemSecondaryAction>
             <IconButton
               color="primary"
@@ -47,14 +67,14 @@ function MainTab() {
         </ListItem>
         <ListItem>
           <ListItemIcon>
-            <CasinoIcon />
+            <PaletteIcon />
           </ListItemIcon>
-          <ListItemText primary="Random Text" />
+          <TextField id="show-text" label="Buffer size" />
           <ListItemSecondaryAction>
             <IconButton
-                color="primary"
-                onClick={handleToggle('wifi')}
-              >
+              color="primary"
+              onClick={handleToggle('wifi')}
+            >
               <SendIcon />
             </IconButton>
           </ListItemSecondaryAction>

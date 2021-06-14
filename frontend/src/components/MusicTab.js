@@ -14,10 +14,25 @@ import WifiIcon from '@material-ui/icons/Wifi';
 import CasinoIcon from '@material-ui/icons/Casino';
 import BluetoothIcon from '@material-ui/icons/Bluetooth';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
+  },
+  ul: {
+    padding: 0,
+  },
+  icon: {
+    position: 'sticky',
+    top: '60px',
+    marginBottom: '-45px',
+  },
+  label: {
+    minWidth: '0px',
+    width: '30px',
+    height: '30px',
+    borderRadius: "5em",
   },
 }));
 
@@ -30,35 +45,25 @@ function MainTab() {
 
   return (
     <div className={classes.root}>
-      <List subheader={<ListSubheader>Text</ListSubheader>}>
-        <ListItem>
-          <ListItemIcon>
-            <TextFieldsIcon />
-          </ListItemIcon>
-          <TextField id="show-text" label="Set Text" />
-          <ListItemSecondaryAction>
-            <IconButton
-              color="primary"
-              onClick={handleToggle('wifi')}
-            >
-              <SendIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            <CasinoIcon />
-          </ListItemIcon>
-          <ListItemText primary="Random Text" />
-          <ListItemSecondaryAction>
-            <IconButton
-                color="primary"
-                onClick={handleToggle('wifi')}
-              >
-              <SendIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
+      <List>
+        {['A', 'B', 'C', 'D', 'E', 'F', 'G'].map((sectionId) => (
+          <li key={`section-${sectionId}`} className={classes.listSection}>
+            <ul className={classes.ul}>
+              <ListItem className={classes.icon}>
+                <ListItemIcon>
+                  <Button className={classes.label} variant="contained" disabled>
+                    {sectionId}
+                  </Button>
+                </ListItemIcon>
+              </ListItem>
+              {[0, 1, 2].map((item) => (
+                <ListItem button key={`item-${sectionId}-${item}`}>
+                  <ListItemText inset primary={`Item ${item}`} />
+                </ListItem>
+              ))}
+            </ul>
+          </li>
+        ))}
       </List>
     </div>
   );

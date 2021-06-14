@@ -12,14 +12,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import MainTab from './components/MainTab';
-
-function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ paddingTop: 0 }}>
-      {props.children}
-    </Typography>
-  );
-}
+import SettingsTab from './components/SettingsTab';
+import MusicTab from './components/MusicTab';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,7 +37,7 @@ function App() {
   };
   return (
   <div className={classes.root}>
-    <AppBar position="static">
+    <AppBar position="sticky">
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
           Biermuur
@@ -54,8 +48,8 @@ function App() {
       </Toolbar>
     </AppBar>
     {value === 0 && <MainTab />}
-    {value === 1 && <TabContainer>Item Two</TabContainer>}
-    {value === 2 && <TabContainer>Item Three</TabContainer>}
+    {value === 1 && <MusicTab />}
+    {value === 2 && <SettingsTab />}
     <Paper square style={{ position: 'fixed', bottom: '0px', width: '100%'}}>
       <Tabs
         value={value}
