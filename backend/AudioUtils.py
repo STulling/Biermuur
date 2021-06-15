@@ -53,3 +53,18 @@ def sparkle(rms):
         display.setPixelColor(x, y, display.primary.value)
     display.strip.show()
 
+def wave(rms):
+    #rms = max(0, min(1, (3 * rms)**(2 + 1) - 0.1))
+    display.setStrip(display.secondary.value)
+
+    xs = [2 * np.pi * x / (display.WIDTH - 1) for x in range(display.WIDTH)]
+    t = 0
+    color = display.primary.value
+    ys = [int(rms * display.HEIGHT//2 * np.sin(x + t) + display.HEIGHT//2) for x in xs]
+    display.setStrip(display.secondary.value)
+    for x, y in zip(range(display.WIDTH), ys):
+        display.setPixelColor(x, y, color)
+        display.setPixelColor(x, y - 1, color)
+        display.setPixelColor(x, y + 1, color)
+    display.strip.show()
+
