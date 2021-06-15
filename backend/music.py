@@ -45,13 +45,14 @@ def shuffleplaylist(path):
 
 class MusicPlayer():
 
-    buffersize = 200
-    q = queue.Queue(maxsize=buffersize)
     event = threading.Event()
 
-    def __init__(self, callback_function=None, blocksize=3072):
+    def __init__(self, callback_function=None, blocksize=1024):
         self.callback_function = callback_function
         self.blocksize = blocksize
+        self.buffersize = 0
+        self.q = None
+        self.event = threading.Event()
 
     def set_callback(self, new_callback):
         self.callback_function = new_callback
@@ -85,6 +86,8 @@ class MusicPlayer():
         self.event.clear()
         song, samplerate = sf.read(file)
         channels = song.shape[1]
+        self.buffersize = int(song.shape[0] / self.blocksize)
+        self.q = queue.Queue(maxsize=self.buffersize)
         song = song.astype(np.float32)
         song = song / np.max(np.abs(song))
         i = 0
