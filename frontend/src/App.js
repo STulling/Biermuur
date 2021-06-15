@@ -53,8 +53,8 @@ function App() {
         </IconButton>
       </Toolbar>
     </AppBar>
-    {value === 0 && <MainTab />}
-    {value === 1 && <MusicTab />}
+    {value === 0 && <MusicTab />}
+    {value === 1 && <MainTab />}
     {value === 2 && <SettingsTab />}
     <Paper square style={{ position: 'fixed', bottom: '0px', width: '100%'}}>
       <Tabs

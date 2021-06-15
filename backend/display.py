@@ -54,7 +54,7 @@ def setPixelColor(x, y, color):
 
 # TODO: Fix
 def getHTMLColors():
-    return RGBToHTMLColor(primary), RGBToHTMLColor(secondary)
+    return RGBToHTMLColor(primary.value), RGBToHTMLColor(secondary.value)
 
 
 def RGBToHTMLColor(rgb_tuple):
