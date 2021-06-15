@@ -56,6 +56,11 @@ def setPixelColor(x, y, color):
 def getHTMLColors():
     return RGBToHTMLColor(primary.value), RGBToHTMLColor(secondary.value)
 
+def getRGBfromI(RGBint):
+    blue = RGBint & 255
+    green = (RGBint >> 8) & 255
+    red = (RGBint >> 16) & 255
+    return red, green, blue
 
 def RGBToHTMLColor(rgb_tuple):
     """ convert an (R, G, B) tuple to #RRGGBB """
