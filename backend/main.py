@@ -42,7 +42,7 @@ class Songs(Resource):
 
 class Play(Resource):
     def get(self, song_name):
-        setAction(DJ.loop, (song_name + '.wav', ))
+        setAction(DJ.loop, (song_name, ))
 
 class SongAdder(Resource):
     def get(self, song_name):

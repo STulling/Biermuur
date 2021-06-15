@@ -3,6 +3,7 @@ import keyboard
 import display
 import music
 import AudioUtils
+import os
 
 mPlayer = None
 
@@ -20,6 +21,7 @@ def on_press(key):
 
 
 def loop(file):
+    file = os.path.join(music.folder, file + '.wav')
     keyboard.on_press(on_press)
     display.init()
     global mPlayer
