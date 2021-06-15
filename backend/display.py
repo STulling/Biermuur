@@ -71,7 +71,7 @@ def HTMLColorToRGB(colorstring):
     if colorstring[0] == '#': colorstring = colorstring[1:]
     r, g, b = colorstring[:2], colorstring[2:4], colorstring[4:]
     r, g, b = [int(n, 16) for n in (r, g, b)]
-    return r, g, b
+    return g, r, b
 
 
 def setTheme(HTMLPrimary, HTMLSecondary):
