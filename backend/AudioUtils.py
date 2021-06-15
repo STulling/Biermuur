@@ -35,11 +35,11 @@ was_on = True
 def cirkel(rms):
     rms = smoothstep(rms)
     global was_on
-    colorRGB = display.getRGBfromI(display.primary.value)
+    colorRGB = list(display.getRGBfromI(display.primary.value))
     if rms > 0.7:
         if was_on:
             for i in range(3):
-                colorRGB[i] *= 0
+                colorRGB[i] = 0
             was_on = False
         else:
             was_on = True
