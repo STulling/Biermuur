@@ -18,10 +18,6 @@ def ruit(rms):
                 display.setPixelColor(x, y, display.primary.value)
     display.strip.show()
 
-from scipy.special import comb
-
-
-
 def cirkel(rms):
     colorRGB = list(display.getRGBfromI(display.primary.value))
     licht = 0
@@ -56,18 +52,17 @@ def sparkle(rms):
 t = 0
 
 def wave(rms):
-    rms = rms = min(1, (3 * rms)**(2 + 1))
+    rms = min(1, rms*1.2)
     display.setStrip(display.secondary.value)
     dt = 0.1
     global t
     t += dt
-    xs = [4 * np.pi * x / (display.WIDTH - 1) for x in range(display.WIDTH)]
+    xs = [3 * np.pi * x / (display.WIDTH - 1) for x in range(display.WIDTH)]
     color = display.primary.value
     ys = [int(rms * display.HEIGHT//2 * np.sin(x + t) + display.HEIGHT//2) for x in xs]
     display.setStrip(display.secondary.value)
     for x, y in zip(range(display.WIDTH), ys):
         display.setPixelColor(x, y, color)
         display.setPixelColor(x, y - 1, color)
-        display.setPixelColor(x, y + 1, color)
     display.strip.show()
 
