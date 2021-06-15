@@ -1,6 +1,6 @@
 import time
 import sys
-from multiprocessing import Array
+from multiprocessing import Value
 
 try:
     from rpi_ws281x import *
@@ -31,8 +31,8 @@ N_KRAT_Y = 3
 fnt = ImageFont.truetype("Pixel12x10Mono.ttf", 13)
 out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
 
-primary = Array('i', [0, 255, 0])
-secondary = Array('i', [255, 0, 0])
+primary = Value('i', Color(0, 255, 0))
+secondary = Value('i', Color(255, 0, 0))
 strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
 
 
@@ -41,7 +41,18 @@ def setAmountColor(n, color):
         strip.setPixelColor(i, color)
     strip.show()
 
+def setPixelColor(x, y, color):
+    if x < 0 or y < 0:
+        return
+    if x >= WIDTH or y >= HEIGHT:
+        return
+    if y % 2 == 1:
+        x = WIDTH - 1 - x
+    loc = int(x + y * WIDTH)
+    strip.setPixelColor(loc, color)
 
+
+# TODO: Fix
 def getHTMLColors():
     return RGBToHTMLColor(primary), RGBToHTMLColor(secondary)
 
@@ -66,33 +77,15 @@ def HTMLColorToRGB(colorstring):
 def setTheme(HTMLPrimary, HTMLSecondary):
     global primary
     global secondary
-    primary[:] = HTMLColorToRGB(HTMLPrimary)
-    secondary[:] = HTMLColorToRGB(HTMLSecondary)
-
-
-def setPixelColor(x, y, color):
-    if x < 0 or y < 0:
-        return
-    if x >= WIDTH or y >= HEIGHT:
-        return
-    if y % 2 == 1:
-        x = WIDTH - 1 - x
-    loc = int(x + y * WIDTH)
-    if isinstance(color, tuple) or isinstance(color, list):
-        color = getIfromRGB(color)
-    if isinstance(color, Array.__class__):
-        color = getIfromRGB(color[:])
-    strip.setPixelColor(loc, int(color))
+    primary.value = getIfromRGB(HTMLColorToRGB(HTMLPrimary))
+    secondary.value = getIfromRGB(HTMLColorToRGB(HTMLSecondary))
 
 def clear():
-    setStrip((0, 0, 0), True)
+    setStrip(0)
 
-def setStrip(color, update=True):
+def setStrip(color):
     for i in range(LED_COUNT):
-        strip.setPixelColor(i, getIfromRGB(color))
-    if update:
-        strip.show()
-
+        strip.setPixelColor(i, color)
 
 def show(image):
     for x in range(WIDTH):
@@ -108,8 +101,6 @@ def wipeImage(image, color):
 
 
 def getIfromRGB(rgb):
-    if isinstance(rgb, Array.__class__):
-        rgb = getIfromRGB(rgb[:])
     red = rgb[0]
     green = rgb[1]
     blue = rgb[2]
@@ -120,7 +111,7 @@ def getIfromRGB(rgb):
 def display(arr):
     for y in range(len(arr)):
         for x in range(len(arr[y])):
-            setPixelColor(x, y, (arr[y][x][0], arr[y][x][1], arr[y][x][2]))
+            setPixelColor(x, y, Color(arr[y][x][0], arr[y][x][1], arr[y][x][2]))
     strip.show()
 
 
@@ -254,7 +245,7 @@ def golf():
         t += dt
         ys1 = [int(6 * np.sin(x + t) + 6) for x in xs]
         ys2 = [int(6 * np.sin(x + t + np.pi) + 6) for x in xs]
-        setStrip(secondary, False)
+        setStrip(secondary.value)
         for x, y in zip(range(12), ys1):
             setPixelColor(x, y, color)
             setPixelColor(x, y - 1, color)
@@ -270,15 +261,14 @@ def golf():
 def lijnen():
     hoeken = np.linspace(-2, 2, 10)
     while True:
-        setStrip(secondary, False)
-        color = getIfromRGB(primary)
+        setStrip(secondary.value)
         alpha = random.choice(hoeken)
         xcenter = random.randint(0, WIDTH)
         ycenter = random.randint(0, HEIGHT)
         yas = ycenter - (xcenter * alpha)
         for x in range(WIDTH):
             yval = int(alpha * x + yas)
-            setPixelColor(x, yval, color)
+            setPixelColor(x, yval, primary.value)
             strip.show()
             time.sleep(0.02)
         strip.show()
@@ -299,7 +289,7 @@ def cirkels():
                         setPixelColor(x, y, color)
             strip.show()
             time.sleep(0.1)
-        setStrip(secondary, False)
+        setStrip(secondary.value)
 
 
 def cirkel(radius):
@@ -313,7 +303,7 @@ def cirkel(radius):
                 setPixelColor(x, y, color)
     strip.show()
     time.sleep(0.1)
-    setStrip(secondary, False)
+    setStrip(secondary.value)
 
 
 def histogram():
@@ -326,7 +316,7 @@ def histogram():
                 setPixelColor(i, 11 - yval, color)
             strip.show()
         time.sleep(0.05)
-        setStrip(secondary, False)
+        setStrip(secondary.value)
 
 
 def matrix():
@@ -354,21 +344,21 @@ def matrix():
             (random.randint(-2, WIDTH + 2), -6),
             (random.randint(-2, WIDTH + 2), -11)]
     while True:
-        setStrip(secondary, True)
+        setStrip(secondary.value)
         for i, (x, y) in enumerate(zeros):
             if y > HEIGHT + 4:
                 zeros[i] = (random.randint(-2, WIDTH + 2), -3)
             else:
                 zeros[i] = (x, y + 1)
             for xoff, yoff in zero:
-                setPixelColor(x + xoff, y + yoff, primary)
+                setPixelColor(x + xoff, y + yoff, primary.value)
         for i, (x, y) in enumerate(ones):
             if y > HEIGHT + 4:
                 ones[i] = (random.randint(-2, WIDTH + 2), -3)
             else:
                 ones[i] = (x, y + 1)
             for xoff, yoff in one:
-                setPixelColor(x + xoff, y + yoff, primary)
+                setPixelColor(x + xoff, y + yoff, primary.value)
         strip.show()
         time.sleep(0.1)
 
@@ -377,21 +367,21 @@ def spiraal():
     while True:
         r = 1
         theta = 2 * np.pi
-        setStrip(secondary, False)
+        setStrip(secondary.value)
         while r < 15:
             theta += 0.05 * np.pi
             r += 0.01
             x = int(r * np.cos(theta)) + (WIDTH // 2)
             y = int(r * np.sin(theta)) + (HEIGHT // 2)
             print(x, y)
-            setPixelColor(x, y, primary)
+            setPixelColor(x, y, primary.value)
             strip.show()
             time.sleep(0.05)
 
 
 def boxes():
     while True:
-        setStrip(secondary, False)
+        setStrip(secondary.value)
         xval = np.arange(0, KRAT_WIDTH, 1)
         yval = np.arange(0, KRAT_HEIGHT, 1)
         kratx = random.randint(0, N_KRAT_X-1)
@@ -400,7 +390,7 @@ def boxes():
         yval += kraty * KRAT_HEIGHT
         for y in yval:
             for x in xval:
-                setPixelColor(x, y, primary)
+                setPixelColor(x, y, primary.value)
         strip.show()
         time.sleep(0.05)
 

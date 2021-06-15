@@ -47,7 +47,7 @@ class MusicPlayer():
 
     event = threading.Event()
 
-    def __init__(self, callback_function=None, blocksize=3072):
+    def __init__(self, callback_function=None, blocksize=1024):
         self.callback_function = callback_function
         self.blocksize = blocksize
         self.buffersize = 0

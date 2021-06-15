@@ -7,7 +7,8 @@ import sys
 import DJ
 
 def main():
-    DJ.loop('lieblingsfach.wav')
+    music.folder = '.'
+    DJ.loop('Benee')
 
 if __name__=="__main__":
     main()
