@@ -58,7 +58,6 @@ class MusicPlayer():
         self.callback_function = new_callback
 
     def process(self, data):
-        data = np.frombuffer(data, np.float32)[::2]
         self.callback_function(np.sqrt(np.mean(data**2)))
 
     def callback(self, outdata, frames, time, status):
@@ -98,14 +97,14 @@ class MusicPlayer():
             i+=1
             self.q.put_nowait(data)  # Pre-fill queue
 
-        stream = sd.RawOutputStream(
+        stream = sd.OutputStream(
             samplerate=samplerate, blocksize=self.blocksize,
             device=sd.default.device, channels=channels, dtype='float32',
             callback=self.callback, finished_callback=self.event.set)
         with stream:
             timeout = self.blocksize * self.buffersize / samplerate
             while (i+1)*self.blocksize < len(song):
-                data = song[i * self.blocksize:(i + 1) * self.blocksize, :].flatten().tobytes()
+                data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
                 i += 1
                 self.q.put(data, timeout=timeout)
                 if simulated:
