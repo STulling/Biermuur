@@ -36,10 +36,10 @@ def cirkel(rms):
     rms = smoothstep(rms)
     global was_on
     colorRGB = list(display.getRGBfromI(display.primary.value))
-    if rms > 0.7:
+    if rms > 0.5:
         if was_on:
             for i in range(3):
-                colorRGB[i] = 0
+                colorRGB[i] = 0.4*colorRGB[i]
             was_on = False
         else:
             was_on = True
