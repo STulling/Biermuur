@@ -39,7 +39,7 @@ def cirkel(rms):
     if rms > 0.5:
         if was_on:
             for i in range(3):
-                colorRGB[i] = 0.4*colorRGB[i]
+                colorRGB[i] = int(0.4*colorRGB[i])
             was_on = False
         else:
             was_on = True
