@@ -93,7 +93,7 @@ class MusicPlayer():
         for _ in range(self.buffersize):
             if (i+1)*self.blocksize > len(song):
                 break
-            data = song[i*self.blocksize:(i+1)*self.blocksize, :].flatten().tobytes()
+            data = song[i*self.blocksize:(i+1)*self.blocksize, :]
             i+=1
             self.q.put_nowait(data)  # Pre-fill queue
 
