@@ -82,6 +82,7 @@ def setTheme(HTMLPrimary, HTMLSecondary):
 
 def clear():
     setStrip(0)
+    strip.show()
 
 def setStrip(color):
     for i in range(LED_COUNT):

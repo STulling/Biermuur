@@ -60,9 +60,9 @@ class Settings(Resource):
     def put(self, setting):
         newVal = request.form['data']
         if setting == 'primary':
-            display.primary.value = display.HTMLColorToRGB(newVal)
+            display.primary.value = display.getIfromRGB(display.HTMLColorToRGB(newVal))
         if setting == 'secondary':
-            display.secondary.value = display.HTMLColorToRGB(newVal)
+            display.secondary.value = display.getIfromRGB(display.HTMLColorToRGB(newVal))
 
 
 func_mappings = {
