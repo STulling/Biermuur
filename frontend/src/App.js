@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 import SettingsIcon from '@material-ui/icons/Settings';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import MainTab from './components/MainTab';
 import SettingsTab from './components/SettingsTab';
 import MusicTab from './components/MusicTab';
@@ -49,7 +49,7 @@ function App() {
           Biermuur
         </Typography>
         <IconButton color="inherit">
-          <DeleteForeverIcon onClick={clear}/>
+          <HighlightOffIcon onClick={clear}/>
         </IconButton>
       </Toolbar>
     </AppBar>
