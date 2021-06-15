@@ -78,7 +78,7 @@ class MusicTab extends React.Component {
 
   componentDidMount() {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", 'http://localhost:5000/api/songs', true);
+    xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/songs', true);
 
     xhr.onload = function () {
       var songList = {}
@@ -109,7 +109,7 @@ class MusicTab extends React.Component {
 
     const play = (songName) => {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", 'http://localhost:5000/api/songs/play/' + songName, true);
+      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/songs/play/' + songName, true);
       
       xhr.send(null);
     };
@@ -133,7 +133,7 @@ class MusicTab extends React.Component {
 
     const addSong = () => {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", 'http://localhost:5000/api/songs/add/' + this.state.addSong, true);
+      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/songs/add/' + this.state.addSong, true);
       
       xhr.send(null);
       handleClose();
@@ -141,7 +141,7 @@ class MusicTab extends React.Component {
 
     const editSong = () => {
       var xhr = new XMLHttpRequest();
-      xhr.open("PUT", 'http://localhost:5000/api/songs/' + this.state.currSong, true);
+      xhr.open("PUT", 'http://' + process.env.REACT_APP_IP + ':5000/api/songs/' + this.state.currSong, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       
       xhr.send('data=' + encodeURIComponent(this.state.newName));
@@ -150,7 +150,7 @@ class MusicTab extends React.Component {
 
     const removeSong = () => {
       var xhr = new XMLHttpRequest();
-      xhr.open("DELETE", 'http://localhost:5000/api/songs/' + this.state.currSong, true);
+      xhr.open("DELETE", 'http://' + process.env.REACT_APP_IP + ':5000/api/songs/' + this.state.currSong, true);
       
       xhr.send(null);
       handleClose();

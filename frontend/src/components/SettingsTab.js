@@ -41,7 +41,7 @@ class SettingsTab extends React.Component {
 
     const handleToggle = (value) => () => {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", 'http://localhost:5000/api/common/' + value, true);
+      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/common/' + value, true);
       xhr.send(null);
     };
 
@@ -50,7 +50,7 @@ class SettingsTab extends React.Component {
       out[type] = e.css.backgroundColor
       this.setState(out)
       var xhr = new XMLHttpRequest();
-      xhr.open("PUT", 'http://localhost:5000/api/settings/' + type, true);
+      xhr.open("PUT", 'http://' + process.env.REACT_APP_IP + ':5000/api/settings/' + type, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       
       xhr.send('data=' + encodeURIComponent(e.css.backgroundColor));
