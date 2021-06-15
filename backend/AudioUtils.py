@@ -20,29 +20,18 @@ def ruit(rms):
 
 from scipy.special import comb
 
-def smoothstep(x, x_min=0, x_max=1, N=1):
-    x = np.clip((x - x_min) / (x_max - x_min), 0, 1)
-    result = 0
-    for n in range(0, 1):
-         result += comb(N + n, n) * comb(2 * N + 1, N - n) * (-x) ** n
 
-    result *= x ** (N + 1)
-
-    return result
-
-was_on = True
 
 def cirkel(rms):
-    rms = smoothstep(rms)
-    global was_on
     colorRGB = list(display.getRGBfromI(display.primary.value))
-    if rms > 0.8:
-        if was_on:
+    licht = 0
+    if rms > 0.5:
+        if licht == 2:
+            licht = 0
             for i in range(3):
                 colorRGB[i] = 0
-            was_on = False
         else:
-            was_on = True
+            licht += 1
     color = display.getIfromRGB(colorRGB)
     display.setStrip(display.secondary.value)
     xmid = display.WIDTH / 2 - 0.5
