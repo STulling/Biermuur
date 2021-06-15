@@ -65,8 +65,8 @@ function App() {
         textColor="primary"
         aria-label="icon tabs example"
       >
-        <Tab icon={<EmojiObjectsIcon />} label="MODES" />
         <Tab icon={<MusicNoteIcon />} label="MUSIC" />
+        <Tab icon={<EmojiObjectsIcon />} label="MODES" />
         <Tab icon={<SettingsIcon />} label="SETTINGS" />
       </Tabs>
     </Paper>
