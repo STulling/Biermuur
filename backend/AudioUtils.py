@@ -70,15 +70,12 @@ def wave(rms):
 
     xs = [2 * np.pi * x / (display.WIDTH - 1) for x in range(display.WIDTH)]
     t = 0
-    dt = 0.025
     color = display.primary.value
-    while True:
-        t += dt
-        ys1 = [int(rms * display.HEIGHT//2 * np.sin(x + t) + display.HEIGHT//2) for x in xs]
-        display.setStrip(display.secondary.value)
-        for x, y in zip(range(display.WIDTH), ys1):
-            display.setPixelColor(x, y, color)
-            display.setPixelColor(x, y - 1, color)
-            display.setPixelColor(x, y + 1, color)
-        display.strip.show()
+    ys = [int(rms * display.HEIGHT//2 * np.sin(x + t) + display.HEIGHT//2) for x in xs]
+    display.setStrip(display.secondary.value)
+    for x, y in zip(range(display.WIDTH), ys):
+        display.setPixelColor(x, y, color)
+        display.setPixelColor(x, y - 1, color)
+        display.setPixelColor(x, y + 1, color)
+    display.strip.show()
 
