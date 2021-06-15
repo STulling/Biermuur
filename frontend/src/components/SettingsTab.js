@@ -118,7 +118,7 @@ class SettingsTab extends React.Component {
               <Button
                   color="primary"
                   variant="contained"
-                  onClick={handleToggle('wifi')}
+                  onClick={handleToggle('update')}
                 >
                 <SendIcon />
               </Button>
