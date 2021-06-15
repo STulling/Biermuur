@@ -34,6 +34,13 @@ function App() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const clear = () => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", 'http://localhost:5000/api/common/clear', true);
+    xhr.send(null);
+  };
+
   return (
   <div className={classes.root}>
     <AppBar position="sticky">
@@ -42,7 +49,7 @@ function App() {
           Biermuur
         </Typography>
         <IconButton color="inherit">
-          <DeleteForeverIcon />
+          <DeleteForeverIcon onClick={clear}/>
         </IconButton>
       </Toolbar>
     </AppBar>

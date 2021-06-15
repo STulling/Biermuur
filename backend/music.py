@@ -9,9 +9,6 @@ import queue
 import threading
 import os
 import numpy as np
-import audioop
-from pydub import AudioSegment, effects
-from multiprocessing import Process
 
 simulated = False
 
@@ -24,16 +21,21 @@ except Exception:
 folder = "/media/pi/F/music"
 
 
-def download(folder, name):
+def download(name):
     command = f"youtube-dl -x -f bestaudio -x --audio-format wav -o \"{folder}/%(title)s.%(ext)s\" \"ytsearch1:{name}\""
     os.system(command)
 
+def rename(old, new):
+    os.rename(os.path.join(folder, old + '.wav'), os.path.join(folder, new + '.wav'))
+
+def remove(file):
+    os.remove(os.path.join(folder, file + '.wav'))
 
 def listFolders():
     return [x[0] for x in os.walk(folder)]
 
 def listSongs():
-    return [name for path, subdirs, files in os.walk(folder) for name in files]
+    return [f[:-4] for f in os.listdir(folder) if f.endswith('.wav')]
 
 def shuffleplaylist(path):
     while True:

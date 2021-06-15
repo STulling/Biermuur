@@ -1,5 +1,6 @@
 import time
 import sys
+from multiprocessing import Array
 
 try:
     from rpi_ws281x import *
@@ -30,8 +31,8 @@ N_KRAT_Y = 3
 fnt = ImageFont.truetype("Pixel12x10Mono.ttf", 13)
 out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
 
-primary = (0, 255, 0)
-secondary = (255, 0, 0)
+primary = Array('i', [0, 255, 0])
+secondary = Array('i', [255, 0, 0])
 strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
 
 
@@ -59,14 +60,14 @@ def HTMLColorToRGB(colorstring):
     if colorstring[0] == '#': colorstring = colorstring[1:]
     r, g, b = colorstring[:2], colorstring[2:4], colorstring[4:]
     r, g, b = [int(n, 16) for n in (r, g, b)]
-    return g, r, b
+    return r, g, b
 
 
 def setTheme(HTMLPrimary, HTMLSecondary):
     global primary
     global secondary
-    primary = HTMLColorToRGB(HTMLPrimary)
-    secondary = HTMLColorToRGB(HTMLSecondary)
+    primary[:] = HTMLColorToRGB(HTMLPrimary)
+    secondary[:] = HTMLColorToRGB(HTMLSecondary)
 
 
 def setPixelColor(x, y, color):
@@ -77,10 +78,14 @@ def setPixelColor(x, y, color):
     if y % 2 == 1:
         x = WIDTH - 1 - x
     loc = int(x + y * WIDTH)
-    if isinstance(color, tuple):
+    if isinstance(color, tuple) or isinstance(color, list):
         color = getIfromRGB(color)
+    if isinstance(color, Array.__class__):
+        color = getIfromRGB(color[:])
     strip.setPixelColor(loc, int(color))
 
+def clear():
+    setStrip((0, 0, 0), True)
 
 def setStrip(color, update=True):
     for i in range(LED_COUNT):
@@ -103,6 +108,8 @@ def wipeImage(image, color):
 
 
 def getIfromRGB(rgb):
+    if isinstance(rgb, Array.__class__):
+        rgb = getIfromRGB(rgb[:])
     red = rgb[0]
     green = rgb[1]
     blue = rgb[2]

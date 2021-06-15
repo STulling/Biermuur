@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Children } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -37,7 +37,7 @@ const styles = theme => ({
   icon: {
     position: 'sticky',
     top: '60px',
-    marginBottom: '-45px',
+    //marginBottom: '-45px',
   },
   label: {
     minWidth: '0px',
@@ -53,6 +53,9 @@ const styles = theme => ({
     whiteSpace: "nowrap",
     overflow: 'hidden',
   },
+  firstItem: {
+    marginTop: '-45px',
+  },
   fab: {
     position: 'fixed',
     right: '10px',
@@ -60,13 +63,16 @@ const styles = theme => ({
   }
 });
 
-class MainTab extends React.Component {
+class MusicTab extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       'songList': {},
-      'open': false
+      'open': false,
+      'addSong': '',
+      'currSong': '',
+      'newName': ''
     };
   }
 
@@ -108,13 +114,46 @@ class MainTab extends React.Component {
       xhr.send(null);
     };
 
-    const handleClickSettingsOpen = () => {
-      this.setState({'songsettingsOpen': true });
+    const handleClickSettingsOpen = (song) => {
+      this.setState({'songsettingsOpen': true, 'currSong': song });
     };
 
     const handleClose = () => {
       this.setState({'songaddOpen': false });
       this.setState({'songsettingsOpen': false });
+    };
+
+    const changeAddSong = (e) => {
+      this.setState({'addSong': e.target.value });
+    };
+
+    const changeCurrSongName = (e) => {
+      this.setState({'newName': e.target.value });
+    };
+
+    const addSong = () => {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", 'http://localhost:5000/api/songs/add/' + this.state.addSong, true);
+      
+      xhr.send(null);
+      handleClose();
+    };
+
+    const editSong = () => {
+      var xhr = new XMLHttpRequest();
+      xhr.open("PUT", 'http://localhost:5000/api/songs/' + this.state.currSong, true);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      
+      xhr.send('data=' + encodeURIComponent(this.state.newName));
+      handleClose();
+    };
+
+    const removeSong = () => {
+      var xhr = new XMLHttpRequest();
+      xhr.open("DELETE", 'http://localhost:5000/api/songs/' + this.state.currSong, true);
+      
+      xhr.send(null);
+      handleClose();
     };
 
     return (
@@ -132,16 +171,28 @@ class MainTab extends React.Component {
                     </Paper>
                   </ListItemIcon>
                 </ListItem>
-                {this.state.songList[sectionId].map((item) => (
-                  <ListItem button key={`item-${sectionId}-${item}`} onClick={() => play(item)}>
-                    <ListItemText className={classes.songName} inset primary={`${item}`} />
-                    <ListItemSecondaryAction>
-                      <IconButton edge="end" aria-label="comments" onClick={handleClickSettingsOpen}>
-                        <MenuIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
+                {this.state.songList[sectionId].map((item) => {
+                  if (this.state.songList[sectionId].indexOf(item) == 0) {
+                  return (
+                    <ListItem className={classes.firstItem} button key={`item-${sectionId}-${item}`} onClick={() => play(item)}>
+                      <ListItemText className={classes.songName} inset primary={`${item}`}/>
+                      <ListItemSecondaryAction>
+                        <IconButton edge="end" aria-label="comments" onClick={() => handleClickSettingsOpen(item)}>
+                          <MenuIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  )} else { return (
+                    <ListItem button key={`item-${sectionId}-${item}`} onClick={() => play(item)}>
+                      <ListItemText className={classes.songName} inset primary={`${item}`} />
+                      <ListItemSecondaryAction>
+                        <IconButton edge="end" aria-label="comments" onClick={() => handleClickSettingsOpen(item)}>
+                          <MenuIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  )}})
+                }
               </ul>
             </li>
           ))}
@@ -152,24 +203,23 @@ class MainTab extends React.Component {
         <Dialog aria-labelledby="simple-dialog-title" open={this.state.songaddOpen} onClose={handleClose}>
           <DialogTitle id="simple-dialog-title">Add song</DialogTitle>
           <DialogContent>
-            <TextField id="song-title" label="Song Title" variant="outlined" />
+            <TextField id="song-title" label="Song Title" variant="outlined" onChange={changeAddSong}/>
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={addSong}>
               Add
             </Button>
           </DialogActions>
         </Dialog>
         <Dialog aria-labelledby="simple-dialog-title" open={this.state.songsettingsOpen} onClose={handleClose}>
-          <DialogTitle id="simple-dialog-title">Edit</DialogTitle>
           <DialogContent>
-            <TextField id="song-title" label="New Song Title" variant="outlined" />
+            <TextField id="song-title" label="New Song Title" variant="outlined" onChange={changeCurrSongName}/>
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={editSong}>
               Edit
             </Button>
-            <Button variant="contained" color="secondary">
+            <Button variant="contained" color="secondary" onClick={removeSong}>
               Delete
             </Button>
           </DialogActions>
@@ -178,4 +228,4 @@ class MainTab extends React.Component {
     );
   }
 }
-export default withStyles(styles)(MainTab);
+export default withStyles(styles)(MusicTab);

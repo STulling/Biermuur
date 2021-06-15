@@ -16,72 +16,132 @@ import BluetoothIcon from '@material-ui/icons/Bluetooth';
 import TextField from '@material-ui/core/TextField';
 import PaletteIcon from '@material-ui/icons/Palette';
 import { ColorPicker } from 'material-ui-color';
+import { withStyles } from '@material-ui/styles';
+import Button from '@material-ui/core/Button';
+import UpdateIcon from '@material-ui/icons/Update';
 
-const useStyles = makeStyles((theme) => ({
+const styles = theme => ({
   root: {
     width: '100%',
   },
-}));
+});
 
-function MainTab() {
-  const classes = useStyles();
+class SettingsTab extends React.Component {
 
-  const handleToggle = (value) => () => {
-    console.log(value)
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      'primary': '',
+      'secondary': '',
+    };
+  }
 
-  return (
-    <div className={classes.root}>
-      <List subheader={<ListSubheader>Colors</ListSubheader>}>
-        <ListItem>
-          <ListItemIcon>
-            <PaletteIcon />
-          </ListItemIcon>
-          <ColorPicker
-            defaultValue='#FF0000' disablePlainColor
-          />
-        </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            <PaletteIcon />
-          </ListItemIcon>
-          <ColorPicker
-            defaultValue='#00FF00' disablePlainColor
-          />
-        </ListItem>
-      </List>
-      <List subheader={<ListSubheader>Audio</ListSubheader>}>
-        <ListItem>
-          <ListItemIcon>
-            <PaletteIcon />
-          </ListItemIcon>
-          <TextField id="show-text" label="Block size" />
+  render() {
+    const { classes } = this.props;
+
+    const handleToggle = (value) => () => {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", 'http://localhost:5000/api/common/' + value, true);
+      xhr.send(null);
+    };
+
+    const changeColor = (type) => (e) => {
+      var out = {}
+      out[type] = e.css.backgroundColor
+      this.setState(out)
+      var xhr = new XMLHttpRequest();
+      xhr.open("PUT", 'http://localhost:5000/api/settings/' + type, true);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      
+      xhr.send('data=' + encodeURIComponent(e.css.backgroundColor));
+    };
+
+    return (
+      <div className={classes.root}>
+        <List subheader={<ListSubheader>Colors</ListSubheader>}>
+          <ListItem>
+            <ListItemIcon>
+              <PaletteIcon />
+            </ListItemIcon>
+            <ColorPicker
+              defaultValue='#FF0000' disablePlainColor onChange={changeColor("primary")} value={this.state.primary}
+            />
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <PaletteIcon />
+            </ListItemIcon>
+            <ColorPicker
+              defaultValue='#00FF00' disablePlainColor onChange={changeColor("secondary")} value={this.state.secondary}
+            />
+          </ListItem>
+        </List>
+        <List subheader={<ListSubheader>Audio</ListSubheader>}>
+          <ListItem>
+            <ListItemIcon>
+              <PaletteIcon />
+            </ListItemIcon>
+            <TextField id="show-text" label="Block size" />
+            <ListItemSecondaryAction>
+              <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={handleToggle('wifi')}
+                >
+                <SendIcon />
+              </Button>
+            </ListItemSecondaryAction>
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              <PaletteIcon />
+            </ListItemIcon>
+            <TextField id="show-text" label="Buffer size" />
+            <ListItemSecondaryAction>
+              <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={handleToggle('wifi')}
+                >
+                <SendIcon />
+              </Button>
+            </ListItemSecondaryAction>
+          </ListItem>
+        </List>
+        <List subheader={<ListSubheader>Advanced</ListSubheader>}>
+          <ListItem>
+            <ListItemIcon>
+              <UpdateIcon />
+            </ListItemIcon>
+            <ListItemText primary="Update" />
+            <ListItemSecondaryAction>
+              <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={handleToggle('wifi')}
+                >
+                <SendIcon />
+              </Button>
+            </ListItemSecondaryAction>
+          </ListItem>
+        </List>
+        <List subheader={<ListSubheader>Info</ListSubheader>}>
+          <ListItem>
+            <ListItemText primary={"Debug button"} />
+          </ListItem>
           <ListItemSecondaryAction>
-            <IconButton
-              color="primary"
-              onClick={handleToggle('wifi')}
-            >
-              <SendIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            <PaletteIcon />
-          </ListItemIcon>
-          <TextField id="show-text" label="Buffer size" />
-          <ListItemSecondaryAction>
-            <IconButton
-              color="primary"
-              onClick={handleToggle('wifi')}
-            >
-              <SendIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
-      </List>
-    </div>
-  );
+              <Button
+                  color="primary"
+                  variant="contained"
+                  onClick={() => console.log(process.env)}
+                >
+                <SendIcon />
+              </Button>
+            </ListItemSecondaryAction>
+        </List>
+      </div>
+    );
+  }
 }
 
-export default MainTab;
+export default withStyles(styles)(SettingsTab);

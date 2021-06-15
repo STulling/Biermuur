@@ -17,11 +17,22 @@ api = Api(app)
 process = None
 time = datetime.now()
 
+
+def newProcess(prim, sec, action, args):
+    display.primary = prim
+    display.secondary = sec
+    if len(args) != 0:
+        action(args[0])
+    else:
+        action()
+
+
+
 def setAction(action, args):
     global process
     if process and process.is_alive():
         process.kill()
-    process = Process(target=action, args=args)
+    process = Process(target=newProcess, args=(display.primary, display.secondary, action, args))
     process.start()
 
 
@@ -31,11 +42,60 @@ class Songs(Resource):
 
 class Play(Resource):
     def get(self, song_name):
-        setAction(DJ.loop, (song_name, ))
+        setAction(DJ.loop, (song_name + '.wav', ))
+
+class SongAdder(Resource):
+    def get(self, song_name):
+        music.download(song_name)
+
+class SongModifier(Resource):
+    def put(self, song_name):
+        newName = request.form['data']
+        music.rename(song_name, newName)
+
+    def delete(self, song_name):
+        music.remove(song_name)
+
+class Settings(Resource):
+    def put(self, setting):
+        newVal = request.form['data']
+        if setting == 'primary':
+            display.primary[:] = display.HTMLColorToRGB(newVal)
+        if setting == 'secondary':
+            display.secondary[:] = display.HTMLColorToRGB(newVal)
+
+
+func_mappings = {
+    'clear': display.clear,
+    'random_word': display.randomwoord,
+    'rainbow': display.rainbow,
+    'diamond_wipes': display.diamond_wipes,
+    'random_pixel_wipe': display.random_pixel,
+    'random_order_wipe': display.random_order_wipe,
+    'golf': display.golf,
+    'lijnen': display.lijnen,
+    'matrix': display.matrix,
+    'cirkels': display.cirkels,
+    'histogram': display.histogram,
+    'spiraal': display.spiraal,
+    'krat': display.boxes,
+}
+
+
+class CommonControls(Resource):
+    def get(self, action):
+        if action in func_mappings:
+            setAction(func_mappings[action], ())
+        elif action == "update":
+            update()
 
 
 api.add_resource(Songs, '/api/songs')
 api.add_resource(Play, '/api/songs/play/<string:song_name>')
+api.add_resource(SongAdder, '/api/songs/add/<string:song_name>')
+api.add_resource(SongModifier, '/api/songs/<string:song_name>')
+api.add_resource(CommonControls, '/api/common/<string:action>')
+api.add_resource(Settings, '/api/settings/<string:setting>')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -78,7 +138,7 @@ def index():
         elif request.form.get('shuffle') and request.form.get('playlist'):
             setAction(music.shuffleplaylist, (request.form.get('playlist'),))
         elif request.form.get('download') and request.form.get('playlist') and request.form.get('song'):
-            setAction(music.download, (request.form.get('playlist'),request.form.get('song'),))
+            setAction(music.download, (request.form.get('song'),))
         return redirect(url_for('index'))
     return render_template("index.html", colors=display.getHTMLColors(), time=time.strftime("%d/%m/%Y %H:%M:%S"), playlists=music.listFolders())
 
@@ -86,7 +146,7 @@ def index():
 def update():
     if process and process.is_alive():
         process.kill()
-    os.system("git pull")
+    os.system("git -C .. pull")
 
 
 if __name__ == "__main__":
