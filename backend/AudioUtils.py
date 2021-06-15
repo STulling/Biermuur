@@ -56,12 +56,12 @@ def sparkle(rms):
 t = 0
 
 def wave(rms):
-    rms = max(0, min(1, (3 * rms)**(2 + 1) - 0.1))
+    rms = rms = min(1, (3 * rms)**(2 + 1))
     display.setStrip(display.secondary.value)
-    dt = 0.05
+    dt = 0.1
     global t
     t += dt
-    xs = [8 * np.pi * x / (display.WIDTH - 1) for x in range(display.WIDTH)]
+    xs = [4 * np.pi * x / (display.WIDTH - 1) for x in range(display.WIDTH)]
     color = display.primary.value
     ys = [int(rms * display.HEIGHT//2 * np.sin(x + t) + display.HEIGHT//2) for x in xs]
     display.setStrip(display.secondary.value)
