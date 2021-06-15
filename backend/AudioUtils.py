@@ -30,8 +30,20 @@ def smoothstep(x, x_min=0, x_max=1, N=1):
 
     return result
 
+was_on = True
+
 def cirkel(rms):
     rms = smoothstep(rms)
+    global was_on
+    colorRGB = display.getRGBfromI(display.primary.value)
+    if rms > 0.7:
+        if was_on:
+            for i in range(3):
+                colorRGB[i] = int(colorRGB[i] * 0)
+            was_on = False
+        else:
+            was_on = True
+    color = display.getIfromRGB(colorRGB)
     display.setStrip(display.secondary.value)
     xmid = display.WIDTH / 2 - 0.5
     ymid = display.HEIGHT / 2 - 0.5
@@ -41,7 +53,7 @@ def cirkel(rms):
         for x in range(display.WIDTH):
             afstand = np.sqrt((y - ymid) ** 2 + (x - xmid) ** 2)
             if afstand < radius:
-                display.setPixelColor(x, y, display.primary.value)
+                display.setPixelColor(x, y, color)
     display.strip.show()
 
 def sparkle(rms):
