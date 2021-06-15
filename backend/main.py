@@ -29,8 +29,13 @@ class Songs(Resource):
     def get(self):
         return music.listSongs()
 
+class Play(Resource):
+    def get(self, song_name):
+        setAction(DJ.loop, (song_name, ))
+
 
 api.add_resource(Songs, '/api/songs')
+api.add_resource(Play, '/api/songs/play/<string:song_name>')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

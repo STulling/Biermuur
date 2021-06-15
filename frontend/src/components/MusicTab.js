@@ -98,11 +98,23 @@ class MainTab extends React.Component {
     const { classes } = this.props;
 
     const handleClickOpen = () => {
-      this.setState({'open': true });
+      this.setState({'songaddOpen': true });
+    };
+
+    const play = (songName) => {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", 'http://localhost:5000/api/songs/play/' + songName, true);
+      
+      xhr.send(null);
+    };
+
+    const handleClickSettingsOpen = () => {
+      this.setState({'songsettingsOpen': true });
     };
 
     const handleClose = () => {
-      this.setState({'open': false });
+      this.setState({'songaddOpen': false });
+      this.setState({'songsettingsOpen': false });
     };
 
     return (
@@ -121,10 +133,10 @@ class MainTab extends React.Component {
                   </ListItemIcon>
                 </ListItem>
                 {this.state.songList[sectionId].map((item) => (
-                  <ListItem button key={`item-${sectionId}-${item}`}>
+                  <ListItem button key={`item-${sectionId}-${item}`} onClick={() => play(item)}>
                     <ListItemText className={classes.songName} inset primary={`${item}`} />
                     <ListItemSecondaryAction>
-                      <IconButton edge="end" aria-label="comments">
+                      <IconButton edge="end" aria-label="comments" onClick={handleClickSettingsOpen}>
                         <MenuIcon />
                       </IconButton>
                     </ListItemSecondaryAction>
@@ -137,7 +149,7 @@ class MainTab extends React.Component {
         <Fab color="primary" aria-label="add" className={classes.fab} onClick={handleClickOpen}>
           <AddIcon />
         </Fab>
-        <Dialog aria-labelledby="simple-dialog-title" open={this.state.open} onClose={handleClose}>
+        <Dialog aria-labelledby="simple-dialog-title" open={this.state.songaddOpen} onClose={handleClose}>
           <DialogTitle id="simple-dialog-title">Add song</DialogTitle>
           <DialogContent>
             <TextField id="song-title" label="Song Title" variant="outlined" />
@@ -145,6 +157,20 @@ class MainTab extends React.Component {
           <DialogActions>
             <Button variant="contained" color="primary">
               Add
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog aria-labelledby="simple-dialog-title" open={this.state.songsettingsOpen} onClose={handleClose}>
+          <DialogTitle id="simple-dialog-title">Edit</DialogTitle>
+          <DialogContent>
+            <TextField id="song-title" label="New Song Title" variant="outlined" />
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" color="primary">
+              Edit
+            </Button>
+            <Button variant="contained" color="secondary">
+              Delete
             </Button>
           </DialogActions>
         </Dialog>
