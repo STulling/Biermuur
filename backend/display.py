@@ -281,6 +281,7 @@ def lijnen():
         # time.sleep(0.2)
 
 
+
 def cirkels():
     while True:
         color = random.randint(0, 16777215)
@@ -399,4 +400,6 @@ def boxes():
                 setPixelColor(x, y, primary.value)
         strip.show()
         time.sleep(0.05)
+
+
 

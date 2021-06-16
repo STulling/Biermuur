@@ -1,7 +1,7 @@
 import numpy as np
-
+import random
 import display
-
+import time
 def simple(rms):
     display.setStrip(display.secondary.value)
     display.setAmountColor(int(rms * display.LED_COUNT), display.primary.value)
@@ -66,3 +66,40 @@ def wave(rms):
         display.setPixelColor(x, y - 1, color)
     display.strip.show()
 
+
+def bliksem(rms):
+    hoeken = np.linspace(-2, 2, 10)
+    alpha1 = random.choice(hoeken)
+    alpha2 = random.choice(hoeken)
+    alpha3 = random.choice(hoeken)
+    #alpha4 = random.choice(hoeken)
+    #alpha5 = random.choice(hoeken)
+    display.setStrip(display.secondary.value)
+    xstart = random.randint(6,display.WIDTH-6)
+    ystart = 0
+
+    xval1 = []
+    yval1 = []
+    xval2 = []
+    yval2 = []
+
+    if alpha1 < 0:
+        xval1 = np.arange(0,-4,-1) + xstart
+    else:
+        xval1 = np.arange(0,4,1) + xstart
+    yval1 = xval1*alpha1
+    if alpha2 < 0:
+        xval2 = np.arange(0,-4,-1) + xval1[3]
+    else:
+        xval1 = np.arange(0,4,1) + xval1[3]
+    yval2 = xval1*alpha2 + yval1[3]
+    if alpha3 < 0:
+        xval3 = np.arange(0,-4,-1) + xval2[3]
+    else:
+        xval3 = np.arange(0,4,1) + xval2[3]
+    yval3 = xval3*alpha3 + yval2[3]
+
+    display.setPixelColor(xval1, yval1, display.primary.value)
+    display.setPixelColor(xval2, yval2, display.primary.value)
+    display.setPixelColor(xval3, yval3, display.primary.value)
+    display.strip.show()

@@ -11,6 +11,7 @@ callbacks = {
     "circle": AudioUtils.cirkel,
     "diamond": AudioUtils.ruit,
     "wave": AudioUtils.wave,
+    "lightning": AudioUtils.bliksem,
     "quit": exit,
 }
 callbackNames = list(callbacks.keys())
@@ -33,6 +34,8 @@ def on_press(key):
         currentCallback.value = callbackNames.index('circle')
     if key.name == 'w':
         currentCallback.value = callbackNames.index('wave')
+    if key.name == 'l':
+        currentCallback.value = callbackNames.index('lightning')
 
 
 def callback(rms):
