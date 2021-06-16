@@ -44,9 +44,10 @@ def cirkel(rms):
 def sparkle(rms):
     rms = max(0, min(1, (3 * rms)**(2 + 1) - 0.1))
     display.setStrip(display.secondary.value)
-    randoms = np.random.random((20, 18)) < rms
-    for x, y in zip(*np.nonzero(randoms)):
-        display.setPixelColor(x, y, display.primary.value)
+    for x in range(display.WIDTH):
+        for y in range(display.HEIGHT):
+            if random.random() < rms:
+                display.setPixelColor(x, y, display.primary.value)
     display.strip.show()
 
 t = 0
