@@ -1,5 +1,7 @@
-export REACT_APP_IP=$1
+sudo pkill -f node
+export REACT_APP_IP=192.168.1.97
+export FLASK_MEDIA_DIR=/media/pi/F/music
 cd frontend
 npm start &
 cd ../backend
-python3 main.py $2
+python3 main.py
