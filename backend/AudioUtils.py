@@ -76,7 +76,6 @@ def bliksem(rms):
     #alpha5 = random.choice(hoeken)
     display.setStrip(display.secondary.value)
     xstart = random.randint(6,display.WIDTH-6)
-    ystart = 0
 
     xval1 = []
     yval1 = []
@@ -84,19 +83,19 @@ def bliksem(rms):
     yval2 = []
 
     if alpha1 < 0:
-        xval1 = np.arange(0,-4,-1) + xstart
+        xval1 = np.arange(-4,0) + xstart
     else:
-        xval1 = np.arange(0,4,1) + xstart
+        xval1 = np.arange(0,4) + xstart
     yval1 = xval1*alpha1
     if alpha2 < 0:
-        xval2 = np.arange(0,-4,-1) + xval1[3]
+        xval2 = np.arange(-4,0) + xval1[3]
     else:
-        xval1 = np.arange(0,4,1) + xval1[3]
+        xval1 = np.arange(0,4) + xval1[3]
     yval2 = xval1*alpha2 + yval1[3]
     if alpha3 < 0:
-        xval3 = np.arange(0,-4,-1) + xval2[3]
+        xval3 = np.arange(-4,0) + xval2[3]
     else:
-        xval3 = np.arange(0,4,1) + xval2[3]
+        xval3 = np.arange(0,4) + xval2[3]
     yval3 = xval3*alpha3 + yval2[3]
 
     display.setPixelColor(xval1, yval1, display.primary.value)
