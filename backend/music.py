@@ -18,7 +18,7 @@ try:
 except Exception:
     pass
 
-folder = "/media/pi/F/music"
+folder = os.environ["FLASK_MEDIA_DIR"]
 
 
 def download(name):

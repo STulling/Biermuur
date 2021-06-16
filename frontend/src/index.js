@@ -24,10 +24,6 @@ const theme = createMuiTheme({
   }
 });
 
-if (!process.env.hasOwnProperty('REACT_APP_IP')) {
-  process.env['REACT_APP_IP'] = 'localhost'
-}
-
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
