@@ -19,6 +19,7 @@ time = datetime.now()
 
 
 def newProcess(prim, sec, action, args):
+    init()
     display.primary = prim
     display.secondary = sec
     if len(args) != 0:
@@ -152,7 +153,6 @@ def update():
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         music.folder = sys.argv[1]
-    init()
     try:
         app.run(host="0.0.0.0", debug=True)
     except KeyboardInterrupt:

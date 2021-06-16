@@ -25,12 +25,11 @@ class Adafruit_NeoPixel():
         self.NUM_PIXELS = LED_COUNT
         self.WIDTH = display.WIDTH
         self.HEIGHT = display.HEIGHT
+
+    def begin(self):
         pygame.init()
         self.SCREEN = pygame.display.set_mode((self.WIDTH * 20, self.HEIGHT * 20))
         self.SCREEN.fill((0, 0, 0))
-
-    def begin(self):
-        return
 
     def setPixelColor(self, index, color):
         if 0 > index or index >= (self.WIDTH * self.HEIGHT):
