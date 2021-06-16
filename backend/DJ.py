@@ -1,31 +1,47 @@
 import keyboard
 
-import display
 import music
 import AudioUtils
 import os
+import multiprocessing
+
+callbacks = {
+    "sparkle": AudioUtils.sparkle,
+    "bars": AudioUtils.simple,
+    "circle": AudioUtils.cirkel,
+    "diamond": AudioUtils.ruit,
+    "wave": AudioUtils.wave,
+    "quit": exit,
+}
+callbackNames = list(callbacks.keys())
+callbackFunctions = list(callbacks.values())
 
 mPlayer = None
+currentCallback = multiprocessing.Value('i', 0)
+
 
 def on_press(key):
     if key.name == 'esc':
-        mPlayer.set_callback(exit)
+        currentCallback.value = callbackNames.index('quit')
     if key.name == 'b':
-        mPlayer.set_callback(AudioUtils.simple)
+        currentCallback.value = callbackNames.index('bars')
     if key.name == 's':
-        mPlayer.set_callback(AudioUtils.sparkle)
+        currentCallback.value = callbackNames.index('sparkle')
     if key.name == 'r':
-        mPlayer.set_callback(AudioUtils.ruit)
+        currentCallback.value = callbackNames.index('diamond')
     if key.name == 'c':
-        mPlayer.set_callback(AudioUtils.cirkel)
+        currentCallback.value = callbackNames.index('circle')
     if key.name == 'w':
-        mPlayer.set_callback(AudioUtils.wave)
+        currentCallback.value = callbackNames.index('wave')
+
+
+def callback(rms):
+    callbackFunctions[currentCallback.value](rms)
 
 
 def loop(file):
     file = os.path.join(music.folder, file + '.wav')
     keyboard.on_press(on_press)
-    display.init()
     global mPlayer
-    mPlayer = music.MusicPlayer(callback_function=AudioUtils.simple)
+    mPlayer = music.MusicPlayer(callback_function=callback)
     mPlayer.playSound(file)

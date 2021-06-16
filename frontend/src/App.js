@@ -14,6 +14,8 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import MainTab from './components/MainTab';
 import SettingsTab from './components/SettingsTab';
 import MusicTab from './components/MusicTab';
+import DJTab from './components/DJTab';
+import AlbumIcon from '@material-ui/icons/Album';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,8 +56,9 @@ function App() {
       </Toolbar>
     </AppBar>
     {value === 0 && <MusicTab />}
-    {value === 1 && <MainTab />}
-    {value === 2 && <SettingsTab />}
+    {value === 1 && <DJTab />}
+    {value === 2 && <MainTab />}
+    {value === 3 && <SettingsTab />}
     <Paper square style={{ position: 'fixed', bottom: '0px', width: '100%'}}>
       <Tabs
         value={value}
@@ -66,6 +69,7 @@ function App() {
         aria-label="icon tabs example"
       >
         <Tab icon={<MusicNoteIcon />} label="MUSIC" />
+        <Tab icon={<AlbumIcon />} label="DJ" />
         <Tab icon={<EmojiObjectsIcon />} label="MODES" />
         <Tab icon={<SettingsIcon />} label="SETTINGS" />
       </Tabs>

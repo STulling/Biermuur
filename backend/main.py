@@ -18,10 +18,11 @@ process = None
 time = datetime.now()
 
 
-def newProcess(prim, sec, action, args):
+def newProcess(prim, sec, curr_callback, action, args):
     init()
     display.primary = prim
     display.secondary = sec
+    DJ.currentCallback = curr_callback
     if len(args) != 0:
         action(args[0])
     else:
@@ -33,7 +34,7 @@ def setAction(action, args):
     global process
     if process and process.is_alive():
         process.kill()
-    process = Process(target=newProcess, args=(display.primary, display.secondary, action, args))
+    process = Process(target=newProcess, args=(display.primary, display.secondary, DJ.currentCallback, action, args))
     process.start()
 
 
@@ -91,12 +92,19 @@ class CommonControls(Resource):
             update()
 
 
+class DJControls(Resource):
+    def get(self, action):
+        if action in DJ.callbackNames:
+            DJ.currentCallback.value = DJ.callbackNames.index(action)
+
+
 api.add_resource(Songs, '/api/songs')
 api.add_resource(Play, '/api/songs/play/<string:song_name>')
 api.add_resource(SongAdder, '/api/songs/add/<string:song_name>')
 api.add_resource(SongModifier, '/api/songs/<string:song_name>')
 api.add_resource(CommonControls, '/api/common/<string:action>')
 api.add_resource(Settings, '/api/settings/<string:setting>')
+api.add_resource(DJControls, '/api/DJ/<string:action>')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

@@ -31,8 +31,8 @@ N_KRAT_Y = 3
 fnt = ImageFont.truetype("Pixel12x10Mono.ttf", 13)
 out = Image.new("RGB", (WIDTH, HEIGHT), (0, 255, 0))
 
-primary = Value('i', Color(0, 255, 0))
-secondary = Value('i', Color(255, 0, 0))
+primary = Value('i', Color(0, 0, 255))
+secondary = Value('i', Color(0, 0, 0))
 strip = Adafruit_NeoPixel(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
 
 
