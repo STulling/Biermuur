@@ -37,14 +37,11 @@ def shuffleplaylist(path):
 
 class MusicPlayer():
 
-    event = threading.Event()
-
     def __init__(self, callback_function=None, blocksize=2048):
         self.callback_function = callback_function
         self.blocksize = blocksize
         self.buffersize = 0
         self.q = None
-        self.event = threading.Event()
 
     def set_callback(self, new_callback):
         self.callback_function = new_callback
@@ -97,7 +94,7 @@ class MusicPlayer():
         stream = sd.OutputStream(
             samplerate=samplerate, blocksize=self.blocksize,
             device=sd.default.device, channels=channels, dtype='float32',
-            callback=self.callback, finished_callback=self.event.set)
+            callback=self.callback)
         print('lets goo')
         with stream:
             print('lets goo 2')
@@ -107,5 +104,4 @@ class MusicPlayer():
                 data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
                 i += 1
                 self.q.put(data, timeout=timeout)
-            self.event.wait()  # Wait until playback is finished
         self.q.queue.clear()
