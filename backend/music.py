@@ -10,14 +10,6 @@ import threading
 import os
 import numpy as np
 
-simulated = False
-
-try:
-    import pygame
-    simulated = True
-except Exception:
-    pass
-
 folder = os.environ["FLASK_MEDIA_DIR"]
 
 
@@ -61,6 +53,7 @@ class MusicPlayer():
         self.callback_function(np.sqrt(np.mean(data**2)))
 
     def callback(self, outdata, frames, time, status):
+        print(status)
         assert frames == self.blocksize
         if status.output_underflow:
             print('Output underflow: increase blocksize?', file=sys.stderr)
@@ -83,12 +76,15 @@ class MusicPlayer():
     def playSound(self, file):
         print(f"Playing: {file}")
         self.event.clear()
+        print('lets goo -3')
         song, samplerate = sf.read(file)
         channels = song.shape[1]
         self.buffersize = int(song.shape[0] / self.blocksize)
         self.q = queue.Queue(maxsize=self.buffersize)
+        print('lets goo -2')
         song = song.astype(np.float32)
         song = song / np.max(np.abs(song))
+        print('lets goo -1')
         i = 0
         for _ in range(self.buffersize):
             if (i+1)*self.blocksize > len(song):
@@ -96,20 +92,20 @@ class MusicPlayer():
             data = song[i*self.blocksize:(i+1)*self.blocksize, :]
             i+=1
             self.q.put_nowait(data)  # Pre-fill queue
+        print('lets goo 0')
 
         stream = sd.OutputStream(
             samplerate=samplerate, blocksize=self.blocksize,
             device=sd.default.device, channels=channels, dtype='float32',
             callback=self.callback, finished_callback=self.event.set)
+        print('lets goo')
         with stream:
+            print('lets goo 2')
             timeout = self.blocksize * self.buffersize / samplerate
             while (i+1)*self.blocksize < len(song):
+                print('lets goo 3')
                 data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
                 i += 1
                 self.q.put(data, timeout=timeout)
-                if simulated:
-                    for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                            exit()
             self.event.wait()  # Wait until playback is finished
         self.q.queue.clear()
