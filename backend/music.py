@@ -72,7 +72,6 @@ class MusicPlayer():
 
     def playSound(self, file):
         print(f"Playing: {file}")
-        self.event.clear()
         print('lets goo -3')
         song, samplerate = sf.read(file)
         channels = song.shape[1]
