@@ -40,8 +40,9 @@ class MusicPlayer():
     def __init__(self, callback_function=None, blocksize=2048):
         self.callback_function = callback_function
         self.blocksize = blocksize
-        self.buffersize = 0
-        self.q = None
+        self.buffersize = 200
+        self.q = queue.Queue(maxsize=self.buffersize)
+        self.event = threading.Event()
 
     def set_callback(self, new_callback):
         self.callback_function = new_callback
@@ -72,11 +73,10 @@ class MusicPlayer():
 
     def playSound(self, file):
         print(f"Playing: {file}")
+        self.event.clear()
         print('lets goo -3')
         song, samplerate = sf.read(file)
         channels = song.shape[1]
-        self.buffersize = int(song.shape[0] / self.blocksize)
-        self.q = queue.Queue(maxsize=self.buffersize)
         print('lets goo -2')
         song = song.astype(np.float32)
         song = song / np.max(np.abs(song))
@@ -93,7 +93,7 @@ class MusicPlayer():
         stream = sd.OutputStream(
             samplerate=samplerate, blocksize=self.blocksize,
             device=sd.default.device, channels=channels, dtype='float32',
-            callback=self.callback)
+            callback=self.callback, finished_callback=self.event.set)
         print('lets goo')
         with stream:
             print('lets goo 2')
@@ -103,4 +103,5 @@ class MusicPlayer():
                 data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
                 i += 1
                 self.q.put(data, timeout=timeout)
+            self.event.wait()
         self.q.queue.clear()

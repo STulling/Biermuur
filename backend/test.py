@@ -7,8 +7,9 @@ import sys
 import DJ
 
 def main():
-    music.folder = '/media/pi/F/music'
-    DJ.loop('Elderbrook - Bird Song')
+    file = 'benee.wav'
+    mPlayer = music.MusicPlayer(callback_function=None)
+    mPlayer.playSound(file)
 
 if __name__=="__main__":
     main()
