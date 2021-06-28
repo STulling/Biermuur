@@ -97,11 +97,12 @@ class MusicPlayer():
         print('lets goo')
         with stream:
             print('lets goo 2')
-            timeout = self.blocksize * self.buffersize / samplerate
+            timeout = 1
             while (i+1)*self.blocksize < len(song):
                 print('lets goo 3')
                 data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
                 i += 1
                 self.q.put(data, timeout=timeout)
+            print('what u doing here?')
             self.event.wait()
         self.q.queue.clear()
