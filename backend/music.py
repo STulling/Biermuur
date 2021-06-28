@@ -51,7 +51,7 @@ class MusicPlayer():
         self.callback_function(np.sqrt(np.mean(data**2)))
 
     def callback(self, outdata, frames, time, status):
-        print(status)
+        print('callback')
         assert frames == self.blocksize
         if status.output_underflow:
             print('Output underflow: increase blocksize?', file=sys.stderr)
