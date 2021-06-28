@@ -92,7 +92,7 @@ class MusicPlayer():
 
         stream = sd.OutputStream(
             samplerate=samplerate, blocksize=self.blocksize,
-            device=sd.default.device, channels=channels, dtype='float32',
+            device=0, channels=channels, dtype='float32',
             callback=self.callback, finished_callback=self.event.set)
         print('lets goo')
         with stream:
