@@ -85,22 +85,22 @@ class MusicPlayer():
         for _ in range(self.buffersize):
             if (i+1)*self.blocksize > len(song):
                 break
-            data = song[i*self.blocksize:(i+1)*self.blocksize, :].flatten().tobytes()
+            data = song[i*self.blocksize:(i+1)*self.blocksize, :]
             i+=1
             self.q.put_nowait(data)  # Pre-fill queue
         print('lets goo 0')
 
-        stream = sd.RawOutputStream(
+        stream = sd.OutputStream(
             samplerate=samplerate, blocksize=self.blocksize,
             device=sd.default.device, channels=channels, dtype='float32',
             callback=self.callback, finished_callback=self.event.set)
         print('lets goo')
         stream.start()
         print('lets goo 2')
-        timeout = 1
+        timeout = 3
         while (i+1)*self.blocksize < len(song):
             print('lets goo 3')
-            data = song[i * self.blocksize:(i + 1) * self.blocksize, :].flatten().tobytes()
+            data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
             i += 1
             self.q.put(data, timeout=timeout)
         print('what u doing here?')
