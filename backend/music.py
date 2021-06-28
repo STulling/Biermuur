@@ -95,14 +95,16 @@ class MusicPlayer():
             device=sd.default.device, channels=channels, dtype='float32',
             callback=self.callback, finished_callback=self.event.set)
         print('lets goo')
-        with stream:
-            print('lets goo 2')
-            timeout = 1
-            while (i+1)*self.blocksize < len(song):
-                print('lets goo 3')
-                data = song[i * self.blocksize:(i + 1) * self.blocksize, :].flatten().tobytes()
-                i += 1
-                self.q.put(data, timeout=timeout)
-            print('what u doing here?')
-            self.event.wait()
+        stream.start()
+        print('lets goo 2')
+        timeout = 1
+        while (i+1)*self.blocksize < len(song):
+            print('lets goo 3')
+            data = song[i * self.blocksize:(i + 1) * self.blocksize, :].flatten().tobytes()
+            i += 1
+            self.q.put(data, timeout=timeout)
+        print('what u doing here?')
+        self.event.wait()
+        stream.stop()
+        stream.close()
         self.q.queue.clear()
