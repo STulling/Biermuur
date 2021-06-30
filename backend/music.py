@@ -49,7 +49,6 @@ class MusicPlayer():
         self.callback_function(np.sqrt(np.mean(data**2)))
 
     def callback(self, outdata, frames, time, status):
-        print('callback')
         assert frames == self.blocksize
         if status.output_underflow:
             print('Output underflow: increase blocksize?', file=sys.stderr)
@@ -72,13 +71,10 @@ class MusicPlayer():
     def playSound(self, file):
         print(f"Playing: {file}")
         self.event.clear()
-        print('lets goo -3')
         song, samplerate = sf.read(file)
         channels = song.shape[1]
-        print('lets goo -2')
         song = song.astype(np.float32)
         song = song / np.max(np.abs(song))
-        print('lets goo -1')
         i = 0
         for _ in range(self.buffersize):
             if (i+1)*self.blocksize > len(song):
@@ -86,22 +82,17 @@ class MusicPlayer():
             data = song[i*self.blocksize:(i+1)*self.blocksize, :]
             i+=1
             self.q.put_nowait(data)  # Pre-fill queue
-        print('lets goo 0')
 
         stream = sd.OutputStream(
             samplerate=samplerate, blocksize=self.blocksize,
             device=sd.default.device, channels=channels, dtype='float32',
             callback=self.callback, finished_callback=self.event.set)
-        print('lets goo')
         stream.start()
-        print('lets goo 2')
         timeout = 3
         while (i+1)*self.blocksize < len(song):
-            print('lets goo 3')
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
             i += 1
             self.q.put(data, timeout=timeout)
-        print('what u doing here?')
         self.event.wait()
         stream.stop()
         stream.close()
