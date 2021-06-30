@@ -1,7 +1,5 @@
 import random
 
-import DJ
-import display
 import sys
 import sounddevice as sd
 import soundfile as sf
