@@ -12,7 +12,7 @@ folder = os.environ["FLASK_MEDIA_DIR"]
 
 
 def download(name):
-    command = "youtube-dl -x -f bestaudio -x --audio-format wav -o \"" + folder + "/%(title)s.%(ext)s\" \"ytsearch1:" + name + "\""
+    command = f"youtube-dl -x -f bestaudio -x --audio-format wav -o \"{folder}/%(title)s.%(ext)s\" \"ytsearch1:{name}\""
     os.system(command)
 
 def rename(old, new):
@@ -69,7 +69,7 @@ class MusicPlayer():
             self.process(data)
 
     def playSound(self, file):
-        print("Playing: ", file)
+        print(f"Playing: {file}")
         self.event.clear()
         song, samplerate = sf.read(file)
         channels = song.shape[1]
