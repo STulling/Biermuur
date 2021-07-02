@@ -16,10 +16,10 @@ def download(name):
     os.system(command)
 
 def rename(old, new):
-    os.rename(os.path.join(folder, old + '.wav'), os.path.join(folder, new + '.wav'))
+    os.rename(os.path.join(folder, old + '.mp3'), os.path.join(folder, new + '.mp3'))
 
 def remove(file):
-    os.remove(os.path.join(folder, file + '.wav'))
+    os.remove(os.path.join(folder, file + '.mp3'))
 
 def listFolders():
     return [x[0] for x in os.walk(folder)]
