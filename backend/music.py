@@ -41,6 +41,7 @@ class MusicPlayer():
         self.buffersize = 500
         self.q = queue.Queue(maxsize=self.buffersize)
         self.event = threading.Event()
+        self.empty_space = np.zeros((self.blocksize*self.buffersize, 2))
 
     def set_callback(self, new_callback):
         self.callback_function = new_callback
@@ -70,6 +71,7 @@ class MusicPlayer():
         print(f"Playing: {file}")
         self.event.clear()
         song, samplerate = open_audio(file)
+        song = np.append(song, self.empty_space, axis=0)
         channels = song.shape[1]
         song = song.astype(np.float32)
         song = song / np.max(np.abs(song))
