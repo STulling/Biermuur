@@ -24,7 +24,7 @@ def callback(rms):
 
 
 def loop(file):
-    file = os.path.join(music.folder, file + '.wav')
+    file = os.path.join(music.folder, file + '.mp3')
     global mPlayer
     mPlayer = music.MusicPlayer(callback_function=callback)
     mPlayer.playSound(file)

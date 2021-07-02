@@ -2,17 +2,17 @@ import random
 
 import sys
 import sounddevice as sd
-import soundfile as sf
 import queue
 import threading
 import os
 import numpy as np
+from audio2numpy import open_audio
 
 folder = os.environ["FLASK_MEDIA_DIR"]
 
 
 def download(name):
-    command = f"youtube-dl -x -f bestaudio -x --audio-format wav -o \"{folder}/%(title)s.%(ext)s\" \"ytsearch1:{name}\""
+    command = f"youtube-dl -x -f bestaudio -x --audio-format mp3 -o \"{folder}/%(title)s.%(ext)s\" \"ytsearch1:{name}\""
     os.system(command)
 
 def rename(old, new):
@@ -25,7 +25,7 @@ def listFolders():
     return [x[0] for x in os.walk(folder)]
 
 def listSongs():
-    return [f[:-4] for f in os.listdir(folder) if f.endswith('.wav')]
+    return [f[:-4] for f in os.listdir(folder) if f.endswith('.mp3')]
 
 def shuffleplaylist(path):
     while True:
@@ -69,7 +69,7 @@ class MusicPlayer():
     def playSound(self, file):
         print(f"Playing: {file}")
         self.event.clear()
-        song, samplerate = sf.read(file)
+        song, samplerate = open_audio(file)
         channels = song.shape[1]
         song = song.astype(np.float32)
         song = song / np.max(np.abs(song))
