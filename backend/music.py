@@ -38,7 +38,7 @@ class MusicPlayer():
     def __init__(self, callback_function=None, blocksize=2048):
         self.callback_function = callback_function
         self.blocksize = blocksize
-        self.buffersize = 200
+        self.buffersize = 500
         self.q = queue.Queue(maxsize=self.buffersize)
         self.event = threading.Event()
 
@@ -65,8 +65,6 @@ class MusicPlayer():
             raise sd.CallbackStop
         else:
             outdata[:] = data
-        if self.callback_function is not None:
-            self.process(data)
 
     def playSound(self, file):
         print(f"Playing: {file}")
@@ -92,6 +90,8 @@ class MusicPlayer():
         while (i+1)*self.blocksize < len(song):
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
             i += 1
+            if self.callback_function is not None:
+                self.process(self.q.queue[0])
             self.q.put(data, timeout=timeout)
         self.event.wait()
         stream.stop()
