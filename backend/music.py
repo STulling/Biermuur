@@ -7,6 +7,7 @@ import threading
 import os
 import numpy as np
 from audio2numpy import open_audio
+import display
 
 folder = os.environ["FLASK_MEDIA_DIR"]
 
@@ -40,14 +41,16 @@ class MusicPlayer():
         self.blocksize = blocksize
         self.buffersize = 500
         self.q = queue.Queue(maxsize=self.buffersize)
-        self.event = threading.Event()
         self.empty_space = np.zeros((self.blocksize*self.buffersize, 2))
+        self.rms_cache = []
+        self.ffi_cache = []
+        self.volume = 1
 
     def set_callback(self, new_callback):
         self.callback_function = new_callback
 
     def process(self, data):
-        self.callback_function(np.sqrt(np.mean(data**2)))
+        self.callback_function()
 
     def callback(self, outdata, frames, time, status):
         assert frames == self.blocksize
@@ -69,13 +72,22 @@ class MusicPlayer():
 
     def playSound(self, file):
         print(f"Playing: {file}")
-        self.event.clear()
         song, samplerate = open_audio(file)
+        print(f"Read file")
         song = np.append(song, self.empty_space, axis=0)
         channels = song.shape[1]
         song = song.astype(np.float32)
-        song = song / np.max(np.abs(song))
+        self.rms_cache = [np.sqrt(np.mean(song[i*self.blocksize:(i+1)*self.blocksize, :]**2)) for i in range(int(np.ceil(len(song)/self.blocksize)))]
+        print(f"Loaded rms_cache")
+        self.ffi_cache = [np.fft.fft(song[i*self.blocksize:(i+1)*self.blocksize, 0])[0:int(self.blocksize/2)]/self.blocksize for i in
+                          range(int(np.ceil(len(song) / self.blocksize)))]
+        print(f"Loaded ffi_cache")
+        self.ffi_cache = [np.abs(x) for x in self.ffi_cache]
+        print(f"Transformed ffi_cache")
+
+        song = (song / max(self.rms_cache)) * self.volume
         i = 0
+        x = 0
         for _ in range(self.buffersize):
             if (i+1)*self.blocksize > len(song):
                 break
@@ -86,16 +98,16 @@ class MusicPlayer():
         stream = sd.OutputStream(
             samplerate=samplerate, blocksize=self.blocksize,
             device=sd.default.device, channels=channels, dtype='float32',
-            callback=self.callback, finished_callback=self.event.set)
+            callback=self.callback)
         stream.start()
-        timeout = 3
         while (i+1)*self.blocksize < len(song):
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
             i += 1
+            display.primary.value = display.wheel(np.argmax(self.ffi_cache[x]) * 4)
             if self.callback_function is not None:
-                self.process(self.q.queue[0])
-            self.q.put(data, timeout=timeout)
-        self.event.wait()
+                self.process(self.rms_cache[x])
+            x += 1
+            self.q.put(data, timeout=3)
         stream.stop()
         stream.close()
         self.q.queue.clear()
