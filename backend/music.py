@@ -84,8 +84,10 @@ class MusicPlayer():
         print(f"Loaded ffi_cache")
         self.ffi_cache = [np.abs(x)[11:] for x in self.ffi_cache]
         print(f"Transformed ffi_cache")
+        rms_max = max(self.rms_cache)
 
         song = (song / max(self.rms_cache)) * self.volume
+        self.rms_cache = [x / rms_max for x in self.rms_cache]
         i = 0
         x = 0
         for _ in range(self.buffersize):
