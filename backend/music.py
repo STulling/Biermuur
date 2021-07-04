@@ -50,7 +50,7 @@ class MusicPlayer():
         self.callback_function = new_callback
 
     def process(self, data):
-        self.callback_function()
+        self.callback_function(data)
 
     def callback(self, outdata, frames, time, status):
         assert frames == self.blocksize
