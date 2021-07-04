@@ -82,7 +82,7 @@ class MusicPlayer():
         self.ffi_cache = [np.fft.fft(song[i*self.blocksize:(i+1)*self.blocksize, 0])[0:int(self.blocksize/2)]/self.blocksize for i in
                           range(int(np.ceil(len(song) / self.blocksize)))]
         print(f"Loaded ffi_cache")
-        self.ffi_cache = [np.abs(x) for x in self.ffi_cache]
+        self.ffi_cache = [np.abs(x)[11:] for x in self.ffi_cache]
         print(f"Transformed ffi_cache")
 
         song = (song / max(self.rms_cache)) * self.volume
@@ -103,7 +103,10 @@ class MusicPlayer():
         while (i+1)*self.blocksize < len(song):
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
             i += 1
-            display.primary.value = display.wheel(min(np.argmax(self.ffi_cache[x]) * 3, 255))
+            if max(self.ffi_cache[x]) > 0.01:
+                display.primary.value = display.wheel(min(np.argmax(self.ffi_cache[x]) * 3, 255))
+            else:
+                display.primary.value = display.wheel(0)
             if self.callback_function is not None:
                 self.process(self.rms_cache[x])
             x += 1
