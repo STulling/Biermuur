@@ -8,6 +8,7 @@ import os
 import numpy as np
 from audio2numpy import open_audio
 import display
+import pickle
 
 folder = os.environ["FLASK_MEDIA_DIR"]
 
@@ -77,15 +78,22 @@ class MusicPlayer():
         song = np.append(song, self.empty_space, axis=0)
         channels = song.shape[1]
         song = song.astype(np.float32)
-        self.rms_cache = [np.sqrt(np.mean(song[i*self.blocksize:(i+1)*self.blocksize, :]**2)) for i in range(int(np.ceil(len(song)/self.blocksize)))]
-        print(f"Loaded rms_cache")
-        self.ffi_cache = [np.fft.fft(song[i*self.blocksize:(i+1)*self.blocksize, 0])[0:int(self.blocksize/2)]/self.blocksize for i in
-                          range(int(np.ceil(len(song) / self.blocksize)))]
-        print(f"Loaded ffi_cache")
-        self.ffi_cache = [np.abs(x)[11:] for x in self.ffi_cache]
-        print(f"Transformed ffi_cache")
-        rms_max = max(self.rms_cache)
+        pklfile = os.path.join(folder, file + '.pkl')
+        if os.path.exists(pklfile):
+            with open(pklfile, 'rb') as f:
+                self.rms_cache, self.ffi_cache = pickle.load(f)
+        else:
+            self.rms_cache = [np.sqrt(np.mean(song[i*self.blocksize:(i+1)*self.blocksize, :]**2)) for i in range(int(np.ceil(len(song)/self.blocksize)))]
+            print(f"Loaded rms_cache")
+            self.ffi_cache = [np.fft.fft(song[i*self.blocksize:(i+1)*self.blocksize, 0])[0:int(self.blocksize/2)]/self.blocksize for i in
+                              range(int(np.ceil(len(song) / self.blocksize)))]
+            print(f"Loaded ffi_cache")
+            self.ffi_cache = [np.abs(x)[11:] for x in self.ffi_cache]
+            print(f"Transformed ffi_cache")
+            with open(pklfile, 'wb') as f:
+                pickle.dump((self.rms_cache, self.ffi_cache), f)
 
+        rms_max = max(self.rms_cache)
         song = (song / max(self.rms_cache)) * self.volume
         self.rms_cache = [x / rms_max for x in self.rms_cache]
         i = 0

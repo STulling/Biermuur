@@ -2,12 +2,12 @@ import numpy as np
 import random
 import display
 import time
+
 def simple(rms):
     display.setStrip(display.secondary.value)
     display.setAmountColor(int(rms * display.LED_COUNT), display.primary.value)
 
 def ruit(rms):
-    rms = min(1, (3 * rms)**(2 + 1))
     display.setStrip(display.secondary.value)
     xmid = display.WIDTH / 2 - 0.5
     ymid = display.HEIGHT / 2 - 0.5
@@ -42,7 +42,6 @@ def cirkel(rms):
     display.strip.show()
 
 def sparkle(rms):
-    rms = max(0, min(1, (3 * rms)**(2 + 1) - 0.1))
     display.setStrip(display.secondary.value)
     for x in range(display.WIDTH):
         for y in range(display.HEIGHT):
@@ -53,7 +52,6 @@ def sparkle(rms):
 t = 0
 
 def wave(rms):
-    rms = min(1, rms*1.2)
     display.setStrip(display.secondary.value)
     dt = 0.1
     global t
