@@ -103,7 +103,7 @@ class MusicPlayer():
         while (i+1)*self.blocksize < len(song):
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
             i += 1
-            display.primary.value = display.wheel(np.argmax(self.ffi_cache[x]) * 4)
+            display.primary.value = display.wheel(min(np.argmax(self.ffi_cache[x]) * 3, 255))
             if self.callback_function is not None:
                 self.process(self.rms_cache[x])
             x += 1
