@@ -9,7 +9,7 @@ import numpy as np
 from audio2numpy import open_audio
 import display
 import pickle
-from scipy.signal import savgol_filter
+from wow_math import savgol_filter
 
 folder = os.environ["FLASK_MEDIA_DIR"]
 
@@ -94,8 +94,7 @@ class MusicPlayer():
             with open(pklfile, 'wb') as f:
                 pickle.dump((self.rms_cache, self.ffi_cache), f)
 
-        highest_tones = [np.argmax(x) for x in self.ffi_cache]
-        highest_tones = savgol_filter(highest_tones, 101, 2)
+        highest_tones = savgol_filter([np.argmax(x) for x in self.ffi_cache], 11, 2)
 
         rms_max = max(self.rms_cache)
         song = (song / max(self.rms_cache)) * self.volume
