@@ -38,7 +38,7 @@ def shuffleplaylist(path):
 
 class MusicPlayer():
 
-    def __init__(self, callback_function=None, blocksize=2048):
+    def __init__(self, callback_function=None, blocksize=1024):
         self.callback_function = callback_function
         self.blocksize = blocksize
         self.buffersize = 500
