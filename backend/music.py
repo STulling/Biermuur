@@ -38,7 +38,7 @@ def shuffleplaylist(path):
 
 class MusicPlayer():
 
-    def __init__(self, callback_function=None, blocksize=1024):
+    def __init__(self, callback_function=None, blocksize=512):
         self.callback_function = callback_function
         self.blocksize = blocksize
         self.buffersize = 500
@@ -94,7 +94,7 @@ class MusicPlayer():
             with open(pklfile, 'wb') as f:
                 pickle.dump((self.rms_cache, self.ffi_cache), f)
 
-        highest_tones = savgol_filter([np.argmax(x) for x in self.ffi_cache], 11, 2)
+        highest_tones = savgol_filter([np.argmax(x) for x in self.ffi_cache], 41, 2)
 
         rms_max = max(self.rms_cache)
         song = (song / max(self.rms_cache)) * self.volume
