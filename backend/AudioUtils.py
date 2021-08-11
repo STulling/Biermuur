@@ -73,7 +73,7 @@ def mond(rms):
     a = display.WIDTH/2
     b = rms
     for x in range(display.WIDTH):
-        y = np.sqrt((1 - ((x-h)**2/b**2))*a**2) + k
+        y = int(np.sqrt((1 - ((x-h)**2/a**2))*b**2) + k)
         display.setPixelColor(x, y, display.primary.value)
         display.setPixelColor(x, 2*k-y, display.primary.value)
     display.strip.show()
