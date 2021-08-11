@@ -20,8 +20,8 @@ mPlayer = None
 currentCallback = multiprocessing.Value('i', 1)
 
 
-def callback(rms):
-    callbackFunctions[currentCallback.value](rms)
+def callback(rms, pitch):
+    callbackFunctions[currentCallback.value](rms, pitch)
 
 
 def loop(file):
