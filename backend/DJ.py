@@ -10,6 +10,7 @@ callbacks = {
     "diamond": AudioUtils.ruit,
     "wave": AudioUtils.wave,
     "mond": AudioUtils.mond,
+    "fill": AudioUtils.fill,
     "quit": exit,
 }
 callbackNames = list(callbacks.keys())

@@ -78,6 +78,10 @@ def mond(rms):
         display.setPixelColor(x, 2*k-y, display.primary.value)
     display.strip.show()
 
+def fill(rms):
+    display.setStrip(display.primary.value)
+    display.strip.show()
+
 def bliksem(rms):
     hoeken = np.linspace(-2, 2, 10)
     alpha1 = random.choice(hoeken)
