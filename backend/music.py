@@ -51,8 +51,8 @@ class MusicPlayer():
     def set_callback(self, new_callback):
         self.callback_function = new_callback
 
-    def process(self, data):
-        self.callback_function(data)
+    def process(self, data, highest_tone):
+        self.callback_function(data, highest_tone)
 
     def callback(self, outdata, frames, time, status):
         assert frames == self.blocksize
@@ -118,7 +118,7 @@ class MusicPlayer():
             i += 1
             display.primary.value = display.wheel(int(max(0, min(highest_tones[x] * 10, 255))))
             if self.callback_function is not None:
-                self.process(self.rms_cache[x])
+                self.process(self.rms_cache[x], highest_tones[x])
             x += 1
             self.q.put(data, timeout=3)
         stream.stop()

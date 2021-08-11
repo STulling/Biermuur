@@ -3,11 +3,11 @@ import random
 import display
 import time
 
-def simple(rms):
+def simple(rms, pitch):
     display.setStrip(display.secondary.value)
     display.setAmountColor(int(rms * display.LED_COUNT), display.primary.value)
 
-def ruit(rms):
+def ruit(rms, pitch):
     display.setStrip(display.secondary.value)
     xmid = display.WIDTH / 2 - 0.5
     ymid = display.HEIGHT / 2 - 0.5
@@ -18,7 +18,7 @@ def ruit(rms):
                 display.setPixelColor(x, y, display.primary.value)
     display.strip.show()
 
-def cirkel(rms):
+def cirkel(rms, pitch):
     colorRGB = list(display.getRGBfromI(display.primary.value))
     licht = 0
     if rms > 0.5:
@@ -41,7 +41,7 @@ def cirkel(rms):
                 display.setPixelColor(x, y, color)
     display.strip.show()
 
-def sparkle(rms):
+def sparkle(rms, pitch):
     display.setStrip(display.secondary.value)
     for x in range(display.WIDTH):
         for y in range(display.HEIGHT):
@@ -51,7 +51,7 @@ def sparkle(rms):
 
 t = 0
 
-def wave(rms):
+def wave(rms, pitch):
     display.setStrip(display.secondary.value)
     dt = 0.1
     global t
@@ -66,7 +66,7 @@ def wave(rms):
     display.strip.show()
 
 
-def mond(rms):
+def mond(rms, pitch):
     display.setStrip(display.secondary.value)
     h = display.WIDTH/2
     k = display.HEIGHT/2
@@ -78,11 +78,11 @@ def mond(rms):
         display.setPixelColor(x, 2*k-y, display.primary.value)
     display.strip.show()
 
-def fill(rms):
+def fill(rms, pitch):
     display.setStrip(display.primary.value)
     display.strip.show()
 
-def bliksem(rms):
+def bliksem(rms, pitch):
     hoeken = np.linspace(-2, 2, 10)
     alpha1 = random.choice(hoeken)
     alpha2 = random.choice(hoeken)
