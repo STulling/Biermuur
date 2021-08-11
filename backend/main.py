@@ -9,6 +9,7 @@ import display
 import sys
 import os
 import DJ
+import json
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -39,7 +40,7 @@ def setAction(action, args):
 
 class Songs(Resource):
     def get(self):
-        return make_response(music.listSongs())
+        return make_response(json.dumps(music.listSongs()))
 
 class Play(Resource):
     def get(self, song_name):
