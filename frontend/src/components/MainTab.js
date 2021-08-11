@@ -26,7 +26,6 @@ function MainTab() {
     xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/common/' + value, true);
     
     xhr.send(null);
-    handleClose();
   };
 
   return (
@@ -62,8 +61,7 @@ function MainTab() {
             </Button>
           </ListItemSecondaryAction>
         </ListItem>
-      </List>
-      <ListItem>
+        <ListItem>
           <ListItemIcon>
             <CasinoIcon />
           </ListItemIcon>
