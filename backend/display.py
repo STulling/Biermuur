@@ -298,8 +298,8 @@ def dobbelsteen():
             for y in yval9:
                 for x in xval9:
                     setPixelColor(x, y, primary.value)
-    strip.show()
-    time.sleep(1)
+        strip.show()
+        time.sleep(1)
 def golf():
     xs = [2 * np.pi * x / 11 for x in range(12)]
     t = 0
