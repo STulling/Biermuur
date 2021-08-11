@@ -16,7 +16,7 @@ callbackNames = list(callbacks.keys())
 callbackFunctions = list(callbacks.values())
 
 mPlayer = None
-currentCallback = multiprocessing.Value('i', 0)
+currentCallback = multiprocessing.Value('i', 5)
 
 
 def callback(rms):

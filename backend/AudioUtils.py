@@ -66,6 +66,17 @@ def wave(rms):
     display.strip.show()
 
 
+def mond(rms):
+    display.setStrip(display.secondary.value)
+    h = display.WIDTH/2
+    k = display.HEIGHT/2
+    b = display.WIDTH/2
+    a = rms
+    for x in display.WIDTH:
+        y = np.sqrt((1 - ((x-h)**2/b**2))*a**2) + k
+        display.setPixelColor(x, y, color)
+    display.strip.show()
+
 def bliksem(rms):
     hoeken = np.linspace(-2, 2, 10)
     alpha1 = random.choice(hoeken)
@@ -82,22 +93,23 @@ def bliksem(rms):
     yval2 = []
 
     if alpha1 < 0:
-        xval1 = np.arange(-4,0) + xstart
+        xval1 = np.arange(-5,0) + xstart
     else:
-        xval1 = np.arange(0,4) + xstart
+        xval1 = np.arange(0,5) + xstart
     yval1 = xval1*alpha1
     if alpha2 < 0:
-        xval2 = np.arange(-4,0) + xval1[3]
+        xval2 = np.arange(-5,0) + xval1[3]
+        print(xval2)
     else:
-        xval1 = np.arange(0,4) + xval1[3]
+        xval1 = np.arange(0,5) + xval1[3]
     yval2 = xval1*alpha2 + yval1[3]
     if alpha3 < 0:
-        xval3 = np.arange(-4,0) + xval2[3]
+        xval3 = np.arange(-5,0) + xval2[3]
     else:
-        xval3 = np.arange(0,4) + xval2[3]
+        xval3 = np.arange(0,5) + xval2[3]
     yval3 = xval3*alpha3 + yval2[3]
-
-    display.setPixelColor(xval1, yval1, display.primary.value)
-    display.setPixelColor(xval2, yval2, display.primary.value)
-    display.setPixelColor(xval3, yval3, display.primary.value)
+    for i in range(len(xval1)):
+        display.setPixelColor(xval1[i], yval1[i], display.primary.value)
+        display.setPixelColor(xval2[i], yval2[i], display.primary.value)
+        display.setPixelColor(xval3[i], yval3[i], display.primary.value)
     display.strip.show()
