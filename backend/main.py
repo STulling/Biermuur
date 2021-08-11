@@ -40,7 +40,7 @@ def setAction(action, args):
 
 class Songs(Resource):
     def get(self):
-        return make_response(json.dumps(music.listSongs()).decode('utf-8'))
+        return make_response(json.dumps(music.listSongs()))
 
 class Play(Resource):
     def get(self, song_name):
