@@ -1,6 +1,6 @@
 sudo pkill -f node
 export REACT_APP_IP=192.168.1.97
-export FLASK_MEDIA_DIR=/media/pi/F/music
+export FLASK_MEDIA_DIR=/media/usb/music
 cd frontend
 npm start &
 cd ../backend
