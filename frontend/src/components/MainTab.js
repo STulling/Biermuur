@@ -22,7 +22,11 @@ function MainTab() {
   const classes = useStyles();
 
   const handleToggle = (value) => () => {
-    console.log(value)
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/common/' + value, true);
+    
+    xhr.send(null);
+    handleClose();
   };
 
   return (
@@ -53,6 +57,22 @@ function MainTab() {
                 color="primary"
                 variant="contained"
                 onClick={handleToggle('wifi')}
+              >
+              <SendIcon />
+            </Button>
+          </ListItemSecondaryAction>
+        </ListItem>
+      </List>
+      <ListItem>
+          <ListItemIcon>
+            <CasinoIcon />
+          </ListItemIcon>
+          <ListItemText primary="Dobbelsteen" />
+          <ListItemSecondaryAction>
+            <Button
+                color="primary"
+                variant="contained"
+                onClick={handleToggle('dobbelsteen')}
               >
               <SendIcon />
             </Button>
