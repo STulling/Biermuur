@@ -53,7 +53,7 @@ t = 0
 
 def wave(rms, pitch):
     display.setStrip(display.secondary.value)
-    dt = 0.1*(1+pitch)
+    dt = 0.1*(1+3*pitch)
     global t
     t += dt
     xs = [3 * np.pi * x / (display.WIDTH - 1) for x in range(display.WIDTH)]
