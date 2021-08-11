@@ -279,16 +279,6 @@ def dobbelsteen():
                 for x in xval5:
                     setPixelColor(x, y, primary.value)
         if ogen == 6:
-            xval6 = xval + 2 * KRAT_WIDTH
-            yval6 = yval + 0 * KRAT_HEIGHT
-            for y in yval6:
-                for x in xval6:
-                    setPixelColor(x, y, primary.value)
-            xval7 = xval + 2 * KRAT_WIDTH
-            yval7 = yval + 2 * KRAT_HEIGHT
-            for y in yval7:
-                for x in xval7:
-                    setPixelColor(x, y, primary.value)
             xval8 = xval + 1 * KRAT_WIDTH
             yval8 = yval + 1 * KRAT_HEIGHT
             for y in yval8:
@@ -300,7 +290,7 @@ def dobbelsteen():
                 for x in xval9:
                     setPixelColor(x, y, primary.value)
         strip.show()
-        time.sleep(1)
+        time.sleep(0.3)
 def golf():
     xs = [2 * np.pi * x / 11 for x in range(12)]
     t = 0
