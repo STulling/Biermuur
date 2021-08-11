@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, make_response
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from display import init, movingText, setStrip
@@ -39,7 +39,7 @@ def setAction(action, args):
 
 class Songs(Resource):
     def get(self):
-        return music.listSongs()
+        return make_response(music.listSongs())
 
 class Play(Resource):
     def get(self, song_name):
@@ -157,7 +157,6 @@ def update():
 
 
 if __name__ == "__main__":
-    sys.setdefaultencoding('utf-8')
     if len(sys.argv) > 1:
         music.folder = sys.argv[1]
     try:
