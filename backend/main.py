@@ -157,6 +157,7 @@ def update():
 
 
 if __name__ == "__main__":
+    sys.setdefaultencoding('utf-8')
     if len(sys.argv) > 1:
         music.folder = sys.argv[1]
     try:

@@ -28,7 +28,7 @@ def listFolders():
     return [x[0] for x in os.walk(folder)]
 
 def listSongs():
-    return [f[:-4].decode('utf-8') for f in os.listdir(folder) if f.endswith('.mp3')]
+    return [f[:-4] for f in os.listdir(folder) if f.endswith('.mp3')]
 
 def shuffleplaylist(path):
     while True:
