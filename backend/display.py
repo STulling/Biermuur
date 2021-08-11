@@ -243,6 +243,7 @@ def randomwoord():
 
 def dobbelsteen():
     for i in range(10):
+        setStrip(secondary.value)
         p = [1,2,3,4,5,6]
         ogen = random.choice(p)
         xval = np.arange(0, KRAT_WIDTH, 1)
