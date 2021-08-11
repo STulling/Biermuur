@@ -242,7 +242,7 @@ def randomwoord():
     movingText(x, 0.04)
 
 def dobbelsteen():
-    for i in range(10):
+    for i in range(20):
         setStrip(secondary.value)
         p = [1,2,3,4,5,6]
         ogen = random.choice(p)
@@ -260,7 +260,7 @@ def dobbelsteen():
             for y in yval2:
                 for x in xval2:
                     setPixelColor(x, y, primary.value)
-        if ogen == 3  or ogen == 5:
+        if ogen == 3  or ogen == 5 or ogen == 1:
             xval3 = xval +  2 * KRAT_WIDTH
             yval3 =  yval + 1* KRAT_HEIGHT
             for y in yval3:
