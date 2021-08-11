@@ -80,6 +80,7 @@ func_mappings = {
     'histogram': display.histogram,
     'spiraal': display.spiraal,
     'krat': display.boxes,
+    'dobbelsteen': display.dobbelsteen,
 }
 
 
