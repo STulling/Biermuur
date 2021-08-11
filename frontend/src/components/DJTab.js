@@ -59,6 +59,7 @@ class DJTab extends React.Component {
         "circle": <FiberManualRecordIcon className={classes.largeIcon}/>,
         "diamond": <GraphicEqIcon className={classes.largeIcon}/>,
         "wave": <ShowChartIcon className={classes.largeIcon}/>,
+        "slow wave": <ShowChartIcon className={classes.largeIcon}/>,
         "mond": <MoodIcon className={classes.largeIcon}/>,
         "fill": <StopIcon className={classes.largeIcon}/>,
     };

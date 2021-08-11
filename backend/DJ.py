@@ -9,6 +9,7 @@ callbacks = {
     "circle": AudioUtils.cirkel,
     "diamond": AudioUtils.ruit,
     "wave": AudioUtils.wave,
+    "slow wave": AudioUtils.slow_wave,
     "mond": AudioUtils.mond,
     "fill": AudioUtils.fill,
     "quit": exit,

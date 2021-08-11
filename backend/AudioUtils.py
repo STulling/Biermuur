@@ -65,6 +65,20 @@ def wave(rms, pitch):
         display.setPixelColor(x, y - 1, color)
     display.strip.show()
 
+def slow_wave(rms, pitch):
+    display.setStrip(display.secondary.value)
+    dt = 0.1
+    global t
+    t += dt
+    xs = [3 * np.pi * x / (display.WIDTH - 1) for x in range(display.WIDTH)]
+    color = display.primary.value
+    ys = [int(rms * display.HEIGHT//2 * np.sin(x + t) + display.HEIGHT//2) for x in xs]
+    display.setStrip(display.secondary.value)
+    for x, y in zip(range(display.WIDTH), ys):
+        display.setPixelColor(x, y, color)
+        display.setPixelColor(x, y - 1, color)
+    display.strip.show()
+
 
 def mond(rms, pitch):
     display.setStrip(display.secondary.value)
