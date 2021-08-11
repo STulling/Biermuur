@@ -118,7 +118,7 @@ class MusicPlayer():
             i += 1
             display.primary.value = display.wheel(int(max(0, min(highest_tones[x] * 10, 255))))
             if self.callback_function is not None:
-                self.process(self.rms_cache[x], highest_tones[x])
+                self.process(self.rms_cache[x], int(max(0, min(highest_tones[x] * 10, 255)))/255)
             x += 1
             self.q.put(data, timeout=3)
         stream.stop()
