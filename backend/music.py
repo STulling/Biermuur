@@ -11,20 +11,7 @@ import display
 import pickle
 from wow_math import savgol_filter
 
-<<<<<<< Updated upstream
 folder = os.environ["FLASK_MEDIA_DIR"]
-=======
-simulated = False
-
-try:
-    import pygame
-    simulated = True
-except Exception:
-    pass
-
-#folder = "/media/pi/F/music"
-folder = "."
->>>>>>> Stashed changes
 
 
 def download(name):

@@ -9,14 +9,14 @@ callbacks = {
     "circle": AudioUtils.cirkel,
     "diamond": AudioUtils.ruit,
     "wave": AudioUtils.wave,
-    "lightning": AudioUtils.bliksem,
+    "mond": AudioUtils.mond,
     "quit": exit,
 }
 callbackNames = list(callbacks.keys())
 callbackFunctions = list(callbacks.values())
 
 mPlayer = None
-currentCallback = multiprocessing.Value('i', 5)
+currentCallback = multiprocessing.Value('i', 1)
 
 
 def callback(rms):

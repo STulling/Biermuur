@@ -74,7 +74,8 @@ def mond(rms):
     a = rms
     for x in display.WIDTH:
         y = np.sqrt((1 - ((x-h)**2/b**2))*a**2) + k
-        display.setPixelColor(x, y, color)
+        display.setPixelColor(x, y, display.primary.value)
+        display.setPixelColor(x, 2*k-y, display.primary.value)
     display.strip.show()
 
 def bliksem(rms):

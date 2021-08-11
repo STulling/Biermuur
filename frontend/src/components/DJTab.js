@@ -7,6 +7,7 @@ import HorizontalSplitIcon from '@material-ui/icons/HorizontalSplit';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import GraphicEqIcon from '@material-ui/icons/GraphicEq';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
+import MoodIcon from '@material-ui/icons/Mood';
 
 const styles = theme => ({
   root: {
@@ -57,6 +58,7 @@ class DJTab extends React.Component {
         "circle": <FiberManualRecordIcon className={classes.largeIcon}/>,
         "diamond": <GraphicEqIcon className={classes.largeIcon}/>,
         "wave": <ShowChartIcon className={classes.largeIcon}/>,
+        "mond": <MoodIcon className={classes.largeIcon}/>,
     };
 
     return (
