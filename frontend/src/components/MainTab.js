@@ -62,8 +62,7 @@ function MainTab() {
             </Button>
           </ListItemSecondaryAction>
         </ListItem>
-      </List>
-      <ListItem>
+        <ListItem>
           <ListItemIcon>
             <CasinoIcon />
           </ListItemIcon>
