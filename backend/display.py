@@ -247,68 +247,68 @@ def dobbelsteen():
         ogen = random.choice(p)
         xval = np.arange(0, KRAT_WIDTH, 1)
         yval = np.arange(0, KRAT_HEIGHT, 1)
-        if ogen == 2 or ogen == 3 or ogen == 4 or ogen == 5 or ogen ==6
-            xval1 +=  1*KRAT_WIDTH
-            yval1 +=  0*KRAT_HEIGHT
+        if ogen == 2 or ogen == 3 or ogen == 4 or ogen == 5 or ogen ==6:
+            xval1 = xval + 1*KRAT_WIDTH
+            yval1 =  yval + 0*KRAT_HEIGHT
             setPixelColor(xval1, yval1, primary.value)
-            for y in yval:
-                for x in xval:
+            for y in yval1:
+                for x in xval1:
                     setPixelColor(xval1, yval1, primary.value)
-        if ogen == 2 or ogen == 3 or ogen == 4 or ogen == 5 or ogen ==6
-            xval2 += 3 * KRAT_WIDTH
-            yval2 += 2 * KRAT_HEIGHT
+        if ogen == 2 or ogen == 3 or ogen == 4 or ogen == 5 or ogen ==6:
+            xval2 = xval + 3 * KRAT_WIDTH
+            yval2 = yval + 2 * KRAT_HEIGHT
             setPixelColor(xval2, yval2, primary.value)
-            for y in yval:
-                for x in xval:
+            for y in yval2:
+                for x in xval2:
                     setPixelColor(xval2, yval2, primary.value)
-        if ogen == 3  or ogen == 5
-            xval3 += 2 * KRAT_WIDTH
-            yval3 +=  1* KRAT_HEIGHT
+        if ogen == 3  or ogen == 5:
+            xval3 = xval +  2 * KRAT_WIDTH
+            yval3 =  yval + 1* KRAT_HEIGHT
             setPixelColor(xval3, yval3, primary.value)
-            for y in yval:
-                for x in xval:
-                    setPixelColor(xval3, y,val3 primary.value)
-        if  ogen == 4 or ogen == 5 or ogen ==6
-            xval4 += 1 * KRAT_WIDTH
-            yval4 += 2 * KRAT_HEIGHT
+            for y in yval3:
+                for x in xval3:
+                    setPixelColor(xval3, yval3, primary.value)
+        if  ogen == 4 or ogen == 5 or ogen ==6:
+            xval4 = xval + 1 * KRAT_WIDTH
+            yval4 = yval + 2 * KRAT_HEIGHT
             setPixelColor(xval4, yval4, primary.value)
-            for y in yval:
-                for x in xval:
+            for y in yval4:
+                for x in xval4:
                     setPixelColor(xval4, yval4, primary.value)
-        if ogen == 4 or ogen == 5 or ogen == 6
-            xval5 += 3 * KRAT_WIDTH
-            yval5 += 0 * KRAT_HEIGHT
+        if ogen == 4 or ogen == 5 or ogen == 6:
+            xval5 = xval + 3 * KRAT_WIDTH
+            yval5 = yval + 0 * KRAT_HEIGHT
             setPixelColor(xval5, yval5, primary.value)
             for y in yval5:
                 for x in xval5:
                     setPixelColor(xval5, yval5, primary.value)
-        if ogen == 6
-            xval6 += 2 * KRAT_WIDTH
-            yval6 += 0 * KRAT_HEIGHT
+        if ogen == 6:
+            xval6 = xval + 2 * KRAT_WIDTH
+            yval6 = yval + 0 * KRAT_HEIGHT
             setPixelColor(xval6, yval6, primary.value)
             for y in yval6:
                 for x in xval6:
                     setPixelColor(xval6, yval6, primary.value)
 
-            xval7 += 2 * KRAT_WIDTH
-            yval7 += 2 * KRAT_HEIGHT
+            xval7 = xval + 2 * KRAT_WIDTH
+            yval7 = yval + 2 * KRAT_HEIGHT
             setPixelColor(xval7, yval7, primary.value)
             for y in yval7:
                 for x in xval7:
                     setPixelColor(xval7, yval7, primary.value)
 
-            xval8 += 1 * KRAT_WIDTH
-            yval8 += 1 * KRAT_HEIGHT
+            xval8 = xval + 1 * KRAT_WIDTH
+            yval8 = yval + 1 * KRAT_HEIGHT
             setPixelColor(xval8, yval8, primary.value)
             for y in yval8:
-                for x in xval7:
+                for x in xval8:
                     setPixelColor(xval8, yval8, primary.value)
 
-            xval9 += 3 * KRAT_WIDTH
-            yval9 += 1 * KRAT_HEIGHT
+            xval9 = xval + 3 * KRAT_WIDTH
+            yval9 = yval + 1 * KRAT_HEIGHT
             setPixelColor(xval9, yval9, primary.value)
-            for y in yval:
-                for x in xval:
+            for y in yval9:
+                for x in xval9:
                     setPixelColor(xval9, yval9, primary.value)
     strip.show()
     time.sleep(1)
