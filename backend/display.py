@@ -242,7 +242,7 @@ def randomwoord():
     movingText(x, 0.04)
 
 def dobbelsteen():
-    for i in range(50):
+    for i in range(30):
         setStrip(secondary.value)
         p = [1,2,3,4,5,6]
         kleuren = [Color(255,0,0),
@@ -297,7 +297,7 @@ def dobbelsteen():
                 for x in xval9:
                     setPixelColor(x, y, kleur)
         strip.show()
-        time.sleep(0.05)
+        time.sleep(0.1)
 def golf():
     xs = [2 * np.pi * x / 11 for x in range(12)]
     t = 0
