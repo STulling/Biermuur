@@ -242,10 +242,17 @@ def randomwoord():
     movingText(x, 0.04)
 
 def dobbelsteen():
-    for i in range(20):
+    for i in range(50):
         setStrip(secondary.value)
         p = [1,2,3,4,5,6]
+        kleuren = [Color(255,0,0),
+                   Color(0,255,0),
+                   Color(0,0,255),
+                   Color(255,0,255),
+                   Color(255,255,0),
+                   Color(0,255,255)]
         ogen = random.choice(p)
+        kleur = kleuren[ogen]
         xval = np.arange(0, KRAT_WIDTH, 1)
         yval = np.arange(0, KRAT_HEIGHT, 1)
         if ogen == 2 or ogen == 3 or ogen == 4 or ogen == 5 or ogen ==6:
@@ -253,44 +260,44 @@ def dobbelsteen():
             yval1 =  yval + 0*KRAT_HEIGHT
             for y in yval1:
                 for x in xval1:
-                    setPixelColor(x, y, primary.value)
+                    setPixelColor(x, y, kleur)
         if ogen == 2 or ogen == 3 or ogen == 4 or ogen == 5 or ogen ==6:
             xval2 = xval + 3 * KRAT_WIDTH
             yval2 = yval + 2 * KRAT_HEIGHT
             for y in yval2:
                 for x in xval2:
-                    setPixelColor(x, y, primary.value)
+                    setPixelColor(x, y, kleur)
         if ogen == 3  or ogen == 5 or ogen == 1:
             xval3 = xval +  2 * KRAT_WIDTH
             yval3 =  yval + 1* KRAT_HEIGHT
             for y in yval3:
                 for x in xval3:
-                    setPixelColor(x, y, primary.value)
+                    setPixelColor(x, y, kleur)
         if  ogen == 4 or ogen == 5 or ogen ==6:
             xval4 = xval + 1 * KRAT_WIDTH
             yval4 = yval + 2 * KRAT_HEIGHT
             for y in yval4:
                 for x in xval4:
-                    setPixelColor(x, y, primary.value)
+                    setPixelColor(x, y, kleur)
         if ogen == 4 or ogen == 5 or ogen == 6:
             xval5 = xval + 3 * KRAT_WIDTH
             yval5 = yval + 0 * KRAT_HEIGHT
             for y in yval5:
                 for x in xval5:
-                    setPixelColor(x, y, primary.value)
+                    setPixelColor(x, y, kleur)
         if ogen == 6:
             xval8 = xval + 1 * KRAT_WIDTH
             yval8 = yval + 1 * KRAT_HEIGHT
             for y in yval8:
                 for x in xval8:
-                    setPixelColor(x, y, primary.value)
+                    setPixelColor(x, y, kleur)
             xval9 = xval + 3 * KRAT_WIDTH
             yval9 = yval + 1 * KRAT_HEIGHT
             for y in yval9:
                 for x in xval9:
-                    setPixelColor(x, y, primary.value)
+                    setPixelColor(x, y, kleur)
         strip.show()
-        time.sleep(0.3)
+        time.sleep(0.05)
 def golf():
     xs = [2 * np.pi * x / 11 for x in range(12)]
     t = 0
