@@ -83,6 +83,7 @@ def snake(rms, pitch):
     x = display.WIDTH - 1
     for h, col in snake_buffer:
         display.setPixelColor(x, h, col)
+        display.setPixelColor(x, h+1, col)
         x -= 1
     display.strip.show()
 
