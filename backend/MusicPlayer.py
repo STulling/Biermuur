@@ -21,7 +21,7 @@ callbackNames = list(callbacks.keys())
 callbackFunctions = list(callbacks.values())
 
 mPlayer = music.MusicPlayer(callback_function=
-                            lambda rms, pitch: callbackFunctions[self.currentCallback.value](rms, pitch))
+                            lambda rms, pitch: callbackFunctions[currentCallback.value](rms, pitch))
 
 
 def play(file):
