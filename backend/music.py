@@ -30,11 +30,6 @@ def listFolders():
 def listSongs():
     return [f[:-4] for f in os.listdir(folder) if f.endswith('.mp3')]
 
-def shuffleplaylist(path):
-    while True:
-        song = random.choice([os.path.join(path, name) for path, subdirs, files in os.walk(path) for name in files])
-        DJ.loop(song)
-
 
 class MusicPlayer():
 

@@ -20,6 +20,10 @@ def shuffle_songs(song_list):
             pass
 
 
-def play_playlist(name):
+def play(name):
     songs = load_playlist(name)
     shuffle_songs(songs)
+
+
+def list_playlists():
+    return os.listdir(playlist_folder)

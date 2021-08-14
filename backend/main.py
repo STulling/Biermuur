@@ -10,6 +10,7 @@ import sys
 import os
 import MusicPlayer
 import json
+import playlist
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -95,6 +96,18 @@ class DJControls(Resource):
             MusicPlayer.currentCallback.value = MusicPlayer.callbackNames.index(action)
 
 
+class PlaylistControls(Resource):
+    def get(self, action, playlist_name):
+        if action == "play":
+            setAction(playlist.play, (playlist_name, ))
+        else:
+            pass
+
+class PlaylistLister(Resource):
+    def get(self):
+        return playlist.list_playlists()
+
+
 api.add_resource(Songs, '/api/songs')
 api.add_resource(Play, '/api/songs/play/<string:song_name>')
 api.add_resource(SongAdder, '/api/songs/add/<string:song_name>')
@@ -102,6 +115,8 @@ api.add_resource(SongModifier, '/api/songs/<string:song_name>')
 api.add_resource(CommonControls, '/api/common/<string:action>')
 api.add_resource(Settings, '/api/settings/<string:setting>')
 api.add_resource(DJControls, '/api/DJ/<string:action>')
+api.add_resource(PlaylistControls, '/api/playlists/<string:action>/<string:playlist_name>')
+api.add_resource(PlaylistLister, '/api/playlists'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
