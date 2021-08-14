@@ -72,7 +72,7 @@ def snake(rms, pitch):
     display.setStrip(display.secondary.value)
     color = display.primary.value
     height = rms * display.HEIGHT
-    snake_buffer.popLeft()
+    snake_buffer.popleft()
     snake_buffer.append((height, color))
     x = 0
     for h, col in snake_buffer:
