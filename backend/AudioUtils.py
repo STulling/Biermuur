@@ -68,16 +68,22 @@ def wave(rms, pitch):
 
 
 snake_buffer = collections.deque([(0, display.getIfromRGB((0, 255, 0))) for _ in range(display.WIDTH)])
+slowdown = 0
 def snake(rms, pitch):
+    global slowdown
+    if slowdown == 4:
+        slowdown = 0
+        return
+    slowdown+=1
     display.setStrip(display.secondary.value)
     color = display.primary.value
     height = rms * display.HEIGHT
     snake_buffer.popleft()
     snake_buffer.append((height, color))
-    x = 0
+    x = display.WIDTH
     for h, col in snake_buffer:
-        display.setPixelColor(x, display.HEIGHT - h, col)
-        x += 1
+        display.setPixelColor(x, h, col)
+        x -= 1
     display.strip.show()
 
 def slow_wave(rms, pitch):
