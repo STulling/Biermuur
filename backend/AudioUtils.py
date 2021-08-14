@@ -77,7 +77,7 @@ def snake(rms, pitch):
     slowdown += 1
     display.setStrip(display.secondary.value)
     color = display.primary.value
-    height = int(rms * display.HEIGHT)
+    height = int(pitch * display.HEIGHT)
     snake_buffer.popleft()
     snake_buffer.append((height, color))
     x = display.WIDTH - 1
