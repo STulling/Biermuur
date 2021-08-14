@@ -2,6 +2,7 @@ import numpy as np
 import random
 import display
 import time
+import collections
 
 def simple(rms, pitch):
     display.setStrip(display.secondary.value)
@@ -63,6 +64,20 @@ def wave(rms, pitch):
     for x, y in zip(range(display.WIDTH), ys):
         display.setPixelColor(x, y, color)
         display.setPixelColor(x, y - 1, color)
+    display.strip.show()
+
+
+snake_buffer = collections.deque([(0, display.getIfromRGB((0, 255, 0))) for _ in range(display.WIDTH)])
+def snake(rms, pitch):
+    display.setStrip(display.secondary.value)
+    color = display.primary.value
+    height = rms * display.HEIGHT
+    snake_buffer.popLeft()
+    snake_buffer.append((height, color))
+    x = 0
+    for h, col in snake_buffer:
+        display.setPixelColor(x, display.HEIGHT - h, col)
+        x += 1
     display.strip.show()
 
 def slow_wave(rms, pitch):

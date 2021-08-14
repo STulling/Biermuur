@@ -9,6 +9,7 @@ import GraphicEqIcon from '@material-ui/icons/GraphicEq';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import MoodIcon from '@material-ui/icons/Mood';
 import StopIcon from '@material-ui/icons/Stop';
+import BugReportIcon from '@material-ui/icons/BugReport';
 
 const styles = theme => ({
   root: {
@@ -62,6 +63,7 @@ class DJTab extends React.Component {
         "slow wave": <ShowChartIcon className={classes.largeIcon}/>,
         "mond": <MoodIcon className={classes.largeIcon}/>,
         "fill": <StopIcon className={classes.largeIcon}/>,
+        "snake": <BugReportIcon className={classes.largeIcon}/>,
     };
 
     return (

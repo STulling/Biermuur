@@ -8,21 +8,36 @@ import music
 import display
 import sys
 import os
-import DJ
+import MusicPlayer
 import json
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 api = Api(app)
 process = None
-time = datetime.now()
 
+func_mappings = {
+    'clear': display.clear,
+    'random_word': display.randomwoord,
+    'rainbow': display.rainbow,
+    'diamond_wipes': display.diamond_wipes,
+    'random_pixel_wipe': display.random_pixel,
+    'random_order_wipe': display.random_order_wipe,
+    'golf': display.golf,
+    'lijnen': display.lijnen,
+    'matrix': display.matrix,
+    'cirkels': display.cirkels,
+    'histogram': display.histogram,
+    'spiraal': display.spiraal,
+    'krat': display.boxes,
+    'dobbelsteen': display.dobbelsteen,
+}
 
 def newProcess(prim, sec, curr_callback, action, args):
     init()
     display.primary = prim
     display.secondary = sec
-    DJ.currentCallback = curr_callback
+    MusicPlayer.currentCallback = curr_callback
     if len(args) != 0:
         action(args[0])
     else:
@@ -34,7 +49,7 @@ def setAction(action, args):
     global process
     if process and process.is_alive():
         process.kill()
-    process = Process(target=newProcess, args=(display.primary, display.secondary, DJ.currentCallback, action, args))
+    process = Process(target=newProcess, args=(display.primary, display.secondary, MusicPlayer.currentCallback, action, args))
     process.start()
 
 
@@ -44,7 +59,7 @@ class Songs(Resource):
 
 class Play(Resource):
     def get(self, song_name):
-        setAction(DJ.loop, (song_name, ))
+        setAction(MusicPlayer.play, (song_name, ))
 
 class SongAdder(Resource):
     def get(self, song_name):
@@ -66,25 +81,6 @@ class Settings(Resource):
         if setting == 'secondary':
             display.secondary.value = display.getIfromRGB(display.HTMLColorToRGB(newVal))
 
-
-func_mappings = {
-    'clear': display.clear,
-    'random_word': display.randomwoord,
-    'rainbow': display.rainbow,
-    'diamond_wipes': display.diamond_wipes,
-    'random_pixel_wipe': display.random_pixel,
-    'random_order_wipe': display.random_order_wipe,
-    'golf': display.golf,
-    'lijnen': display.lijnen,
-    'matrix': display.matrix,
-    'cirkels': display.cirkels,
-    'histogram': display.histogram,
-    'spiraal': display.spiraal,
-    'krat': display.boxes,
-    'dobbelsteen': display.dobbelsteen,
-}
-
-
 class CommonControls(Resource):
     def get(self, action):
         if action in func_mappings:
@@ -95,8 +91,8 @@ class CommonControls(Resource):
 
 class DJControls(Resource):
     def get(self, action):
-        if action in DJ.callbackNames:
-            DJ.currentCallback.value = DJ.callbackNames.index(action)
+        if action in MusicPlayer.callbackNames:
+            MusicPlayer.currentCallback.value = MusicPlayer.callbackNames.index(action)
 
 
 api.add_resource(Songs, '/api/songs')
@@ -109,46 +105,7 @@ api.add_resource(DJControls, '/api/DJ/<string:action>')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST':
-        if request.form.get('clear'):
-            setAction(setStrip, (tuple([0, 0, 0]),))
-        elif request.form.get('randomWoord'):
-            setAction(display.randomwoord, ())
-        elif request.form.get('regenboog'):
-            setAction(display.rainbow, ())
-        elif request.form.get('diamond_wipes'):
-            setAction(display.diamond_wipes, ())
-        elif request.form.get('random_pixel'):
-            setAction(display.random_pixel, ())
-        elif request.form.get('random_order_wipe'):
-            setAction(display.random_order_wipe, ())
-        elif request.form.get('show') and request.form.get('text'):
-            print("showing: " + request.form.get('text'))
-            setAction(movingText, (request.form.get('text'), 0.04, True))
-        elif request.form.get('golf'):
-            setAction(display.golf, ())
-        elif request.form.get('lijnen'):
-            setAction(display.lijnen, ())
-        elif request.form.get('matrix'):
-            setAction(display.matrix, ())
-        elif request.form.get('set'):
-            display.setTheme(request.form.get('primary'), request.form.get('secondary'))
-        elif request.form.get('cirkels'):
-            setAction(display.cirkels, ())
-        elif request.form.get('histogram'):
-            setAction(display.histogram, ())
-        elif request.form.get('update'):
-            update()
-        elif request.form.get('spiraal'):
-            setAction(display.spiraal, ())
-        elif request.form.get('krat'):
-            setAction(display.boxes, ())
-        elif request.form.get('shuffle') and request.form.get('playlist'):
-            setAction(music.shuffleplaylist, (request.form.get('playlist'),))
-        elif request.form.get('download') and request.form.get('playlist') and request.form.get('song'):
-            setAction(music.download, (request.form.get('song'),))
-        return redirect(url_for('index'))
-    return render_template("index.html", colors=display.getHTMLColors(), time=time.strftime("%d/%m/%Y %H:%M:%S"), playlists=music.listFolders())
+    return "use port 3000"
 
 
 def update():
