@@ -71,16 +71,16 @@ snake_buffer = collections.deque([(0, display.getIfromRGB((0, 255, 0))) for _ in
 slowdown = 0
 def snake(rms, pitch):
     global slowdown
-    if slowdown == 4:
+    if slowdown == 8:
         slowdown = 0
         return
-    slowdown+=1
+    slowdown += 1
     display.setStrip(display.secondary.value)
     color = display.primary.value
-    height = rms * display.HEIGHT
+    height = int(rms * display.HEIGHT)
     snake_buffer.popleft()
     snake_buffer.append((height, color))
-    x = display.WIDTH
+    x = display.WIDTH - 1
     for h, col in snake_buffer:
         display.setPixelColor(x, h, col)
         x -= 1
