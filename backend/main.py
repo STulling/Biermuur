@@ -101,26 +101,30 @@ class DJControls(Resource):
             MusicPlayer.currentCallback.value = MusicPlayer.callbackNames.index(action)
 
 
+class PlaylistLister(Resource):
+    def get(self):
+        return playlist.list_playlists()
+
+
 class PlaylistControls(Resource):
     def get(self, action, playlist_name):
         if action == "play":
             setAction(playlist.play, (playlist_name,))
-        elif action == "list":
-            return playlist.list_playlists()
+        elif action == "new":
+            return playlist.new(playlist_name)
+        elif action == "destroy":
+            playlist.destroy(playlist_name)
+        elif action == "get":
+            return playlist.load_playlist(playlist_name)
 
     def put(self, action, playlist_name):
-        song_name = request.form['data']
+        data = request.form['data']
         if action == "add":
-            playlist.add_song(playlist_name, song_name)
-        else:
-            pass
-
-    def delete(self, action, playlist_name):
-        song_name = request.form['data']
-        if action == "remove":
-            playlist.remove_song(playlist_name, song_name)
-        else:
-            pass
+            playlist.add_song(playlist_name, data)
+        elif action == "rename":
+            playlist.rename(playlist_name, data)
+        elif action == "remove":
+            playlist.remove_song(playlist_name, data)
 
 
 api.add_resource(SongLister, '/api/songs')
@@ -131,6 +135,7 @@ api.add_resource(CommonControls, '/api/common/<string:action>')
 api.add_resource(Settings, '/api/settings/<string:setting>')
 api.add_resource(DJControls, '/api/DJ/<string:action>')
 api.add_resource(PlaylistControls, '/api/playlists/<string:action>/<string:playlist_name>')
+api.add_resource(PlaylistLister, '/api/playlists')
 
 
 @app.route('/')

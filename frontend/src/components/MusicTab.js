@@ -18,6 +18,10 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import Divider from '@material-ui/core/Divider';
+
 const styles = theme => ({
   root: {
     width: '100%',
@@ -52,6 +56,12 @@ const styles = theme => ({
     position: 'fixed',
     right: '10px',
     bottom: '80px',
+  },
+  diaActions: {
+    alignSelf: 'center',
+  },
+  select: {
+    width: '200px',
   }
 });
 
@@ -64,7 +74,9 @@ class MusicTab extends React.Component {
       'open': false,
       'addSong': '',
       'currSong': '',
-      'newName': ''
+      'newName': '',
+      'chosenPlaylist': '',
+      'playlistList': []
     };
   }
 
@@ -90,10 +102,26 @@ class MusicTab extends React.Component {
     }.bind(this);
     
     xhr.send(null);
+
+    var xhr2 = new XMLHttpRequest();
+    xhr2.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists', true);
+
+    xhr2.onload = function () {
+      var playlistList = {}
+      var songs = JSON.parse(xhr2.responseText)
+      songs.sort()
+      this.setState({'playlistList': songs});
+    }.bind(this);
+    
+    xhr2.send(null);
   }
 
   render() {
     const { classes } = this.props;
+
+    const handleChange = (event) => {
+      this.setState({'chosenPlaylist': event.target.value});
+    };
 
     const handleClickOpen = () => {
       this.setState({'songaddOpen': true });
@@ -128,6 +156,24 @@ class MusicTab extends React.Component {
       xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/songs/add/' + this.state.addSong, true);
       
       xhr.send(null);
+      handleClose();
+    };
+
+    const addSongToPlaylist = () => {
+      var xhr = new XMLHttpRequest();
+      xhr.open("PUT", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/add/' + this.state.chosenPlaylist, true);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      
+      xhr.send('data=' + encodeURIComponent(this.state.currSong));
+      handleClose();
+    };
+
+    const removeSongFromPlaylist = () => {
+      var xhr = new XMLHttpRequest();
+      xhr.open("PUT", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/remove/' + this.state.chosenPlaylist, true);
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      
+      xhr.send('data=' + encodeURIComponent(this.state.currSong));
       handleClose();
     };
 
@@ -207,12 +253,32 @@ class MusicTab extends React.Component {
           <DialogContent>
             <TextField id="song-title" label="New Song Title" variant="outlined" onChange={changeCurrSongName}/>
           </DialogContent>
-          <DialogActions>
+          <DialogActions className={classes.diaActions}>
             <Button variant="contained" color="primary" onClick={editSong}>
               Edit
             </Button>
             <Button variant="contained" color="secondary" onClick={removeSong}>
               Delete
+            </Button>
+          </DialogActions>
+          <DialogActions className={classes.diaActions}>
+            <Select
+              className={classes.select}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              onChange={handleChange}
+            >
+              {Object.values(this.state.playlistList).map((name) => (
+                <MenuItem value={name}>{name}</MenuItem>
+              ))}
+            </Select>
+          </DialogActions>
+          <DialogActions className={classes.diaActions}>
+          <Button variant="contained" color="primary" onClick={addSongToPlaylist}>
+              Add
+            </Button>
+            <Button variant="contained" color="secondary" onClick={removeSongFromPlaylist}>
+              Remove
             </Button>
           </DialogActions>
         </Dialog>

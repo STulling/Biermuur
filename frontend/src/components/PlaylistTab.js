@@ -62,15 +62,16 @@ class PlaylistTab extends React.Component {
     this.state = {
       'playlistList': {},
       'open': false,
-      'addSong': '',
-      'currSong': '',
-      'newName': ''
+      'addPlaylist': '',
+      'currPlaylist': '',
+      'newName': '',
+      'currPlaylistSongs': []
     };
   }
 
   componentDidMount() {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/list', true);
+    xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists', true);
 
     xhr.onload = function () {
       var playlistList = {}
@@ -106,52 +107,90 @@ class PlaylistTab extends React.Component {
       xhr.send(null);
     };
 
+    const refresh = () => {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists', true);
+
+      xhr.onload = function () {
+        var playlistList = {}
+        var songs = JSON.parse(xhr.responseText)
+        songs.sort()
+        var chars = songs.map(x => x[0].toUpperCase())
+        var unique = [...new Set(chars)];
+        for (const char of unique) {
+          playlistList[char] = []
+          for (const song of songs) {
+            if (song[0].toUpperCase() == char) {
+              playlistList[char].push(song);
+            }
+          }
+        }
+        this.setState({'playlistList': playlistList});
+      }.bind(this);
+      
+      xhr.send(null);
+    }
+
     const handleClickSettingsOpen = (song) => {
-      this.setState({'songsettingsOpen': true, 'currSong': song });
+      this.setState({'playlistsettingsOpen': true, 'currPlaylist': song });
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/get/' + song, true);
+
+      xhr.onload = function () {
+        var playlistList = {}
+        var songs = JSON.parse(xhr.responseText)
+        songs.sort()
+        this.setState({'currPlaylistSongs': songs});
+      }.bind(this);
+      
+      xhr.send(null);
     };
 
     const handleClose = () => {
       this.setState({'songaddOpen': false });
-      this.setState({'songsettingsOpen': false });
+      this.setState({'playlistsettingsOpen': false });
     };
 
-    const changeAddSong = (e) => {
-      this.setState({'addSong': e.target.value });
+    const changeAddPlaylist = (e) => {
+      this.setState({'addPlaylist': e.target.value });
     };
 
-    const changeCurrSongName = (e) => {
+    const changecurrPlaylistName = (e) => {
       this.setState({'newName': e.target.value });
     };
 
-    const addSong = () => {
+    const addPlaylist = () => {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/songs/add/' + this.state.addSong, true);
+      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/new/' + this.state.addPlaylist, true);
       
       xhr.send(null);
       handleClose();
+      refresh()
     };
 
-    const editSong = () => {
+    const editPlaylist = () => {
       var xhr = new XMLHttpRequest();
-      xhr.open("PUT", 'http://' + process.env.REACT_APP_IP + ':5000/api/songs/' + this.state.currSong, true);
+      xhr.open("PUT", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/rename/' + this.state.currPlaylist, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       
       xhr.send('data=' + encodeURIComponent(this.state.newName));
       handleClose();
+      refresh()
     };
 
-    const removeSong = () => {
+    const removePlaylist = () => {
       var xhr = new XMLHttpRequest();
-      xhr.open("DELETE", 'http://' + process.env.REACT_APP_IP + ':5000/api/songs/' + this.state.currSong, true);
+      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/destroy/' + this.state.currPlaylist, true);
       
       xhr.send(null);
       handleClose();
+      refresh()
     };
 
     return (
       <div className={classes.root}>
         <List>
-          {Object.keys(this.state.songList).map((sectionId) => (
+          {Object.keys(this.state.playlistList).map((sectionId) => (
             <li key={`section-${sectionId}`} className={classes.listSection}>
               <ul className={classes.ul}>
                 <ListItem className={classes.icon}>
@@ -163,8 +202,8 @@ class PlaylistTab extends React.Component {
                     </Paper>
                   </ListItemIcon>
                 </ListItem>
-                {this.state.songList[sectionId].map((item) => {
-                  if (this.state.songList[sectionId].indexOf(item) == 0) {
+                {this.state.playlistList[sectionId].map((item) => {
+                  if (this.state.playlistList[sectionId].indexOf(item) == 0) {
                   return (
                     <ListItem className={classes.firstItem} button key={`item-${sectionId}-${item}`} onClick={() => play(item)}>
                       <ListItemText className={classes.songName} inset primary={`${item}`}/>
@@ -193,28 +232,39 @@ class PlaylistTab extends React.Component {
           <AddIcon />
         </Fab>
         <Dialog aria-labelledby="simple-dialog-title" open={this.state.songaddOpen} onClose={handleClose}>
-          <DialogTitle id="simple-dialog-title">Add song</DialogTitle>
+          <DialogTitle id="simple-dialog-title">Add playlist</DialogTitle>
           <DialogContent>
-            <TextField id="song-title" label="Song Title" variant="outlined" onChange={changeAddSong}/>
+            <TextField id="song-title" label="Playlist Title" variant="outlined" onChange={changeAddPlaylist}/>
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" color="primary" onClick={addSong}>
+            <Button variant="contained" color="primary" onClick={addPlaylist}>
               Add
             </Button>
           </DialogActions>
         </Dialog>
-        <Dialog aria-labelledby="simple-dialog-title" open={this.state.songsettingsOpen} onClose={handleClose}>
+        <Dialog aria-labelledby="simple-dialog-title" open={this.state.playlistsettingsOpen} onClose={handleClose}>
           <DialogContent>
-            <TextField id="song-title" label="New Song Title" variant="outlined" onChange={changeCurrSongName}/>
+            <TextField id="song-title" label="New Song Title" variant="outlined" onChange={changecurrPlaylistName}/>
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" color="primary" onClick={editSong}>
+            <Button variant="contained" color="primary" onClick={editPlaylist}>
               Edit
             </Button>
-            <Button variant="contained" color="secondary" onClick={removeSong}>
+            <Button variant="contained" color="secondary" onClick={removePlaylist}>
               Delete
             </Button>
           </DialogActions>
+          <DialogContent>
+            <List>
+              {Object.values(this.state.currPlaylistSongs).map((name) => (
+              <ListItem>
+                <Paper>
+                  {name}
+                </Paper>
+              </ListItem>
+              ))}
+            </List>
+          </DialogContent>
         </Dialog>
       </div>
     );
