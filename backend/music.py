@@ -114,7 +114,7 @@ class MusicPlayer():
             callback=self.callback)
         stream.start()
 
-        while (i+1)*self.blocksize < len(song):
+        while True:
             if i >= len(rms_cache):
                 song_name = random.choice(songs)
                 song, rms_cache, color_cache = self.load_song(song_name)
@@ -127,10 +127,6 @@ class MusicPlayer():
             self.q.put(data, timeout=3)
             self.effectbuffer.put_nowait((rms_cache[i], color_cache[i]))
             i += 1
-        stream.stop()
-        stream.close()
-        self.q.queue.clear()
-        self.q.effectbuffer.clear()
 
     def playSound(self, file):
         self.playPlaylist([file])
