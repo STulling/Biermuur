@@ -54,12 +54,6 @@ def setAction(action, args):
     process.start()
 
 
-class Songs(Resource):
-    def get(self):
-        print(music.listSongs)
-        return Response(json.dumps(music.listSongs()), content_type='text/json; charset=utf-8')
-
-
 class Play(Resource):
     def get(self, song_name):
         setAction(MusicPlayer.play, (song_name,))
@@ -124,7 +118,6 @@ class PlaylistControls(Resource):
             pass
 
 
-api.add_resource(Songs, '/api/songs')
 api.add_resource(Play, '/api/songs/play/<string:song_name>')
 api.add_resource(SongAdder, '/api/songs/add/<string:song_name>')
 api.add_resource(SongModifier, '/api/songs/<string:song_name>')
@@ -138,6 +131,10 @@ api.add_resource(PlaylistControls, '/api/playlists/<string:action>/<string:playl
 def index():
     return "use port 3000"
 
+# extreem cringe
+@app.route('/api/songs')
+def songs():
+    return json.dumps(music.listSongs())
 
 def update():
     if process and process.is_alive():
