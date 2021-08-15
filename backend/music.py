@@ -7,9 +7,8 @@ from audio2numpy import open_audio
 import display
 import pickle
 from wow_math import savgol_filter
-import unicodedata
 
-folder = u"" + os.environ["FLASK_MEDIA_DIR"]
+folder = os.environ["FLASK_MEDIA_DIR"]
 
 
 def download(name):
@@ -26,7 +25,7 @@ def listFolders():
     return [x[0] for x in os.walk(folder)]
 
 def listSongs():
-    return [unicodedata.normalize('NFC', f[:-4]) for f in os.listdir(folder) if f.endswith('.mp3')]
+    return [f[:-4] for f in os.listdir(folder) if f.endswith('.mp3')]
 
 
 class MusicPlayer():

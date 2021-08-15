@@ -72,13 +72,14 @@ class MusicTab extends React.Component {
     this.state = {
       'songList': {},
       'open': false,
-      'addSong': '',
-      'currSong': '',
-      'newName': '',
       'chosenPlaylist': '',
+      'currSong': '',
       'playlistList': []
     };
   }
+
+  newName = ''
+  addSong = ''
 
   componentDidMount() {
     var xhr = new XMLHttpRequest();
@@ -144,16 +145,16 @@ class MusicTab extends React.Component {
     };
 
     const changeAddSong = (e) => {
-      this.setState({'addSong': e.target.value });
+      this.addSong = e.target.value;
     };
 
     const changeCurrSongName = (e) => {
-      this.setState({'newName': e.target.value });
+      this.newName = e.target.value;
     };
 
     const addSong = () => {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/songs/add/' + this.state.addSong, true);
+      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/songs/add/' + this.addSong, true);
       
       xhr.send(null);
       handleClose();
@@ -182,7 +183,7 @@ class MusicTab extends React.Component {
       xhr.open("PUT", 'http://' + process.env.REACT_APP_IP + ':5000/api/songs/' + this.state.currSong, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       
-      xhr.send('data=' + encodeURIComponent(this.state.newName));
+      xhr.send('data=' + encodeURIComponent(this.newName));
       handleClose();
     };
 

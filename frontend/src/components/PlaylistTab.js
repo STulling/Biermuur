@@ -29,7 +29,6 @@ const styles = theme => ({
   icon: {
     position: 'sticky',
     top: '60px',
-    //marginBottom: '-45px',
   },
   label: {
     minWidth: '0px',
@@ -62,12 +61,13 @@ class PlaylistTab extends React.Component {
     this.state = {
       'playlistList': {},
       'open': false,
-      'addPlaylist': '',
       'currPlaylist': '',
-      'newName': '',
       'currPlaylistSongs': []
     };
   }
+
+  newName = '';
+  addPlaylist = '';
 
   componentDidMount() {
     var xhr = new XMLHttpRequest();
@@ -152,16 +152,16 @@ class PlaylistTab extends React.Component {
     };
 
     const changeAddPlaylist = (e) => {
-      this.setState({'addPlaylist': e.target.value });
+      this.addPlaylist = e.target.value;
     };
 
     const changecurrPlaylistName = (e) => {
-      this.setState({'newName': e.target.value });
+      this.newName = e.target.value;
     };
 
     const addPlaylist = () => {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/new/' + this.state.addPlaylist, true);
+      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/new/' + this.addPlaylist, true);
       
       xhr.send(null);
       handleClose();
@@ -173,7 +173,7 @@ class PlaylistTab extends React.Component {
       xhr.open("PUT", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/rename/' + this.state.currPlaylist, true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       
-      xhr.send('data=' + encodeURIComponent(this.state.newName));
+      xhr.send('data=' + encodeURIComponent(this.newName));
       handleClose();
       refresh()
     };
