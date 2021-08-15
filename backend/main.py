@@ -56,7 +56,7 @@ def setAction(action, args):
 
 class Songs(Resource):
     def get(self):
-        return Response(json.dumps(music.listSongs()), content_type='text/json; charset=utf-8')
+        return Response(music.listSongs(), content_type='text/json; charset=utf-8')
 
 
 class Play(Resource):
