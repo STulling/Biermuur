@@ -27,3 +27,8 @@ mPlayer = music.MusicPlayer(callback_function=
 def play(file):
     file = os.path.join(music.folder, file + '.mp3')
     mPlayer.playSound(file)
+
+
+def playList(files):
+    files = [os.path.join(music.folder, file + '.mp3') for file in files]
+    mPlayer.playPlaylist(files)

@@ -11,12 +11,7 @@ def load_playlist(name):
 
 
 def shuffle_songs(song_list):
-    while True:
-        try:
-            song = random.choice(song_list)
-            MusicPlayer.play(song)
-        except:
-            pass
+    MusicPlayer.playPlaylist(song_list)
 
 
 def play(name):
