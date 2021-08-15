@@ -11,7 +11,7 @@ def load_playlist(name):
 
 
 def shuffle_songs(song_list):
-    MusicPlayer.playPlaylist(song_list)
+    MusicPlayer.playList(song_list)
 
 
 def play(name):
