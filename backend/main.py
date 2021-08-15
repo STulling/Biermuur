@@ -1,9 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, make_response
+from flask import Flask, render_template, request, redirect, url_for, make_response, Response
 from flask_restful import Resource, Api
 from flask_cors import CORS
 from display import init, movingText, setStrip
 from multiprocessing import Process
-from datetime import datetime
 import music
 import display
 import sys
@@ -34,6 +33,7 @@ func_mappings = {
     'dobbelsteen': display.dobbelsteen,
 }
 
+
 def newProcess(prim, sec, curr_callback, action, args):
     init()
     display.primary = prim
@@ -45,26 +45,29 @@ def newProcess(prim, sec, curr_callback, action, args):
         action()
 
 
-
 def setAction(action, args):
     global process
     if process and process.is_alive():
         process.kill()
-    process = Process(target=newProcess, args=(display.primary, display.secondary, MusicPlayer.currentCallback, action, args))
+    process = Process(target=newProcess,
+                      args=(display.primary, display.secondary, MusicPlayer.currentCallback, action, args))
     process.start()
 
 
 class Songs(Resource):
     def get(self):
-        return make_response(json.dumps(music.listSongs()))
+        return Response(json.dumps(music.listSongs()), content_type='text/json; charset=utf-8')
+
 
 class Play(Resource):
     def get(self, song_name):
-        setAction(MusicPlayer.play, (song_name, ))
+        setAction(MusicPlayer.play, (song_name,))
+
 
 class SongAdder(Resource):
     def get(self, song_name):
         music.download(song_name)
+
 
 class SongModifier(Resource):
     def put(self, song_name):
@@ -74,6 +77,7 @@ class SongModifier(Resource):
     def delete(self, song_name):
         music.remove(song_name)
 
+
 class Settings(Resource):
     def put(self, setting):
         newVal = request.form['data']
@@ -81,6 +85,7 @@ class Settings(Resource):
             display.primary.value = display.getIfromRGB(display.HTMLColorToRGB(newVal))
         if setting == 'secondary':
             display.secondary.value = display.getIfromRGB(display.HTMLColorToRGB(newVal))
+
 
 class CommonControls(Resource):
     def get(self, action):
@@ -99,13 +104,23 @@ class DJControls(Resource):
 class PlaylistControls(Resource):
     def get(self, action, playlist_name):
         if action == "play":
-            setAction(playlist.play, (playlist_name, ))
+            setAction(playlist.play, (playlist_name,))
+        elif action == "list":
+            return playlist.list_playlists()
+
+    def put(self, action, playlist_name):
+        song_name = request.form['data']
+        if action == "add":
+            playlist.add_song(playlist_name, song_name)
         else:
             pass
 
-class PlaylistLister(Resource):
-    def get(self):
-        return playlist.list_playlists()
+    def delete(self, action, playlist_name):
+        song_name = request.form['data']
+        if action == "remove":
+            playlist.remove_song(playlist_name, song_name)
+        else:
+            pass
 
 
 api.add_resource(Songs, '/api/songs')
@@ -116,9 +131,9 @@ api.add_resource(CommonControls, '/api/common/<string:action>')
 api.add_resource(Settings, '/api/settings/<string:setting>')
 api.add_resource(DJControls, '/api/DJ/<string:action>')
 api.add_resource(PlaylistControls, '/api/playlists/<string:action>/<string:playlist_name>')
-api.add_resource(PlaylistLister, '/api/playlists'
 
-@app.route('/', methods=['GET', 'POST'])
+
+@app.route('/')
 def index():
     return "use port 3000"
 

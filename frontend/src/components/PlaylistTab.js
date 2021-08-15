@@ -60,7 +60,7 @@ class PlaylistTab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      'songList': {},
+      'playlistList': {},
       'open': false,
       'addSong': '',
       'currSong': '',
@@ -70,23 +70,23 @@ class PlaylistTab extends React.Component {
 
   componentDidMount() {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists', true);
+    xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/list', true);
 
     xhr.onload = function () {
-      var songList = {}
+      var playlistList = {}
       var songs = JSON.parse(xhr.responseText)
       songs.sort()
       var chars = songs.map(x => x[0].toUpperCase())
       var unique = [...new Set(chars)];
       for (const char of unique) {
-        songList[char] = []
+        playlistList[char] = []
         for (const song of songs) {
           if (song[0].toUpperCase() == char) {
-            songList[char].push(song);
+            playlistList[char].push(song);
           }
         }
       }
-      this.setState({'songList': songList});
+      this.setState({'playlistList': playlistList});
     }.bind(this);
     
     xhr.send(null);
@@ -99,9 +99,9 @@ class PlaylistTab extends React.Component {
       this.setState({'songaddOpen': true });
     };
 
-    const play = (songName) => {
+    const play = (playlistName) => {
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/play/' + songName, true);
+      xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/playlists/play/' + playlistName, true);
       
       xhr.send(null);
     };
