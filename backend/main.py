@@ -134,7 +134,7 @@ def index():
 # extreem cringe
 @app.route('/api/songs')
 def songs():
-    return music.listSongs()
+    return str(music.listSongs())
 
 def update():
     if process and process.is_alive():
