@@ -7,6 +7,7 @@ from audio2numpy import open_audio
 import display
 import pickle
 from wow_math import savgol_filter
+import random
 
 folder = os.environ["FLASK_MEDIA_DIR"]
 
@@ -33,12 +34,13 @@ class MusicPlayer():
     def __init__(self, callback_function=None, blocksize=1024):
         self.callback_function = callback_function
         self.blocksize = blocksize
-        self.buffersize = 500
+        self.buffersize = 1000
+        self.effectbuffer = queue.Queue(maxsize=self.buffersize)
         self.q = queue.Queue(maxsize=self.buffersize)
         self.empty_space = np.zeros((self.blocksize*self.buffersize, 2))
-        self.rms_cache = []
-        self.ffi_cache = []
         self.volume = 1
+        self.music_queue = []
+        self.shuffle_choices = []
 
     def set_callback(self, new_callback):
         self.callback_function = new_callback
@@ -64,55 +66,71 @@ class MusicPlayer():
         else:
             outdata[:] = data
 
-    def playSound(self, file):
+    def load_song(self, file):
         print(f"Playing: {file}")
         song, samplerate = open_audio(file)
         print(f"Read file")
-        song = np.append(song, self.empty_space, axis=0)
-        channels = song.shape[1]
         song = song.astype(np.float32)
         pklfile = os.path.join(folder, file + '.pkl')
         if os.path.exists(pklfile):
             with open(pklfile, 'rb') as f:
-                self.rms_cache, self.ffi_cache = pickle.load(f)
+                rms_cache, color_cache = pickle.load(f)
         else:
-            self.rms_cache = [np.sqrt(np.mean(song[i*self.blocksize:(i+1)*self.blocksize, :]**2)) for i in range(int(np.ceil(len(song)/self.blocksize)))]
+            rms_cache = [np.sqrt(np.mean(song[i * self.blocksize:(i + 1) * self.blocksize, :] ** 2)) for i in
+                              range(int(np.ceil(len(song) / self.blocksize)))]
             print(f"Loaded rms_cache")
-            self.ffi_cache = [np.fft.fft(song[i*self.blocksize:(i+1)*self.blocksize, 0])[0:int(self.blocksize/2)]/self.blocksize for i in
+            ffi_cache = [np.fft.fft(song[i * self.blocksize:(i + 1) * self.blocksize, 0])[
+                              0:int(self.blocksize / 2)] / self.blocksize for i in
                               range(int(np.ceil(len(song) / self.blocksize)))]
             print(f"Loaded ffi_cache")
-            self.ffi_cache = [np.abs(x)[11:41] for x in self.ffi_cache]
+            ffi_cache = [np.abs(x)[11:61] for x in ffi_cache]
+            highest_tones = savgol_filter([np.argmax(x) for x in ffi_cache], 21, 2)
+            color_cache = [int(max(0, min(x * 10, 255)))/255 for x in highest_tones]
             print(f"Transformed ffi_cache")
             with open(pklfile, 'wb') as f:
-                pickle.dump((self.rms_cache, self.ffi_cache), f)
+                pickle.dump((rms_cache, color_cache), f)
 
-        highest_tones = savgol_filter([np.argmax(x) for x in self.ffi_cache], 21, 2)
 
-        rms_max = max(self.rms_cache)
-        song = (song / max(self.rms_cache)) * self.volume
-        self.rms_cache = [x / rms_max for x in self.rms_cache]
+        rms_max = max(rms_cache)
+        song = (song / max(rms_cache)) * self.volume
+        rms_cache = [x / rms_max for x in rms_cache]
+        return song, rms_cache, color_cache
+
+    def playPlaylist(self, songs):
+        song_name = random.choice(songs)
+        song, rms_cache, color_cache = self.load_song(song_name)
         i = 0
-        x = 0
         for _ in range(self.buffersize):
             if (i+1)*self.blocksize > len(song):
                 break
             data = song[i*self.blocksize:(i+1)*self.blocksize, :]
-            i+=1
+            i += 1
             self.q.put_nowait(data)  # Pre-fill queue
+            self.effectbuffer.put_nowait((rms_cache[i], color_cache[i]))
 
         stream = sd.OutputStream(
-            samplerate=samplerate, blocksize=self.blocksize,
-            device=sd.default.device, channels=channels, dtype='float32',
+            samplerate=44100, blocksize=self.blocksize,
+            device=sd.default.device, channels=2, dtype='float32',
             callback=self.callback)
         stream.start()
+
         while (i+1)*self.blocksize < len(song):
+            if i >= len(rms_cache):
+                song_name = random.choice(songs)
+                song, rms_cache, color_cache = self.load_song(song_name)
+                i = 0
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
-            i += 1
-            display.primary.value = display.wheel(int(max(0, min(highest_tones[x] * 10, 255))))
+            rms, color = self.effectbuffer.get_nowait()
+            display.primary.value = display.wheel(int(color * 255))
             if self.callback_function is not None:
-                self.process(self.rms_cache[x], int(max(0, min(highest_tones[x] * 10, 255)))/255)
-            x += 1
+                self.process(rms, color)
             self.q.put(data, timeout=3)
+            self.effectbuffer.put_nowait((rms_cache[i], color_cache[i]))
+            i += 1
         stream.stop()
         stream.close()
         self.q.queue.clear()
+        self.q.effectbuffer.clear()
+
+    def playSound(self, file):
+        self.playPlaylist([file])
