@@ -1,17 +1,15 @@
-import random
-
 import sys
 import sounddevice as sd
 import queue
-import threading
 import os
 import numpy as np
 from audio2numpy import open_audio
 import display
 import pickle
 from wow_math import savgol_filter
+import unicodedata
 
-folder = os.environ["FLASK_MEDIA_DIR"].encode('utf-8')
+folder = os.environ["FLASK_MEDIA_DIR"].encode().decode()
 
 
 def download(name):
@@ -28,7 +26,7 @@ def listFolders():
     return [x[0] for x in os.walk(folder)]
 
 def listSongs():
-    return [f[:-4] for f in os.listdir(folder) if f.endswith(b'.mp3')]
+    return [unicodedata.normalize('NFC', f[:-4]) for f in os.listdir(folder) if f.endswith('.mp3')]
 
 
 class MusicPlayer():
