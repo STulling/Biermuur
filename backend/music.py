@@ -11,7 +11,7 @@ import display
 import pickle
 from wow_math import savgol_filter
 
-folder = os.environ["FLASK_MEDIA_DIR"]
+folder = os.environ["FLASK_MEDIA_DIR"].encode('utf-8')
 
 
 def download(name):
