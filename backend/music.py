@@ -9,7 +9,7 @@ import pickle
 from wow_math import savgol_filter
 import unicodedata
 
-folder = os.environ["FLASK_MEDIA_DIR"].encode().decode()
+folder = u"" + os.environ["FLASK_MEDIA_DIR"]
 
 
 def download(name):
