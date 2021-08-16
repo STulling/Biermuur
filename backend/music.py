@@ -118,7 +118,7 @@ class MusicPlayer():
         #self.worker.start()
 
         while True:
-            if i >= len(rms_cache):
+            if i >= len(rms_cache) - 1:
                 song, rms_cache, color_cache = random.choice(songs)
                 i = 0
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
