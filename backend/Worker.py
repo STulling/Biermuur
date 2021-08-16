@@ -1,6 +1,7 @@
 from threading import Thread
 import display
 
+
 class Worker(Thread):
     """Thread executing tasks from a given tasks queue"""
 
@@ -8,7 +9,6 @@ class Worker(Thread):
         Thread.__init__(self)
         self.queue = queue
         self.daemon = True
-        self.start()
 
     """Thread work loop calling the function with the params"""
 
