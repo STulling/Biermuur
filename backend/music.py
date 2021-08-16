@@ -8,6 +8,8 @@ import display
 import pickle
 from wow_math import savgol_filter
 import random
+import threading
+from Worker import Worker
 
 folder = os.environ["FLASK_MEDIA_DIR"]
 
@@ -28,7 +30,6 @@ def listFolders():
 def listSongs():
     return [f[:-4] for f in os.listdir(folder) if f.endswith('.mp3')]
 
-
 class MusicPlayer():
 
     def __init__(self, callback_function=None, blocksize=1024):
@@ -41,6 +42,8 @@ class MusicPlayer():
         self.volume = 1
         self.music_queue = []
         self.shuffle_choices = []
+        self.workerqueue = queue.Queue(maxsize=3)
+        self.worker = Worker(self.workerqueue)
 
     def set_callback(self, new_callback):
         self.callback_function = new_callback
@@ -121,6 +124,7 @@ class MusicPlayer():
                 i = 0
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
             rms, color = self.effectbuffer.get_nowait()
+            self.workerqueue.put_nowait(self.callback_function, rms, color)
             display.primary.value = display.wheel(int(color * 255))
             if self.callback_function is not None:
                 self.process(rms, color)
