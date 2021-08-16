@@ -115,6 +115,7 @@ class MusicPlayer():
             device=sd.default.device, channels=2, dtype='float32',
             callback=self.callback)
         stream.start()
+        self.worker.run()
 
         while True:
             if i >= len(rms_cache):
