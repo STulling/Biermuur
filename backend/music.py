@@ -15,7 +15,7 @@ folder = os.environ["FLASK_MEDIA_DIR"]
 
 
 def download(name):
-    command = f"youtube-dl -x -f bestaudio -x --audio-format mp3 --postprocessor-args \"-ar 44100\" -o \"{folder}/%(title)s.%(ext)s\" \"ytsearch1:{name}\""
+    command = f"youtube-dl -x -f bestaudio -x --audio-format mp3 --postprocessor-args \"-ar 44100 -ac 2\" -o \"{folder}/%(title)s.%(ext)s\" \"ytsearch1:{name}\""
     os.system(command)
 
 def rename(old, new):
