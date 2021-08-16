@@ -14,15 +14,5 @@ class Worker(Thread):
     def run(self):
         # keep running until told to abort
         while True:
-            try:
-                # get a task and raise immediately if none available
-                func, arg1, arg2 = self.queue.get()
-            except:
-                continue
-
-            try:
-                # the function may raise
-                func(arg1, arg2)
-            except Exception as e:
-                # so we move on and handle it in whatever way the caller wanted
-                print(e)
+            func, arg1, arg2 = self.queue.get()
+            func(arg1, arg2)

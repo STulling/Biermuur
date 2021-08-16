@@ -110,7 +110,7 @@ class MusicPlayer():
             self.effectbuffer.put_nowait((rms_cache[i], color_cache[i]))
 
         stream = sd.OutputStream(
-            samplerate=44100, blocksize=self.blocksize,
+            samplerate=44100*2, blocksize=self.blocksize,
             device=sd.default.device, channels=2, dtype='float32',
             callback=self.callback)
         stream.start()
