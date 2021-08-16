@@ -122,12 +122,12 @@ class MusicPlayer():
                 i = 0
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
             rms, color = self.effectbuffer.get_nowait()
-            self.workerqueue.put_nowait((self.callback_function, rms, color))
+            self.workerqueue.put((self.callback_function, rms, color))
             display.primary.value = display.wheel(int(color * 255))
             if self.callback_function is not None:
                 self.process(rms, color)
             self.q.put(data, timeout=3)
-            self.effectbuffer.put_nowait((rms_cache[i], color_cache[i]))
+            self.effectbuffer.put((rms_cache[i], color_cache[i]))
             i += 1
 
     def playSound(self, file):
