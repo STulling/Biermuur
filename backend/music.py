@@ -71,6 +71,7 @@ class MusicPlayer():
     def load_song(self, file):
         print(f"Playing: {file}")
         song, samplerate = open_audio(file)
+        print(samplerate)
         print(f"Read file")
         song = song.astype(np.float32)
         pklfile = os.path.join(folder, file + '.pkl')
@@ -121,11 +122,8 @@ class MusicPlayer():
                 song, rms_cache, color_cache = self.load_song(song_name)
                 i = 0
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
-            rms, color = self.effectbuffer.get_nowait()
+            rms, color = self.effectbuffer.get()
             self.workerqueue.put((self.callback_function, rms, color))
-            display.primary.value = display.wheel(int(color * 255))
-            if self.callback_function is not None:
-                self.process(rms, color)
             self.q.put(data, timeout=3)
             self.effectbuffer.put((rms_cache[i], color_cache[i]))
             i += 1

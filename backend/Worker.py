@@ -1,4 +1,5 @@
 from threading import Thread
+import display
 
 class Worker(Thread):
     """Thread executing tasks from a given tasks queue"""
@@ -15,4 +16,5 @@ class Worker(Thread):
         # keep running until told to abort
         while True:
             func, arg1, arg2 = self.queue.get()
+            display.primary.value = display.wheel(int(arg2 * 255))
             func(arg1, arg2)
