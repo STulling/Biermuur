@@ -32,7 +32,7 @@ def listSongs():
 
 class MusicPlayer():
 
-    def __init__(self, callback_function=None, blocksize=2048):
+    def __init__(self, callback_function=None, blocksize=1024):
         self.callback_function = callback_function
         self.blocksize = blocksize
         self.buffersize = 1000
@@ -58,8 +58,6 @@ class MusicPlayer():
         assert not status
         try:
             data = self.q.get_nowait()
-            rms, color = self.effectbuffer.get()
-            self.workerqueue.put((self.callback_function, rms, color))
         except queue.Empty:
             print('Buffer is empty: increase buffersize?', file=sys.stderr)
             raise sd.CallbackAbort
@@ -100,9 +98,9 @@ class MusicPlayer():
         rms_cache = [x / rms_max for x in rms_cache]
         return song, rms_cache, color_cache
 
-    def playPlaylist(self, songs):
-        song_name = random.choice(songs)
-        song, rms_cache, color_cache = self.load_song(song_name)
+    def playPlaylist(self, song_names):
+        songs = [self.load_song(song_name) for song_name in song_names]
+        song, rms_cache, color_cache = random.choice(songs)
         i = 0
         for _ in range(self.buffersize):
             if (i+1)*self.blocksize > len(song):
@@ -117,14 +115,17 @@ class MusicPlayer():
             device=sd.default.device, channels=2, dtype='float32',
             callback=self.callback)
         stream.start()
-        self.worker.start()
+        #self.worker.start()
 
         while True:
             if i >= len(rms_cache):
-                song_name = random.choice(songs)
-                song, rms_cache, color_cache = self.load_song(song_name)
+                song, rms_cache, color_cache = random.choice(songs)
                 i = 0
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
+            rms, color = self.effectbuffer.get()
+            # self.workerqueue.put((self.callback_function, rms, color))
+            display.primary.value = display.wheel(int(color * 255))
+            self.process(rms, color)
             self.q.put(data, timeout=3)
             self.effectbuffer.put((rms_cache[i], color_cache[i]))
             i += 1
