@@ -38,7 +38,6 @@ class MusicPlayer():
         self.buffersize = 1000
         self.effectbuffer = queue.Queue(maxsize=self.buffersize)
         self.q = queue.Queue(maxsize=self.buffersize)
-        self.empty_space = np.zeros((self.blocksize*self.buffersize, 2))
         self.volume = 1
         self.music_queue = []
         self.shuffle_choices = []
@@ -93,9 +92,8 @@ class MusicPlayer():
             with open(pklfile, 'wb') as f:
                 pickle.dump((rms_cache, color_cache), f)
 
-
         rms_max = max(rms_cache)
-        song = (song / max(rms_cache)) * self.volume
+        song = (song / rms_max) * self.volume
         rms_cache = [x / rms_max for x in rms_cache]
         return song, rms_cache, color_cache
 
@@ -124,7 +122,7 @@ class MusicPlayer():
                 i = 0
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
             rms, color = self.effectbuffer.get_nowait()
-            self.workerqueue.put_nowait(self.callback_function, rms, color)
+            self.workerqueue.put_nowait((self.callback_function, rms, color))
             display.primary.value = display.wheel(int(color * 255))
             if self.callback_function is not None:
                 self.process(rms, color)
