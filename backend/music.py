@@ -15,7 +15,7 @@ folder = os.environ["FLASK_MEDIA_DIR"]
 
 
 def download(name):
-    command = f"youtube-dl -x -f bestaudio -x --audio-format mp3 -o \"{folder}/%(title)s.%(ext)s\" \"ytsearch1:{name}\""
+    command = f"youtube-dl -x -f bestaudio -x --audio-format mp3 --postprocessor-args \"-ar 44100\" -o \"{folder}/%(title)s.%(ext)s\" \"ytsearch1:{name}\""
     os.system(command)
 
 def rename(old, new):
@@ -58,6 +58,8 @@ class MusicPlayer():
         assert not status
         try:
             data = self.q.get_nowait()
+            rms, color = self.effectbuffer.get()
+            self.workerqueue.put((self.callback_function, rms, color))
         except queue.Empty:
             print('Buffer is empty: increase buffersize?', file=sys.stderr)
             raise sd.CallbackAbort
@@ -116,7 +118,6 @@ class MusicPlayer():
             callback=self.callback)
         stream.start()
         self.worker.start()
-        print("00")
 
         while True:
             if i >= len(rms_cache):
@@ -124,15 +125,8 @@ class MusicPlayer():
                 song, rms_cache, color_cache = self.load_song(song_name)
                 i = 0
             data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
-            print("01")
-            rms, color = self.effectbuffer.get()
-            print("02")
-            self.workerqueue.put((self.callback_function, rms, color))
-            print("03")
             self.q.put(data, timeout=3)
-            print("04")
             self.effectbuffer.put((rms_cache[i], color_cache[i]))
-            print("05")
             i += 1
 
     def playSound(self, file):
