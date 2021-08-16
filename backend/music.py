@@ -32,7 +32,7 @@ def listSongs():
 
 class MusicPlayer():
 
-    def __init__(self, callback_function=None, blocksize=1024):
+    def __init__(self, callback_function=None, blocksize=2048):
         self.callback_function = callback_function
         self.blocksize = blocksize
         self.buffersize = 1000
