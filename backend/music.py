@@ -14,16 +14,16 @@ folder = os.environ["FLASK_MEDIA_DIR"]
 
 
 def load_song(file, blocksize, volume):
+    print(f"Playing: {file}")
+    song, samplerate = open_audio(file)
+    print(samplerate)
+    print(f"Read file")
+    song = song.astype(np.float32)
     pklfile = os.path.join(folder, file + '.pkl')
     if os.path.exists(pklfile):
         with open(pklfile, 'rb') as f:
-            song, rms_cache, color_cache = pickle.load(f)
+            rms_max, rms_cache, color_cache = pickle.load(f)
     else:
-        print(f"Playing: {file}")
-        song, samplerate = open_audio(file)
-        print(samplerate)
-        print(f"Read file")
-        song = song.astype(np.float32)
         rms_cache = [np.sqrt(np.mean(song[i * blocksize:(i + 1) * blocksize, :] ** 2)) for i in
                      range(int(np.ceil(len(song) / blocksize)))]
         print(f"Loaded rms_cache")
@@ -36,11 +36,11 @@ def load_song(file, blocksize, volume):
         color_cache = [int(max(0, min(x * 10, 255))) / 255 for x in highest_tones]
         print(f"Transformed ffi_cache")
         rms_max = max(rms_cache)
-        song = (song / rms_max) * volume
         rms_cache = [x / rms_max for x in rms_cache]
         with open(pklfile, 'wb') as f:
-            pickle.dump((song, rms_cache, color_cache), f)
+            pickle.dump((rms_max, rms_cache, color_cache), f)
 
+    song = (song / rms_max) * volume
     return song, rms_cache, color_cache
 
 def download(name):
@@ -96,7 +96,7 @@ class MusicPlayer():
     def playPlaylist(self, song_names):
         with concurrent.futures.ProcessPoolExecutor() as executor:
             song, rms_cache, color_cache = load_song(random.choice(song_names), self.blocksize, self.volume)
-            #future = executor.submit(load_song, random.choice(song_names), self.blocksize, self.volume)
+            future = executor.submit(load_song, random.choice(song_names), self.blocksize, self.volume)
             i = 0
             for _ in range(self.buffersize):
                 if (i+1)*self.blocksize > len(song):
@@ -112,10 +112,15 @@ class MusicPlayer():
                 callback=self.callback)
             stream.start()
 
+            # load 1 song
+            # load second song in background
+            # use second song then load third song
+            # etc.
+
             while True:
                 if i >= len(rms_cache) - 1:
-                    #song, rms_cache, color_cache = future.result()
-                    #future = executor.submit(load_song, random.choice(song_names), self.blocksize, self.volume)
+                    song, rms_cache, color_cache = future.result()
+                    future = executor.submit(load_song, random.choice(song_names), self.blocksize, self.volume)
                     i = 0
                 data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
                 rms, color = self.effectbuffer.get()
