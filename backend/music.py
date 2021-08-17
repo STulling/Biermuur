@@ -94,7 +94,7 @@ class MusicPlayer():
         return song, rms_cache, color_cache
 
     def playPlaylist(self, song_names):
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+        with concurrent.futures.ProcessPoolExecutor() as executor:
             song, rms_cache, color_cache = self.load_song(random.choice(song_names))
             future = executor.submit(self.load_song, random.choice(song_names))
             i = 0
