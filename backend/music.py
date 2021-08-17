@@ -8,8 +8,7 @@ import display
 import pickle
 from wow_math import savgol_filter
 import random
-import threading
-from Worker import Worker
+import concurrent.futures
 
 folder = os.environ["FLASK_MEDIA_DIR"]
 
@@ -99,36 +98,41 @@ class MusicPlayer():
         return song, rms_cache, color_cache
 
     def playPlaylist(self, song_names):
-        songs = [self.load_song(song_name) for song_name in song_names]
-        song, rms_cache, color_cache = random.choice(songs)
-        i = 0
-        for _ in range(self.buffersize):
-            if (i+1)*self.blocksize > len(song):
-                break
-            data = song[i*self.blocksize:(i+1)*self.blocksize, :]
-            i += 1
-            self.q.put_nowait(data)  # Pre-fill queue
-            self.effectbuffer.put_nowait((rms_cache[i], color_cache[i]))
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            song, rms_cache, color_cache = self.load_song(random.choice(song_names))
+            future = executor.submit(self.load_song, random.choice(song_names))
+            i = 0
+            for _ in range(self.buffersize):
+                if (i+1)*self.blocksize > len(song):
+                    break
+                data = song[i*self.blocksize:(i+1)*self.blocksize, :]
+                i += 1
+                self.q.put_nowait(data)  # Pre-fill queue
+                self.effectbuffer.put_nowait((rms_cache[i], color_cache[i]))
 
-        stream = sd.OutputStream(
-            samplerate=44100, blocksize=self.blocksize,
-            device=sd.default.device, channels=2, dtype='float32',
-            callback=self.callback)
-        stream.start()
-        #self.worker.start()
+            stream = sd.OutputStream(
+                samplerate=44100, blocksize=self.blocksize,
+                device=sd.default.device, channels=2, dtype='float32',
+                callback=self.callback)
+            stream.start()
 
-        while True:
-            if i >= len(rms_cache) - 1:
-                song, rms_cache, color_cache = random.choice(songs)
-                i = 0
-            data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
-            rms, color = self.effectbuffer.get()
-            # self.workerqueue.put((self.callback_function, rms, color))
-            display.primary.value = display.wheel(int(color * 255))
-            self.process(rms, color)
-            self.q.put(data, timeout=3)
-            self.effectbuffer.put((rms_cache[i], color_cache[i]))
-            i += 1
+            # load 1 song
+            # load second song in background
+            # use second song then load third song
+            # etc.
+
+            while True:
+                if i >= len(rms_cache) - 1:
+                    song, rms_cache, color_cache = future.result()
+                    future = executor.submit(self.load_song, random.choice(song_names))
+                    i = 0
+                data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
+                rms, color = self.effectbuffer.get()
+                display.primary.value = display.wheel(int(color * 255))
+                self.process(rms, color)
+                self.q.put(data, timeout=3)
+                self.effectbuffer.put((rms_cache[i], color_cache[i]))
+                i += 1
 
     def playSound(self, file):
         self.playPlaylist([file])
