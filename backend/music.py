@@ -94,41 +94,39 @@ class MusicPlayer():
             outdata[:] = data
 
     def playPlaylist(self, song_names):
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            song, rms_cache, color_cache = load_song(random.choice(song_names), self.blocksize, self.volume)
-            future = executor.submit(load_song, random.choice(song_names), self.blocksize, self.volume)
-            i = 0
-            for _ in range(self.buffersize):
-                if (i+1)*self.blocksize > len(song):
-                    break
-                data = song[i*self.blocksize:(i+1)*self.blocksize, :]
-                i += 1
-                self.q.put_nowait(data)  # Pre-fill queue
-                self.effectbuffer.put_nowait((rms_cache[i], color_cache[i]))
+        songs = [load_song(song_name, self.blocksize, self.volume) for song_name in song_names]
+        song, rms_cache, color_cache = random.choice(songs)
+        i = 0
+        for _ in range(self.buffersize):
+            if (i+1)*self.blocksize > len(song):
+                break
+            data = song[i*self.blocksize:(i+1)*self.blocksize, :]
+            i += 1
+            self.q.put_nowait(data)  # Pre-fill queue
+            self.effectbuffer.put_nowait((rms_cache[i], color_cache[i]))
 
-            stream = sd.OutputStream(
-                samplerate=44100, blocksize=self.blocksize,
-                device=sd.default.device, channels=2, dtype='float32',
-                callback=self.callback)
-            stream.start()
+        stream = sd.OutputStream(
+            samplerate=44100, blocksize=self.blocksize,
+            device=sd.default.device, channels=2, dtype='float32',
+            callback=self.callback)
+        stream.start()
 
-            # load 1 song
-            # load second song in background
-            # use second song then load third song
-            # etc.
+        # load 1 song
+        # load second song in background
+        # use second song then load third song
+        # etc.
 
-            while True:
-                if i >= len(rms_cache) - 1:
-                    song, rms_cache, color_cache = future.result()
-                    future = executor.submit(load_song, random.choice(song_names), self.blocksize, self.volume)
-                    i = 0
-                data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
-                rms, color = self.effectbuffer.get()
-                display.primary.value = display.wheel(int(color * 255))
-                self.process(rms, color)
-                self.q.put(data, timeout=3)
-                self.effectbuffer.put((rms_cache[i], color_cache[i]))
-                i += 1
+        while True:
+            if i >= len(rms_cache) - 1:
+                song, rms_cache, color_cache = random.choice(songs)
+                i = 0
+            data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
+            rms, color = self.effectbuffer.get()
+            display.primary.value = display.wheel(int(color * 255))
+            self.process(rms, color)
+            self.q.put(data, timeout=3)
+            self.effectbuffer.put((rms_cache[i], color_cache[i]))
+            i += 1
 
     def playSound(self, file):
         self.playPlaylist([file])
