@@ -96,7 +96,7 @@ class MusicPlayer():
     def playPlaylist(self, song_names):
         with concurrent.futures.ProcessPoolExecutor() as executor:
             song, rms_cache, color_cache = load_song(random.choice(song_names), self.blocksize, self.volume)
-            future = executor.submit(load_song, random.choice(song_names), self.blocksize, self.volume)
+            #future = executor.submit(load_song, random.choice(song_names), self.blocksize, self.volume)
             i = 0
             for _ in range(self.buffersize):
                 if (i+1)*self.blocksize > len(song):
@@ -114,8 +114,8 @@ class MusicPlayer():
 
             while True:
                 if i >= len(rms_cache) - 1:
-                    song, rms_cache, color_cache = future.result()
-                    future = executor.submit(load_song, random.choice(song_names), self.blocksize, self.volume)
+                    #song, rms_cache, color_cache = future.result()
+                    #future = executor.submit(load_song, random.choice(song_names), self.blocksize, self.volume)
                     i = 0
                 data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
                 rms, color = self.effectbuffer.get()
