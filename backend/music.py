@@ -13,6 +13,36 @@ import concurrent.futures
 folder = os.environ["FLASK_MEDIA_DIR"]
 
 
+def load_song(file, blocksize, volume):
+    print(f"Playing: {file}")
+    song, samplerate = open_audio(file)
+    print(samplerate)
+    print(f"Read file")
+    song = song.astype(np.float32)
+    pklfile = os.path.join(folder, file + '.pkl')
+    if os.path.exists(pklfile):
+        with open(pklfile, 'rb') as f:
+            rms_cache, color_cache = pickle.load(f)
+    else:
+        rms_cache = [np.sqrt(np.mean(song[i * blocksize:(i + 1) * blocksize, :] ** 2)) for i in
+                     range(int(np.ceil(len(song) / blocksize)))]
+        print(f"Loaded rms_cache")
+        ffi_cache = [np.fft.fft(song[i * blocksize:(i + 1) * blocksize, 0])[
+                     0:int(blocksize / 2)] / blocksize for i in
+                     range(int(np.ceil(len(song) / blocksize)))]
+        print(f"Loaded ffi_cache")
+        ffi_cache = [np.abs(x)[11:61] for x in ffi_cache]
+        highest_tones = savgol_filter([np.argmax(x) for x in ffi_cache], 21, 2)
+        color_cache = [int(max(0, min(x * 10, 255))) / 255 for x in highest_tones]
+        print(f"Transformed ffi_cache")
+        with open(pklfile, 'wb') as f:
+            pickle.dump((rms_cache, color_cache), f)
+
+    rms_max = max(rms_cache)
+    song = (song / rms_max) * volume
+    rms_cache = [x / rms_max for x in rms_cache]
+    return song, rms_cache, color_cache
+
 def download(name):
     command = f"youtube-dl -x -f bestaudio -x --audio-format mp3 --postprocessor-args \"-ar 44100 -ac 2\" -o \"{folder}/%(title)s.%(ext)s\" \"ytsearch1:{name}\""
     os.system(command)
@@ -63,40 +93,10 @@ class MusicPlayer():
         else:
             outdata[:] = data
 
-    def load_song(self, file):
-        print(f"Playing: {file}")
-        song, samplerate = open_audio(file)
-        print(samplerate)
-        print(f"Read file")
-        song = song.astype(np.float32)
-        pklfile = os.path.join(folder, file + '.pkl')
-        if os.path.exists(pklfile):
-            with open(pklfile, 'rb') as f:
-                rms_cache, color_cache = pickle.load(f)
-        else:
-            rms_cache = [np.sqrt(np.mean(song[i * self.blocksize:(i + 1) * self.blocksize, :] ** 2)) for i in
-                              range(int(np.ceil(len(song) / self.blocksize)))]
-            print(f"Loaded rms_cache")
-            ffi_cache = [np.fft.fft(song[i * self.blocksize:(i + 1) * self.blocksize, 0])[
-                              0:int(self.blocksize / 2)] / self.blocksize for i in
-                              range(int(np.ceil(len(song) / self.blocksize)))]
-            print(f"Loaded ffi_cache")
-            ffi_cache = [np.abs(x)[11:61] for x in ffi_cache]
-            highest_tones = savgol_filter([np.argmax(x) for x in ffi_cache], 21, 2)
-            color_cache = [int(max(0, min(x * 10, 255)))/255 for x in highest_tones]
-            print(f"Transformed ffi_cache")
-            with open(pklfile, 'wb') as f:
-                pickle.dump((rms_cache, color_cache), f)
-
-        rms_max = max(rms_cache)
-        song = (song / rms_max) * self.volume
-        rms_cache = [x / rms_max for x in rms_cache]
-        return song, rms_cache, color_cache
-
     def playPlaylist(self, song_names):
         with concurrent.futures.ProcessPoolExecutor() as executor:
-            song, rms_cache, color_cache = self.load_song(random.choice(song_names))
-            future = executor.submit(self.load_song, random.choice(song_names))
+            song, rms_cache, color_cache = load_song(random.choice(song_names), self.blocksize, self.volume)
+            future = executor.submit(load_song, random.choice(song_names))
             i = 0
             for _ in range(self.buffersize):
                 if (i+1)*self.blocksize > len(song):
@@ -120,7 +120,7 @@ class MusicPlayer():
             while True:
                 if i >= len(rms_cache) - 1:
                     song, rms_cache, color_cache = future.result()
-                    future = executor.submit(self.load_song, random.choice(song_names))
+                    future = executor.submit(load_song, (random.choice(song_names), self.blocksize, self.volume))
                     i = 0
                 data = song[i * self.blocksize:(i + 1) * self.blocksize, :]
                 rms, color = self.effectbuffer.get()
