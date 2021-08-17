@@ -38,10 +38,6 @@ class MusicPlayer():
         self.effectbuffer = queue.Queue(maxsize=self.buffersize)
         self.q = queue.Queue(maxsize=self.buffersize)
         self.volume = 1
-        self.music_queue = []
-        self.shuffle_choices = []
-        self.workerqueue = queue.Queue(maxsize=3)
-        self.worker = Worker(self.workerqueue)
 
     def set_callback(self, new_callback):
         self.callback_function = new_callback
