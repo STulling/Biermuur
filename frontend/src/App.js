@@ -10,7 +10,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 import SettingsIcon from '@material-ui/icons/Settings';
 import MusicNoteIcon from '@material-ui/icons/MusicNote';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
+import SkipNextIcon from '@material-ui/icons/SkipNext';
 import MainTab from './components/MainTab';
 import SettingsTab from './components/SettingsTab';
 import PlaylistTab from './components/PlaylistTab';
@@ -44,15 +45,24 @@ function App() {
     xhr.send(null);
   };
 
+  const skip = () => {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/common/skip', true);
+    xhr.send(null);
+  };
+
   return (
   <div className={classes.root}>
     <AppBar position="sticky">
       <Toolbar>
         <Typography variant="h6" className={classes.title}>
-          Biermuur
+          Biermuur 2.0
         </Typography>
         <IconButton color="inherit">
-          <HighlightOffIcon onClick={clear}/>
+          <SkipNextIcon onClick={skip}/>
+        </IconButton>
+        <IconButton color="inherit">
+          <PowerSettingsNewIcon onClick={clear}/>
         </IconButton>
       </Toolbar>
     </AppBar>
