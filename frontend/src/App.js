@@ -41,7 +41,7 @@ function App() {
 
   const clear = () => {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/common/clear', true);
+    xhr.open("GET", 'http://' + process.env.REACT_APP_IP + ':5000/api/common/stop', true);
     xhr.send(null);
   };
 
